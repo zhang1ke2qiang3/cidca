@@ -1,0 +1,23 @@
+server:
+  port: 80
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/fas?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    servlet:
+      multipart:
+        maxFileSize:20MB
+        maxRequestSize:20MB
+    
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    
+    
+    

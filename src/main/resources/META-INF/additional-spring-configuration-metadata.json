@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "server.forward-headers",
+    "type": "java.lang.String",
+    "description": "A description for 'server.forward-headers'"
+  },
+  {
+    "name": "server.tomcat.remote-ip-header",
+    "type": "java.lang.String",
+    "description": "A description for 'server.tomcat.remote-ip-header'"
+  },
+  {
+    "name": "server.tomcat.protocol-header",
+    "type": "java.lang.String",
+    "description": "A description for 'server.tomcat.protocol-header'"
+  },
+  {
+    "name": "limit.min-money",
+    "type": "java.lang.String",
+    "description": "A description for 'limit.min-money'"
+  }
+]}
