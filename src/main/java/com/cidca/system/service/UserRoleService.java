@@ -6,7 +6,7 @@ import com.cidca.entity.TUserRole;
 
 public interface UserRoleService {
 
-	public TUserRole insert(TUserRole vo) throws Exception;
+	public TUserRole save(TUserRole vo) throws Exception;
 	
 	public List<TUserRole> findById(List<Integer> ids);
 	

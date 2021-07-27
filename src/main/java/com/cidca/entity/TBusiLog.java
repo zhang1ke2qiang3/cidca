@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -18,9 +16,8 @@ public class TBusiLog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
+	@Column(name = "uuid")
+	private String uuid;
 
 	//业务名称/模块名称
 	@Column(name = "busitype")
@@ -72,9 +69,10 @@ public class TBusiLog implements Serializable {
 	}
 
 	/**业务名称（如资格处置）、业务表的名称、业务表ID、操作人、操作内容、操作时间、备注**/
-	public TBusiLog(String busitype, String busitable, String busiid, String operuser,String opercontent,
+	public TBusiLog(String uuid,String busitype, String busitable, String busiid, String operuser,String opercontent,
 			Date opertime, String remark) {
 		super();
+		this.uuid = uuid;
 		this.busitype = busitype;
 		this.busitable = busitable;
 		this.busiid = busiid;
@@ -84,30 +82,16 @@ public class TBusiLog implements Serializable {
 		this.remark = remark;
 	}
 	
-//	public TBusiLog(String busitype, String busitable, String busiid, String operuser, Integer operuserRole,String opercontent,
-//			Date opertime, String remark) {
-//		super();
-//		this.busitype = busitype;
-//		this.busitable = busitable;
-//		this.busiid = busiid;
-//		this.operuser = operuser;
-//		this.operuserRole = operuserRole;
-//		this.opercontent = opercontent;
-//		this.opertime = opertime;
-//		this.remark = remark;
-//	}
-
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getBusitype() {
 		return busitype;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public void setBusitype(String busitype) {

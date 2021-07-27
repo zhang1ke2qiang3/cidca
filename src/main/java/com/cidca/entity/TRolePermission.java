@@ -19,11 +19,11 @@ public class TRolePermission implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name="roleId")
-	private int roleId;
+	@Column(name="roleid")
+	private int roleid;
 
-	@Column(name="permissionCode")
-	private String permissionCode;
+	@Column(name="permission_code")
+	private String permission_code;
 
 	public TRolePermission() {}
 
@@ -36,21 +36,28 @@ public class TRolePermission implements Serializable{
 		this.id = id;
 	}
 
-	public int getRoleId() {
-		return roleId;
+	public int getRoleid() {
+		return roleid;
 	}
 
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
+	public void setRoleid(int roleid) {
+		this.roleid = roleid;
 	}
 
-	public String getPermissionCode() {
-		return permissionCode;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	public void setPermissionCode(String permissionCode) {
-		this.permissionCode = permissionCode;
+
+	public String getPermission_code() {
+		return permission_code;
 	}
+
+
+	public void setPermission_code(String permission_code) {
+		this.permission_code = permission_code;
+	}
+
 
 
 

@@ -21,12 +21,12 @@ import org.apache.commons.lang3.StringUtils;
 public class MailService {
 	
 	/**
-	 * 描述：发邮件--fas
+	 * 描述：发邮件--cidca
 	 */
 	public static void SendMail(String tomail,String title,String msg) throws Exception {
 		
 		String qm ="123456789"; //您的邮箱密码
-		String tu = "fas.org.cn";//你邮箱的后缀域名
+		String tu = "cidca.org.cn";//你邮箱的后缀域名
 		String tto=tomail;//接收邮件的邮箱
 		String tcontent=msg;
 		Properties props=new Properties();
@@ -37,7 +37,7 @@ public class MailService {
 		MimeMessage message=new MimeMessage(s);
 		
 		//给消息对象设置发件人/收件人/主题/发信时间
-		InternetAddress from=new InternetAddress("fas@"+tu); //发件箱
+		InternetAddress from=new InternetAddress("cidca@"+tu); //发件箱
 		message.setFrom(from);
 		InternetAddress to=new InternetAddress(tto);
 		message.setRecipient(Message.RecipientType.TO,to);
@@ -52,19 +52,19 @@ public class MailService {
 		message.setContent(mm);//把mm作为消息对象的内容
 		message.saveChanges();
 		Transport transport=s.getTransport("smtp");
-		transport.connect("mail."+tu,"fas@fas.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
+		transport.connect("mail."+tu,"cidca@cidca.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
 		transport.sendMessage(message,message.getAllRecipients());
 		transport.close();
 		
 	}
 	 
 	/**
-	 * 描述：发邮件--fas
+	 * 描述：发邮件--cidca
 	 */
 	public static void SendMail(String tomail,String ccmail,String title,String msg) throws Exception {
 		
-		String qm ="faas@fas"; //您的邮箱密码
-		String tu = "fas.org.cn"; 	//你邮箱的后缀域名
+		String qm ="faas@cidca"; //您的邮箱密码
+		String tu = "cidca.org.cn"; 	//你邮箱的后缀域名
 		String tto=tomail; //接收邮件的邮箱
 		String tcontent=msg;
 		Properties props=new Properties();
@@ -75,7 +75,7 @@ public class MailService {
 		MimeMessage message=new MimeMessage(s);
 		
 		//给消息对象设置发件人/收件人/主题/发信时间
-		InternetAddress from=new InternetAddress("fas@"+tu); 
+		InternetAddress from=new InternetAddress("cidca@"+tu); 
 		message.setFrom(from);
 		InternetAddress to=new InternetAddress(tto);
 		message.setRecipient(Message.RecipientType.TO,to);
@@ -94,7 +94,7 @@ public class MailService {
 		message.setContent(mm);//把mm作为消息对象的内容
 		message.saveChanges();
 		Transport transport=s.getTransport("smtp");
-		transport.connect("mail."+tu,"fas@fas.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
+		transport.connect("mail."+tu,"cidca@cidca.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
 		transport.sendMessage(message,message.getAllRecipients());
 		transport.close();
 		
@@ -109,8 +109,8 @@ public class MailService {
 	 */
 	public static void SendMail(String[] tomails,String[] ccmails,String[] files,String title,String msg) throws Exception {
 		
-		String qm ="fas@fas"; //您的邮箱密码
-		String tu = "fas.org.cn"; 	//你邮箱的后缀域名
+		String qm ="cidca@cidca"; //您的邮箱密码
+		String tu = "cidca.org.cn"; 	//你邮箱的后缀域名
 		Properties props=new Properties();
 		props.put("mail.smtp.host","mail."+tu);	//发信的主机，这里我填写的是我们公司的主机！可以不用修改！
 		props.put("mail.smtp.auth","true"); 
@@ -119,7 +119,7 @@ public class MailService {
 		MimeMessage message=new MimeMessage(s);
 		
 		//给消息对象设置发件人/收件人/主题/发信时间
-		InternetAddress from=new InternetAddress("fas@"+tu);
+		InternetAddress from=new InternetAddress("cidca@"+tu);
 		message.setFrom(from);
 		//收件人
 		if(tomails!=null){
@@ -162,7 +162,7 @@ public class MailService {
 		message.saveChanges();
 		
 		Transport transport=s.getTransport("smtp");
-		transport.connect("mail."+tu,"fas@fas.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
+		transport.connect("mail."+tu,"cidca@cidca.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
 		transport.sendMessage(message,message.getAllRecipients());//这一步出的错
 		transport.close();
 		
@@ -178,7 +178,7 @@ public class MailService {
 		MimeMessage message=new MimeMessage(s);
 		
 		//给消息对象设置发件人/收件人/主题/发信时间
-//		InternetAddress from=new InternetAddress("fas@"+tu);
+//		InternetAddress from=new InternetAddress("cidca@"+tu);
 		InternetAddress from=new InternetAddress(fjrEmail);
 		message.setFrom(from);
 		//收件人
@@ -221,7 +221,7 @@ public class MailService {
 		message.saveChanges();
 		
 		Transport transport=s.getTransport("smtp");
-//		transport.connect("mail."+tu,"fas@fas.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
+//		transport.connect("mail."+tu,"cidca@cidca.org.cn",qm); //这里的115798090也要修改为您的QQ号码 
 		transport.connect("mail."+tu,fjrEmail,qm); //这里的115798090也要修改为您的QQ号码 
 		transport.sendMessage(message,message.getAllRecipients());//这一步出的错
 		transport.close();

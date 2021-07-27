@@ -12,10 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -37,9 +35,8 @@ public class TUser implements Serializable {
 	private String password;
 	
 	//部门
-	@ManyToOne(targetEntity = TDepartment.class, fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "deptid")
-	private TDepartment dept;
+	@Column(name = "deptid")
+	private String deptid;
 	
 	@Column(name = "tel")
 	private String tel;
@@ -53,6 +50,9 @@ public class TUser implements Serializable {
 
 	@Column(name = "mobile")
 	private String mobile;
+	
+//	@Column(name = "roleid")
+//	private String roleid;
 	
 	@ManyToMany(targetEntity = TRole.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "roleid")
@@ -108,12 +108,12 @@ public class TUser implements Serializable {
 		this.username = username;
 	}
 
-	public TDepartment getDept() {
-		return dept;
+	public String getDeptid() {
+		return deptid;
 	}
 
-	public void setDept(TDepartment dept) {
-		this.dept = dept;
+	public void setDeptid(String deptid) {
+		this.deptid = deptid;
 	}
 
 	public String getTel() {

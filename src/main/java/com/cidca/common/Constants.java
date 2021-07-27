@@ -10,7 +10,7 @@ import com.cidca.util.DateTools;
 
 public class Constants {
 	public final static String SESSION_KEY="User";
-	public final static String DEVELOPMENT_URL="http://localhost:8080/fas/";
+	public final static String DEVELOPMENT_URL="http://localhost:8080/cidca/";
 	public final static String AMPURL="http://www.cidca.gov.cn/cidca/";
 	public final static String SEVERURL="http://www.cidca.gov.cn/cidca/upload/headphoto/";
 
@@ -36,6 +36,17 @@ public class Constants {
 	public static final String THREE="3";
 	public static final String FOUR="4";
 	public static final String FIVE="5";
+	
+	public static final String AUDIT_TEMP="0";//草稿
+	public static final String AUDIT_WAIT="1";//待审核
+	public static final String AUDIT_OK="2";//审核通过
+	public static final String AUDIT_NO="3";//审核不通过
+	public static final String AUDIT_BACK="-1";//退回
+	
+	
+	
+	public static final int EXTERNAL=1;//外部人员
+	public static final int INTERNAL=0;//内部人员
 
 	//	综合业务部门：
 	public final static int ZHYWB_RKJD=8;//	认可监督部	
@@ -59,30 +70,6 @@ public class Constants {
 	public final static int ATTACHTYPE_IDCARD=227;
 	/**证件类型-学历学位证**/
 	public final static int ATTACHTYPE_EDUCATION=228;
-	/**证件类型-职称证明**/
-	public final static int ATTACHTYPE_PRO=229;
-	/**证件类型-业务成就**/
-	public final static int ATTACHTYPE_ACHIEVEMENT=230;
-	/**证件类型-fas培训**/
-	public final static int ATTACHTYPE_TRAIN_fas=233;
-	/**证件类型-其他类型**/
-	public final static int ATTCHTYPE_OTHER=232;
-
-	/**
-	 * sessionFilterContent
-	 * session登录验证/ session验证/ 检索词别动
-	 * checkPhoneNum：登录时
-	 * checkMobile：注册时
-	 */
-	public final static String sfc[]={"login.do","loginning.do","sessionFilter.do","inputRegisterCheckIdcard.do","checkIdcardByRegister.do",
-			"inputRegisterPwdReset.do","saveRegisterPwdReset.do","saveMuser.do","getMuserBaseData.do","saveOrUpdateMuserEducational.do",
-			"saveOrUpdateMuserWork.do","inputRegisterPwd.do","saveOrUpdateMuserTraining.do","saveOrUpdateMuserBusiness.do",
-			"saveOrUpdateMuserQualifications.do","saveRegisterPwd.do","getMuserEducationalList.do","deleteMuserEducational.do","getMuserWorkList.do",
-			"inputRegister.do","deleteMuserWork.do","getMuserTrainingList.do","deleteMuserTraining.do","getMuserBusinessList.do",
-			"deleteMuserBusiness.do","getMuserQualificationsList.do","deleteMuserQualifications.do","UploadPdfFile.do",
-			"selectRoleOfGuide.do","guideList.do","getGuideList.do","welcomeGuide.do","getGuideBySequenceNumber.do","config.do",
-			"checkPhoneNum.do","checkMobile.do","ssoLogin.do","getVerificationCode.do","error405.do","error404.do","error400.do",
-			"error500.do","errorNoChrome.do","operationsFrequently.do","testFunction.jsp","testFunction2.jsp","testFunction3.jsp"};
 
 	//文件类型/文件后缀名/附件后缀 检索词别动
 	public final static String IMG_SUFFIX[]={"BMP","GIF","JPG","JPEG","JPEG2000","PNG","TIFF"};
@@ -155,7 +142,7 @@ public class Constants {
 		SqlInjectMap.put(7,"create");
 	}
 	
-	//防止请求.do或者频繁刷新
+	//防止频繁刷新请
 	@SuppressWarnings("rawtypes")
 	public static Map checkCountMap =new HashMap();
 	@SuppressWarnings("unchecked")
@@ -183,11 +170,11 @@ public class Constants {
 	//跨站白名单
 	public static final HashMap<Integer,String> IpWhiteMap= new HashMap<Integer,String>();
 	static{
-		IpWhiteMap.put(0,"https://www.fas.org.cn");
-		IpWhiteMap.put(1,"https://las.fas.org.cn");
+		IpWhiteMap.put(0,"https://www.cidca.org.cn");
+		IpWhiteMap.put(1,"https://las.cidca.org.cn");
 		IpWhiteMap.put(2,"http://localhost");
 		IpWhiteMap.put(3,"http://127.0.0.1");//本地测试用
-		IpWhiteMap.put(4,"https://fas.fas.org.cn");
+		IpWhiteMap.put(4,"https://cidca.cidca.org.cn");
 		IpWhiteMap.put(5,"https://mail.126.com");
 		IpWhiteMap.put(6,"https://mail.163.com");
 		IpWhiteMap.put(7,"https://mail.qq.com");

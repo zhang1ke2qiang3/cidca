@@ -290,7 +290,6 @@ public class ExcelReader {
 			}
 		} else
 			cellvalue = "";
-
 		return cellvalue;
 	}
 	

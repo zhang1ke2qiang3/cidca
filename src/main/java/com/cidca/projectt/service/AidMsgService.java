@@ -12,20 +12,20 @@ public interface AidMsgService {
 
 	public AidMsg insert(AidMsg vo) throws Exception;
 	
-	public List<AidMsg> findById(List<String> ids);
+	public int update(String project_name);
 	
-	public void deleteById(String userid) throws Exception;
+	public AidMsg findById(String id);
 	
-	public AidMsg insertAidMsg(AidMsg vo);
+	public void deleteById(String id) throws Exception;
 	
 	public void updateAidMsg(AidMsg vo);
 	
 	public List<AidMsg> findAll();
 	
 	public List<AidMsg> findByProject_name(String project_name) throws Exception;
-
-	public int update(String project_name);
 	
 	public Page<AidMsg> findAll(Specification<AidMsg> spec, Pageable pageable);
+	
+	
 
 }

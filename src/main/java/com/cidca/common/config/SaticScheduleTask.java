@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 //@Configuration      //1.主要用于标记配置类，兼备Component的效果。
 //@EnableScheduling   // 2.开启定时任务
+@SuppressWarnings("unused")
 public class SaticScheduleTask {
     
 	//3.添加定时任务

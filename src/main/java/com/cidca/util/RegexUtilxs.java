@@ -284,6 +284,20 @@ public class RegexUtilxs {
 	 */
 	public static final String REGEX_NEGATIVE_FLOAT       = "^-[1-9]\\d*\\.\\d*|-0\\.\\d*[1-9]\\d*$";
 
-	/************** If u want more please visit http://toutiao.com/i6231678548520731137/ **************/
+	
+	/**
+	 * ^ 匹配一行的开头位置
+	 * (?![0-9]+$) 预测该位置后面不全是数字
+	 * (?![a-zA-Z]+$) 预测该位置后面不全是字母
+	 * [0-9A-Za-z] {5,10} 由8-16位数字或这字母组成
+	 */
+	
+	/**数字和字母 5~10 */
+	public static final String LETTERS_AND_NUMBERS = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{5,10}$"; 
+
+	/** 密码规则：大写、小写字母，数字，特殊字符(_!@#$%^&*()+.)的组合，不能低于8位4选3 */
+	public static final String PASSWORD_FST= "^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\\W_]+$)(?![a-z0-9]+$)(?![a-z\\W_]+$)(?![0-9\\W_]+$)[a-zA-Z0-9\\W_]{9,}$";//4选3
+	/** 密码规则：大写、小写字母，数字，特殊字符(_!@#$%^&*()+.)的组合，不能低于8位4选4 */
+	public static final String PASSWORD_FSF= "^(?![A-Za-z0-9]+$)(?![a-z0-9_!@#$%^&*()+.]+$)(?![A-Za-z_!@#$%^&*()+.]+$)(?![A-Z0-9_!@#$%^&*()+.]+$)[a-zA-Z0-9_!@#$%^&*()+.]{8,}$";//4选4
 
 }

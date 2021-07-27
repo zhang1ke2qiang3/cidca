@@ -9,11 +9,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import com.cidca.entity.AidMsgSubclass;
 import com.cidca.entity.TUserRole;
 
 
-public interface UserRoleDao extends JpaRepository<TUserRole, Integer> ,JpaSpecificationExecutor<AidMsgSubclass>{
+public interface UserRoleDao extends JpaRepository<TUserRole, Integer> ,JpaSpecificationExecutor<TUserRole>{
 
 	@Query(value = "select u.userid from TUserRole u where userid = ?1")
 	@Modifying

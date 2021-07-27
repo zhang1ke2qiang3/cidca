@@ -5,17 +5,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 @Table(name = "t_muser")
@@ -24,20 +16,17 @@ public class TMuser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
+	@Column(name = "uuid")
+	private String uuid;
 
 	//人员类型：内部/外部
-	@ManyToOne(targetEntity = TBaseData.class, fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "persontype")
-	@NotFound(action = NotFoundAction.IGNORE)
-	private TBaseData persontype;
+	@Column(name = "persontype")
+	private String persontype;
 
 	@Column(name = "idcard")
 	private String idcard;
 
-	@Column(name = "password")
+	@Column(name = "passwordd")
 	private String password;
 	
 	//姓名
@@ -55,25 +44,29 @@ public class TMuser implements Serializable {
 	@Column(name = "email")
 	private String email;
 
-	//组织类型
-	@ManyToOne(targetEntity = TBaseData.class, fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "organizationtype")
-	@NotFound(action = NotFoundAction.IGNORE)
-	private TBaseData organizationtype;
+	//企业类型/社会组织类型
+	@Column(name = "organizationtype")
+	private String organizationtype;
 
-	//组织名称
+	//企业全称/组织全称
 	@Column(name = "organizationname")
 	private String organizationname;
+	
+	//所属上级单位
+	@Column(name = "affiliated")
+	private String affiliated;
+	
+	//是否是两家商会会员单位 0否 1是
+	@Column(name = "iscommerce")
+	private String isCommerce;
 
 	//统一社会信用代码
 	@Column(name = "organizationcode")
 	private String organizationcode;	
 
 	//注册地址-省份
-	@ManyToOne(targetEntity = TBaseData.class, fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "area")
-	@NotFound(action = NotFoundAction.IGNORE)
-	private TBaseData area;
+	@Column(name = "area")
+	private String area;
 	
 	//注册地址
 	@Column(name = "address")
@@ -102,27 +95,24 @@ public class TMuser implements Serializable {
 	private Date updatetime;
 
 	@Column(name = "loginnum")
-	private String loginnum;
+	private Integer loginnum;
 
 	//国籍nationality 
 	@Column(name = "nationality")
-	private Integer nationality;
+	private String nationality;
 
 	@Column(name = "timelock")
 	private Date timeLock;
 
-	@Column(name = "uuidd")
-	private String uuid;
-
 	@Transient
-	private int col1;//自定义
+	private String imgCode_mobile;//图形验证码
 	@Transient
-	private int col2;//自定义
-	
+	private String mobileCode;//短信验证码
 	
 	public TMuser() {
 		super();
 	}
+
 
 	/**
 	 * 
@@ -149,243 +139,295 @@ public class TMuser implements Serializable {
 	 * @param timeLock
 	 * @param uuid
 	 */
-	public TMuser(TBaseData persontype, String idcard, String password, String fullname, String shortname,
-			String mobile, String email, TBaseData organizationtype, String organizationname, String organizationcode,
-			TBaseData area, String address, String manager, String telephone, String certificate, String dbfrom,
-			Date createtime, Date updatetime, String loginnum, Integer nationality, Date timeLock, String uuid) {
+	public TMuser(String uuid, String persontype, String idcard, String password, String fullname, String shortname,
+			String mobile, String email, String organizationtype, String organizationname, String organizationcode,
+			String area, String address, String manager, String telephone, String certificate, String dbfrom,
+			Date createtime, Date updatetime, Integer loginnum, String nationality, Date timeLock) {
 		super();
-		this.persontype = persontype;
-		this.idcard = idcard;
-		this.password = password;
-		this.fullname = fullname;
-		this.shortname = shortname;
-		this.mobile = mobile;
-		this.email = email;
-		this.organizationtype = organizationtype;
-		this.organizationname = organizationname;
-		this.organizationcode = organizationcode;
-		this.area = area;
-		this.address = address;
-		this.manager = manager;
-		this.telephone = telephone;
-		this.certificate = certificate;
-		this.dbfrom = dbfrom;
-		this.createtime = createtime;
-		this.updatetime = updatetime;
-		this.loginnum = loginnum;
-		this.nationality = nationality;
-		this.timeLock = timeLock;
 		this.uuid = uuid;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public TBaseData getPersontype() {
-		return persontype;
-	}
-
-	public void setPersontype(TBaseData persontype) {
 		this.persontype = persontype;
-	}
-
-	public String getIdcard() {
-		return idcard;
-	}
-	
-	public String getIdcardTemp() {
-		return "***";
-	}
-
-	public void setIdcard(String idcard) {
 		this.idcard = idcard;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-	
-	public String getPasswordTemp() {
-		return "***";
-	}
-
-	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getFullname() {
-		return fullname;
-	}
-
-	public void setFullname(String fullname) {
 		this.fullname = fullname;
-	}
-
-	public String getShortname() {
-		return shortname;
-	}
-
-	public void setShortname(String shortname) {
 		this.shortname = shortname;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-	
-	public String getMobileTemp() {
-		return "***";
-	}
-
-	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-	
-	public String getEmailTemp() {
-		return "***";
-	}
-
-	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public TBaseData getOrganizationtype() {
-		return organizationtype;
-	}
-
-	public void setOrganizationtype(TBaseData organizationtype) {
 		this.organizationtype = organizationtype;
-	}
-
-	public String getOrganizationname() {
-		return organizationname;
-	}
-
-	public void setOrganizationname(String organizationname) {
 		this.organizationname = organizationname;
-	}
-
-	public String getOrganizationcode() {
-		return organizationcode;
-	}
-
-	public void setOrganizationcode(String organizationcode) {
 		this.organizationcode = organizationcode;
-	}
-
-	public TBaseData getArea() {
-		return area;
-	}
-
-	public void setArea(TBaseData area) {
 		this.area = area;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-	
-	public String getAddressTemp() {
-		return "***";
-	}
-
-	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getManager() {
-		return manager;
-	}
-
-	public void setManager(String manager) {
 		this.manager = manager;
-	}
-
-	public String getTelephone() {
-		return telephone;
-	}
-	
-	public String getTelephoneTemp() {
-		return "***";
-	}
-
-	public void setTelephone(String telephone) {
 		this.telephone = telephone;
-	}
-
-	public String getCertificate() {
-		return certificate;
-	}
-
-	public void setCertificate(String certificate) {
 		this.certificate = certificate;
-	}
-
-	public String getDbfrom() {
-		return dbfrom;
-	}
-
-	public void setDbfrom(String dbfrom) {
 		this.dbfrom = dbfrom;
-	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
-	}
-
-	public Date getUpdatetime() {
-		return updatetime;
-	}
-
-	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
-	}
-
-	public String getLoginnum() {
-		return loginnum;
-	}
-
-	public void setLoginnum(String loginnum) {
 		this.loginnum = loginnum;
-	}
-
-	public Integer getNationality() {
-		return nationality;
-	}
-
-	public void setNationality(Integer nationality) {
 		this.nationality = nationality;
-	}
-
-	public Date getTimeLock() {
-		return timeLock;
-	}
-
-	public void setTimeLock(Date timeLock) {
 		this.timeLock = timeLock;
 	}
+
 
 	public String getUuid() {
 		return uuid;
 	}
 
+
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
-	
+
+	public String getPersontype() {
+		return persontype;
+	}
+
+
+	public void setPersontype(String persontype) {
+		this.persontype = persontype;
+	}
+
+
+	public String getIdcard() {
+		return idcard;
+	}
+
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
+	}
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	public String getFullname() {
+		return fullname;
+	}
+
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+
+	public String getShortname() {
+		return shortname;
+	}
+
+
+	public void setShortname(String shortname) {
+		this.shortname = shortname;
+	}
+
+
+	public String getMobile() {
+		return mobile;
+	}
+
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public String getOrganizationtype() {
+		return organizationtype;
+	}
+
+
+	public void setOrganizationtype(String organizationtype) {
+		this.organizationtype = organizationtype;
+	}
+
+
+	public String getOrganizationname() {
+		return organizationname;
+	}
+
+
+	public void setOrganizationname(String organizationname) {
+		this.organizationname = organizationname;
+	}
+
+
+	public String getOrganizationcode() {
+		return organizationcode;
+	}
+
+
+	public void setOrganizationcode(String organizationcode) {
+		this.organizationcode = organizationcode;
+	}
+
+
+	public String getArea() {
+		return area;
+	}
+
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+
+	public String getManager() {
+		return manager;
+	}
+
+
+	public void setManager(String manager) {
+		this.manager = manager;
+	}
+
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+
+	public String getCertificate() {
+		return certificate;
+	}
+
+
+	public void setCertificate(String certificate) {
+		this.certificate = certificate;
+	}
+
+
+	public String getDbfrom() {
+		return dbfrom;
+	}
+
+
+	public void setDbfrom(String dbfrom) {
+		this.dbfrom = dbfrom;
+	}
+
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+
+
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
+
+
+	public Integer getLoginnum() {
+		return loginnum;
+	}
+
+
+	public void setLoginnum(Integer loginnum) {
+		this.loginnum = loginnum;
+	}
+
+
+	public String getNationality() {
+		return nationality;
+	}
+
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+
+
+	public Date getTimeLock() {
+		return timeLock;
+	}
+
+
+	public void setTimeLock(Date timeLock) {
+		this.timeLock = timeLock;
+	}
+
+
+	public String getAffiliated() {
+		return affiliated;
+	}
+
+
+	public void setAffiliated(String affiliated) {
+		this.affiliated = affiliated;
+	}
+
+
+	public String getImgCode_mobile() {
+		return imgCode_mobile;
+	}
+
+
+	public void setImgCode_mobile(String imgCode_mobile) {
+		this.imgCode_mobile = imgCode_mobile;
+	}
+
+
+	public String getMobileCode() {
+		return mobileCode;
+	}
+
+
+	public void setMobileCode(String mobileCode) {
+		this.mobileCode = mobileCode;
+	}
+
+
+	public String getIsCommerce() {
+		return isCommerce;
+	}
+
+
+	public void setIsCommerce(String isCommerce) {
+		this.isCommerce = isCommerce;
+	}
+
+
 
 }

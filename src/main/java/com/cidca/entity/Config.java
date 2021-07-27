@@ -18,10 +18,11 @@ public class Config {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
-	@Column(length=50)
-	private String webName; //网站名称
 	
+	@Column(name = "web_name",length=50)
+	private String webName; //网站名称
 	
 	public Integer getId() {
 		return id;

@@ -24,8 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.cidca.common.Constants;
 import com.cidca.entity.TBaseData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 
 /**
@@ -64,7 +62,7 @@ public class StringUtil {
 	}
 	
 	/**得到一个大写32位的UUID*/
-	public static String getRandomHexToUpperCase() {
+	public static String getUUIDRandomHexToUpperCase() {
 		return (UUID.randomUUID().toString().replaceAll("-", "")).toUpperCase();
 	}
 
@@ -1207,20 +1205,35 @@ public class StringUtil {
 	 * @param msg 返回的消息：10字内
 	 * @return
 	 */
-	public static String ConvertToStringWithJSON(boolean flag,String msg) {
-		Map<String, Object> returnMap=new HashMap<String, Object>();
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		returnMap.put("success", flag);
-		returnMap.put("msg", msg);
-		return gson.toJson(returnMap);
-	}
+//	public static String ConvertToStringWithJSON(boolean flag,String msg) {
+//		Map<String, Object> returnMap=new HashMap<String, Object>();
+//		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+//		returnMap.put("success", flag);
+//		returnMap.put("msg", msg);
+//		return gson.toJson(returnMap);
+//	}
 	
-	@SuppressWarnings({ "rawtypes" })
-	public static String ConvertToStringWithJSON(int total,List list) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("total", total);
-		map.put("rows", list);
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		return gson.toJson(map);
+//	public static String ConvertToStringWithJSON(String flag,String message) {
+//		Map<String, Object> returnMap=new HashMap<String, Object>();
+//		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+//		returnMap.put("success", flag);
+//		returnMap.put("message", message);
+//		return gson.toJson(returnMap);
+//	}
+	
+//	@SuppressWarnings({ "rawtypes" })
+//	public static String ConvertToStringWithJSON(int total,List list) {
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("total", total);
+//		map.put("rows", list);
+//		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+//		return gson.toJson(map);
+//	}
+	
+	public static Map<String, Object> returnMapToView(String resultcode,String value) {
+		Map<String, Object> returnMap=new HashMap<String, Object>();
+		returnMap.put("resultcode",resultcode);
+		returnMap.put("value", value);
+		return returnMap;
 	}
 }

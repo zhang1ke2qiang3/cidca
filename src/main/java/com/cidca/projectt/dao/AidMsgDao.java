@@ -23,12 +23,10 @@ public interface AidMsgDao extends JpaRepository<AidMsg, String>,JpaSpecificatio
     @Transactional
 	public int update(String project_name);
 	
-	public List<AidMsg> findByProject_name(String project_name);
-	
 	@Modifying
     @Transactional
 	@Query(value = "select u from AidMsg u where project_name = ?1")
-	public List<AidMsg> findByUseridAndPassword(@Param("project_name")String project_name);
+	public List<AidMsg> findByProject_name(@Param("project_name")String project_name);
 	
 	
 }

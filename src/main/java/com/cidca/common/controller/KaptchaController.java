@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 
@@ -24,7 +22,7 @@ public class KaptchaController {
     @Autowired
     DefaultKaptcha defaultKaptcha;
 
-    @RequestMapping("/defaultKaptcha")
+    @RequestMapping("/public/defaultKaptcha")
     public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response) throws Exception {
         byte[] captcha = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();

@@ -240,6 +240,9 @@ public class DateTools {
 	 * @return java.util.Date
 	 */
 	public static synchronized Date parseDateSecondFormat(String strDate) {
+		if (StringUtils.isEmpty(strDate)) {
+			return null;
+		}
 		String pattern = "yyyy-MM-dd HH:mm:ss";
 		return parseDateFormat(strDate, pattern);
 	}
@@ -276,7 +279,6 @@ public class DateTools {
 	 */
 	public static synchronized Date getDateStrMinuteFormat(java.util.Date date) {
 		String pattern = "yyyy-MM-dd HH:mm";
-
 		String strDate = getDateFormat(date, pattern);
 		return parseDateFormat(strDate, pattern);
 	}
@@ -309,13 +311,14 @@ public class DateTools {
 	}
 
 	/**
-	 * @return String
+	 * 日期转化字为符串
+	 * date-str
 	 */
 	public static synchronized String getDateDayFormat() {
 		Calendar cal = Calendar.getInstance();
 		return getDateDayFormat(cal);
 	}
-	
+
 	public static synchronized String getInThePastWeekFormat() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
@@ -369,7 +372,7 @@ public class DateTools {
 			return getDateFormat(date, pattern);
 		}
 		return null;
-		
+
 	}
 
 	public static synchronized String getDateDayFormatCN(java.util.Date date) {
@@ -670,8 +673,7 @@ public class DateTools {
 	 * @param pattern
 	 * @return java.util.Date
 	 */
-	public static synchronized Date parseDateFormat(String strDate,
-			String pattern) {
+	public static synchronized Date parseDateFormat(String strDate,String pattern) {
 		synchronized (sdf) {
 			Date date = null;
 			sdf.applyPattern(pattern);
@@ -990,7 +992,6 @@ public class DateTools {
 		/**
 		 * 详细设计： 1.指定日期的月份减1
 		 */
-
 		Calendar gc = parseCalendarDayFormat(date);
 		gc.add(Calendar.MONTH, -1);
 		return getDateDayFormat(gc);
@@ -1389,7 +1390,7 @@ public class DateTools {
 	 * 标准日期格式
 	 */
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
-	
+
 	/**
 	 * 标准时间格式
 	 */
@@ -1399,7 +1400,7 @@ public class DateTools {
 	 * ORA标准日期格式
 	 */
 	private static final SimpleDateFormat ORA_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-	
+
 	/**
 	 * ORA标准时间格式
 	 */
@@ -1878,7 +1879,7 @@ public class DateTools {
 		calEnd.setTime(endDate);  
 		return calEnd.get(Calendar.DAY_OF_MONTH) - calBegin.get(Calendar.DAY_OF_MONTH);  
 	}
-	
+
 	/**
 	 * java计算两个日期之间相差天数-20210520
 	 */
@@ -1898,7 +1899,7 @@ public class DateTools {
 		}
 		return days;
 	}
-	
+
 	/**
 	 * java计算两个日期之间相差天数-20210520
 	 */
@@ -1909,8 +1910,8 @@ public class DateTools {
 		}
 		return days;
 	}
-	
-	
+
+
 	public static Date stringTodate(String dateStr, String formatStr) {  
 		// 如果时间为空则默认当前时间  
 		Date date = null;  
@@ -1936,52 +1937,6 @@ public class DateTools {
 		return date;  
 	}
 
-
-	/**
-	 * 由出生日期获得年龄 
-	 * 
-	 * @param strDate 出生日期(yyyy-MM-dd)
-	 * @return
-	 * @author 宗磊
-	 */
-	public static String getAgeStr(String strDate) throws Exception { 
-		String ageStr = "";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-		Date birthDay = null;
-		birthDay = sdf.parse(strDate);
-		Calendar cal = Calendar.getInstance(); 
-		int age = 0;
-		if (birthDay != null) {
-			if (cal.before(birthDay)) {  
-				throw new IllegalArgumentException(  
-						"The birthDay is before Now.It's unbelievable!");  
-			}  
-			int yearNow = cal.get(Calendar.YEAR);  
-			int monthNow = cal.get(Calendar.MONTH);  
-			int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH);  
-			cal.setTime(birthDay);   
-
-			int yearBirth = cal.get(Calendar.YEAR);  
-			int monthBirth = cal.get(Calendar.MONTH);  
-			int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);   
-
-			age = yearNow - yearBirth;  
-
-			if (monthNow <= monthBirth) {  
-				if (monthNow == monthBirth) {  
-					if (dayOfMonthNow < dayOfMonthBirth) {
-						 age--;  
-					}
-				}else{  
-					age--;  
-				}  
-			}  
-			ageStr = age + "岁";
-		}
-
-		return ageStr;  
-	}
-
 	/**
 	 * 由出生日期获得年龄 
 	 * @param birthday 出生日期
@@ -2003,44 +1958,34 @@ public class DateTools {
 			Calendar date1 = Calendar.getInstance();
 			date1.setTime(birthday);
 			int year1=date1.get(Calendar.YEAR);
-
 			Calendar date2 = Calendar.getInstance();
 			date2.setTime(new Date());
 			int year2=date2.get(Calendar.YEAR);
 			nl=year2-year1;
 		}
-
 		return nl;
 	}
 
-	public static String formatDateTime(String dateTime) throws Exception{
-		String date = dateTime.substring(0, 10);
-		String time = dateTime.substring(11, 19);
-		dateTime = date + " " +time;
-		return dateTime;
-	}
-
+	/**
+	 * 计算相差时间
+	 * @param paraDate
+	 * @return
+	 */
 	public static int dateDiff(String paraDate){
 		long min = 0L;
-		//String strTime = null;
 		// 按照传入的格式生成一个simpledateformate对象
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:sss");
 		long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
 		long nh = 1000 * 60 * 60;// 一小时的毫秒数
 		long nm = 1000 * 60;// 一分钟的毫秒数
-		//long ns = 1000;// 一秒钟的毫秒数
 		long diff;
 		int Differ=0;
-		//long day = 0;
 		Date curDate = new Date(System.currentTimeMillis());//获取当前时间
 		String str = sd.format(curDate);
 		try {
 			// 获得两个时间的毫秒时间差异
 			diff = sd.parse(paraDate).getTime() - sd.parse(str).getTime();
-			//day = diff / nd;// 计算差多少天
-			//long hour = diff % nd / nh;// 计算差多少小时
 			min = diff % nd % nh / nm;// 计算差多少分钟
-			//long sec = diff % nd % nh % nm / ns;// 计算差多少秒
 			Differ= new Long(min).intValue(); 
 			return Differ;
 		} catch (Exception e) {
@@ -2089,9 +2034,7 @@ public class DateTools {
 				day = 366;
 			}
 		}
-
 		Date tempDate = getDateBefore(date2, day);
-
 		if (date.getTime() < tempDate.getTime()) {
 			System.out.println(date + "在" + tempDate + "前面");
 			return true;
@@ -2290,17 +2233,17 @@ public class DateTools {
 		}
 		return flag;
 	}
-	
+
 	// 计算两个时间差，返回为分钟。
-    public static long CalTime(Date d1, Date d2) {
-        long minutes = 0L;
-        long diff = d1.getTime() - d2.getTime();
+	public static long CalTime(Date d1, Date d2) {
+		long minutes = 0L;
+		long diff = d1.getTime() - d2.getTime();
 		minutes = diff / (1000 * 60);
-        return minutes;
-    }
-    
-    //两个日期之间的月份之差 月份 两个日期间的月份数 月份差 
-    public static int getMonthDiff(Date d1, Date d2) {
+		return minutes;
+	}
+
+	//两个日期之间的月份之差 月份 两个日期间的月份数 月份差 
+	public static int getMonthDiff(Date d1, Date d2) {
 		Calendar c1 = Calendar.getInstance();
 		Calendar c2 = Calendar.getInstance();
 		c1.setTime(d1);
@@ -2328,13 +2271,13 @@ public class DateTools {
 	}
 
 
-    /**
-     * 
-     * @param date1 被比较的时间
-     * @param date2 现在的时间
-     * @return
-     */
-    public static long ShowTimeInterval(Date date1, Date date2) throws Exception{
+	/**
+	 * 
+	 * @param date1 被比较的时间
+	 * @param date2 现在的时间
+	 * @return
+	 */
+	public static long ShowTimeInterval(Date date1, Date date2) throws Exception{
 		long lDate1 = date1.getTime();
 		long lDate2 = date2.getTime();
 		long diff = (lDate1 < lDate2) ? (lDate2 - lDate1) : (lDate1 - lDate2);
@@ -2345,9 +2288,31 @@ public class DateTools {
 		return sec;
 	}
 
+	/**得到当前时间*/
+	public static synchronized Date getLockTime(){
+		Calendar nowTime = Calendar.getInstance();//得到当前时间
+		nowTime.add(Calendar.MINUTE, 5);
+		return nowTime.getTime();
+	}
 
+	/**得到当前时间*/
+	public static synchronized Date getCurrentTime(){
+		Calendar nowTime = Calendar.getInstance();
+		return nowTime.getTime();
+	}
 
-
+	/**String转long*/
+	public static long pareLong(String time){
+		SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		long s=0;
+		try {
+			s=sim.parse(time).getTime();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return s;
+	}
 
 
 
