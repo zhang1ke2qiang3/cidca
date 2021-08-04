@@ -1,6 +1,10 @@
 package com.cidca.system.controller;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +15,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cidca.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -34,9 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cidca.common.Constants;
-import com.cidca.entity.TAuditLog;
-import com.cidca.entity.TMuser;
-import com.cidca.entity.TUserRole;
+import com.cidca.system.service.BusiLogService;
 import com.cidca.system.service.MuserService;
 import com.cidca.system.service.SystemService;
 import com.cidca.system.service.UserRoleService;
@@ -48,12 +51,14 @@ import com.cidca.util.RegexUtilxs;
 import com.cidca.util.StringUtil;
 import com.cidca.util.UserCounter;
 
+import sun.misc.BASE64Encoder;
+
 /**
  * 不需要认证的全部放到这个Controller @RequestMapping("/public")
  * @author mingtian
  *
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "restriction" })
 @Controller
 @RequestMapping("/public")
 public class LoginController {
@@ -66,6 +71,8 @@ public class LoginController {
 	private SystemService systemService;
 	@Autowired
 	private UserRoleService userRoleService;
+	@Autowired
+	private BusiLogService busiLogService;
 
 	/**
 	 * 登录页
@@ -75,6 +82,16 @@ public class LoginController {
 	@RequestMapping("/login")
 	public String login() throws Exception {
 		return "/sys/login";//自动把String解析为视图
+	}
+
+	/**
+	 * 登录页
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/exlogin")
+	public String exlogin() throws Exception {
+		return "/sys/exlogin";//自动把String解析为视图
 	}
 
 	/**
@@ -102,21 +119,14 @@ public class LoginController {
 		String tryCode=object.getString("tryCode");//用户输入的验证码
 		logger.info("rightCode:" + rightCode + " ———— tryCode:" + tryCode);
 
-		String ip=UserCounter.getClientIpAddress(request);
-
-		//错误3次出3次以上锁定10分钟
-		boolean checkLoginNum4 = checkLoginNum4ByUser(userid);
-		if (checkLoginNum4) {
-			Date lockTime = DateTools.getLockTime();//当前时间+5分钟
-			TMuser muser = userService.findByIdcard(userid);
-			if (null!=muser) {
-				muser.setTimeLock(lockTime);//时间锁
-				userService.updateTMuser(muser);
-				systemService.save(new TAuditLog(userid, ip, lockTime, "账号锁定"));
-			}
-			Constants.errorMap.remove(userid);//清除，防止时间锁到了后不能登录
-			return StringUtil.returnMapToView("200",  "请勿频繁登录，请与"+DateTools.getDateMilliFormat(lockTime)+"再试");
+		if (StringUtils.isEmpty(tryCode)) {
+			return StringUtil.returnMapToView( "200","请输入的验证码~");
 		}
+		if (!rightCode.equals(tryCode)) {
+			return StringUtil.returnMapToView( "200","您输入的验证码不正确，请点击刷新后重新获取~");
+		}
+
+		String ip=UserCounter.getClientIpAddress(request);
 
 		Subject subject = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(userid, password);// 在认证提交前准备 token（令牌）
@@ -136,7 +146,6 @@ public class LoginController {
 			user.setPersontype(muser.getPersontype());
 			user.setIdcard(muser.getIdcard());
 			user.setFullname(muser.getFullname());
-			user.setPersontype(muser.getPersontype());
 			//设置首次登录标志
 			Integer loginnum=muser.getLoginnum();
 			if(null==loginnum){
@@ -155,6 +164,22 @@ public class LoginController {
 			return StringUtil.returnMapToView( "200", "登录失败");
 		}
 	}
+
+//	/**
+//	 * 获取菜单
+//	 * @param request
+//	 * @param response
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	@SuppressWarnings({ "unchecked"})
+//	@RequestMapping(value = "/getmenu")
+//	public @ResponseBody List getmenu(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		String idcard = (String) request.getSession().getAttribute("SESSION_KEY");//获取idcard
+//		//根据idcard查询角色
+//		List<TRoleMenu> roleMenuList = systemService.roleMenuListByUserid();
+//
+//	}
 
 	/**
 	 * 登录-手机+验证码形式
@@ -330,7 +355,6 @@ public class LoginController {
 				}else{
 					return StringUtil.returnMapToView("200", "该用户名已被注册");
 				}
-
 			}
 			Map<String, Object> returnMap=new HashMap<String, Object>();
 			returnMap.put("resultcode","100");
@@ -352,6 +376,32 @@ public class LoginController {
 			flag=true;
 		}
 		return flag;
+	}
+
+	/**
+	 * 获取手机验证码前 校验图形码
+	 * 如果输入的验证码和发放的一致，则准许获取验证码；否则不准
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getCodeBefore")
+	public @ResponseBody Map<String, Object> getCodeBefore(HttpServletRequest request) throws Exception {
+		String rightCode = (String) request.getSession().getAttribute("rightCode");
+		String inputCode=request.getParameter("inputCode");
+		if (StringUtils.isEmpty(rightCode)) {
+			return StringUtil.returnMapToView("200","图形码生成失败，请联系管理员~");
+		}
+		if (StringUtils.isEmpty(inputCode)) {
+			return StringUtil.returnMapToView("200","请输入图形码后获取手机验证码~");
+		}
+		if (!rightCode.equals(inputCode)) {
+			return StringUtil.returnMapToView("200","输入的图形码与实际不符，请刷新后重新输入~");
+		}
+		if (rightCode.equals(inputCode)) {
+			return StringUtil.returnMapToView("100","校验成功~");
+		}
+		return null;
 	}
 
 	/**
@@ -412,7 +462,7 @@ public class LoginController {
 	public String changePw(HttpServletRequest request) throws Exception {
 		return "/sys/changePw";
 	}
-	
+
 	/**
 	 * 注册-验证手机号码并发送验证码
 	 */
@@ -573,67 +623,105 @@ public class LoginController {
 
 	/**
 	 * 证明文件上传-支持多文件
-	 * @param files
+	 * @param
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/multifileUpload")
-	public @ResponseBody Map<String, Object> multifileUpload(@RequestParam(value = "fileName",required = false)MultipartFile[] files, HttpServletRequest request) throws Exception {
-		String idcard=request.getParameter("idcard");
+	public @ResponseBody Map<String, Object> multifileUpload(
+			@RequestParam(value = "certificate",required = false)MultipartFile file, 
+			@RequestParam(value = "idcard",required = false)String idcard, 
+			HttpServletRequest request) throws Exception {
 		if (StringUtils.isNotEmpty(idcard)) {
 			TMuser muser = userService.findByIdcard(idcard);
 			if (null==muser) {
 				return StringUtil.returnMapToView("200","未找到当前用户，请登录!");
 			}
-		}
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		if(files.length<1){
-			return StringUtil.returnMapToView("200","文件不存在");
-		}
-		String path = ClassUtils.getDefaultClassLoader().getResource("static").getPath()+"/upload/";
-
-		for (int i = 0; i < files.length; i++) {
-			MultipartFile file=files[i];
-			String fileName = file.getOriginalFilename();
-			if (StringUtils.isEmpty(fileName)) {
-				continue;
+			if (file.isEmpty()) {
+				return StringUtil.returnMapToView("200","文件不存在");
 			}
-			//判断文件合法性
-			int index = fileName.lastIndexOf(".");
-			String suffix = null;
-			if (index == -1 || (suffix = fileName.substring(index + 1)).isEmpty()) {
-				return StringUtil.returnMapToView("200", "文件后缀不能为空");
-			}
-
 			boolean b1 = FileUtils.getLegitimacyOfFile(file.getInputStream());
 			if (!b1) {
 				return StringUtil.returnMapToView("200", "文件格式不符合规范");
 			}
 
-			int size = (int) file.getSize();
-			logger.info("文件名称："+fileName + "，文件大小(long)-->" + size);
-
 			if(file.isEmpty()){
 				return StringUtil.returnMapToView("200","文件不存在");
 			}else{
-				File targetFile= new File(path + "/" + fileName);
-				if(!targetFile.getParentFile().exists()){ //判断文件父目录是否存在
-					targetFile.getParentFile().mkdir();
+				if (null!=file) {
+					try {
+						String encode = new BASE64Encoder().encode(file.getBytes());
+						muser.setCertificate(encode);
+						userService.saveTMuser(muser);
+						busiLogService.insert(
+							new TBusiLog(StringUtil.getUUIDRandomHexToUpperCase(), "上传证明文件", "t_muser", muser.getUuid(), muser.getFullname(),
+								muser.getFullname()+"上传证明文件", new Date(), null)
+						);
+					} catch (IOException e) {
+						logger.error(e.getMessage());
+						return StringUtil.returnMapToView("200", "上传失败~");
+					}
 				}
-				try {
-					file.transferTo(targetFile);
-				}catch (Exception e) {
-					e.printStackTrace();
-					return StringUtil.returnMapToView("200","upload file fail");
-				} 
 			}
-			return StringUtil.returnMapToView("100","上传成功！请等待审核，审核通过后将有邮件和短信通知。");
+
+		}else{
+			return StringUtil.returnMapToView("200","未找到当前用户，请登录!");
 		}
-		return StringUtil.returnMapToView("200","上传失败，未检测到您上传文件");
+
+
+
+		return StringUtil.returnMapToView("100","上传成功！请等待审核，审核通过后将有邮件和短信通知。");
 	}
 
+
+	@RequestMapping(value = "/downloadCertificateTemplate")
+	public String downloadCertificateTemplate( HttpServletResponse response ,Model model) throws Exception {
+		//待下载文件名
+		String fileName = "C:/Users/mingtian/Pictures/Template.pdf";//TODO 上线前记得替换
+		//设置为png格式的文件
+		response.setHeader("content-type", "application/pdf");
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=" + new String("模板.pdf".getBytes("gb2312"), "ISO8859-1" ));
+		byte[] buff = new byte[1024];
+		BufferedInputStream bis = null;//创建缓冲输入流
+		OutputStream outputStream = null;
+		try {
+			outputStream = response.getOutputStream();
+			//这个路径为待下载文件的路径
+			bis = new BufferedInputStream(new FileInputStream(new File(fileName)));
+			int read = bis.read(buff);
+
+			//通过while循环写入到指定了的文件夹中
+			while (read != -1) {
+				outputStream.write(buff, 0, buff.length);
+				outputStream.flush();
+				read = bis.read(buff);
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+			//出现异常返回给页面失败的信息
+			model.addAttribute("result","下载失败");
+		} finally {
+			if (bis != null) {
+				try {
+					bis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//成功后返回成功信息
+		model.addAttribute("result","下载成功");
+		return null;
+	}
 
 	@RequestMapping(value = "/error")
 	public String error(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -642,49 +730,6 @@ public class LoginController {
 		return "/sys/error";
 	}
 
-	//-----------------测试区-----------------
-	/**
-	 * 首页：验证码-首页 OK 测试无误
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping("/login_Kaptcha")
-	public ModelAndView login_Kaptcha() throws Exception {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("title", "loginPage");
-		mav.setViewName("/sys/login_Kaptcha");
-		return mav;
-	}
-
-	@RequestMapping(value="/insertOrUpdateTMuser")
-	@ResponseBody
-	public String insertTMuser(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//		Date date = new Date();
-		//		TMuser tMuser = new TMuser(basedataDao.getOne(0), "www", "A95DCB8AEBB202EFEEDB10D5538EDEB9", "测试", "CS", "13718651580", 
-		//				"4233970@qq.com", basedataDao.getOne(3), "组织名称", "Q1W2E3R4", basedataDao.getOne(370), 
-		//				"北京市房山区拱辰街道办事处拱辰北大街45号", "单位负责人", "010-12345678", null, null, date, date, Constants.ZERO, 0, null, null);
-		//		userService.insert(tMuser);
-		//		TMuser muser = userService.findByIdcard("qqq");
-		//		String userPassword="";
-		//		List<TMuser> list = userService.findByIdcardAndPassword("qqq", "A95DCB8AEBB202EFEEDB10D5538EDEB9");
-		//		if (list.size()==1) {
-		//			userPassword = list.get(0).getPassword();
-		//		}
-		//		muser.setIdcard("www");
-		//		userService.updateTMuser(muser);
-		return "insertTMuser ok";
-	}
-
-	@RequestMapping(value = "/loginTest")
-	public @ResponseBody Map<String, Object> loginTest( HttpServletRequest request,HttpServletResponse response) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		String a = request.getParameter("a");
-		logger.info(a);
-		map.put("resultcode", "100");
-		map.put("value", "提交成功");
-		return map;
-	}
 
 
 

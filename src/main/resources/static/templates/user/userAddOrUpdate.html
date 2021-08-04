@@ -1,0 +1,417 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>对外援助统计数据直报平台-注册</title>
+		<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<script src="../../js/jquery.min_1.10.2.js"></script>
+		<script src="../../js/bootstrap/bootstrap.min.js"></script>
+		<link href="../../css/inputRegister/inputRegister.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="box">
+			<div class="boxs">
+				<div class="top-box">
+					<img src="../../img/login-img/icon_zhuce logo.png"/>
+					<div class="top-txt">对外援助统计数据直报平台</div>
+					<img src="../../img/login-img/icon_help.png"/>
+				</div>
+				<div class="box-con">
+					<div class="box-plan" id="planBox">
+
+					</div>
+					<div id="fillBox">
+
+					</div>
+					<div class="next-box">
+						<button class="but-box" onclick="goNext()">下一步</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			var planNum = 1
+			var planList  = [{
+				ind:1,
+				name:'信息填报'
+			},{
+				ind:2,
+				name:'上传附件'
+			},{
+				ind:3,
+				name:'注册成功'
+			}]
+			var fillList = [{
+				titName:'登录名',
+				type:'text',
+				idName:'idcard',
+				placeTxt:'15字以内'
+			},{
+				titName:'密码',
+				type:'password',
+				idName:'password',
+				placeTxt:'8~15位，字母数字和特殊符号的组合'
+			},{
+				titName:'再次输入密码',
+				type:'password',
+				idName:'password2',
+				placeTxt:'8~15位，字母数字和特殊符号的组合'
+			},{
+				titName:'经办人名字',
+				type:'text',
+				idName:'fullname',
+				placeTxt:'20字以内'
+			},{
+				titName:'手机号码',
+				type:'text',
+				idName:'mobile',
+				placeTxt:'11位数字'
+			},{
+				titName:'验证码',	
+				type:'textBut',
+				idName:'mobileCode',
+				placeTxt:'请输入收到的短信验证码',
+				butTxt:'发送验证码',
+				butId:'mobileCodeBut'
+			},{
+				titName:'邮箱',
+				type:'text',
+				idName:'email',
+				placeTxt:'示例：wangjie@126.com'
+			},{
+				titName:'组织类型',
+				type:'radio',
+				idName:'organizationtype',
+				radioList:[{
+					name:'企业',
+					value:'1'
+				},{
+					name:'社会组织',
+					value:'0'
+				}]
+			},{
+				titName:'企业名称',
+				type:'text',
+				idName:'',
+				patternType:'firm',
+				placeTxt:'30字内，请填写全名'
+			},{
+				titName:'社会组织名称',
+				type:'text',
+				idName:'organizationname',
+				patternType:'tissue',
+				placeTxt:'30字内'
+			},{
+				titName:'所属上级单位',
+				type:'text',
+				idName:'affiliated',
+				placeTxt:'30字内，请填写全名'
+			// },{
+			// 	titName:'业务主管单位',
+			// 	type:'text',
+			// 	patternType:'tissue',
+			// 	placeTxt:'30字内'
+			},{
+				titName:'是否是两家商会会员单位',
+				type:'radio',
+				patternType:'firm',
+				idName:'',
+				radioList:[{
+					name:'是',
+					value:'0'
+				},{
+					name:'否',
+					value:'1'
+				}]
+			},{
+				titName:'统一社会信用代码',
+				type:'textBut',
+				idName:'organizationcode',
+				placeTxt:'30字内',
+				butTxt:'检查重复',
+				butId:'organizationcodeBut'
+			},{
+				titName:'注册地',
+				type:'select',
+				idName:'area',
+				idNames:'city',
+				inputId:'address',
+				placeTxt:'50字以内',
+				selectList:[{
+					name:'北京市',
+					children:[{
+						name:'朝阳区'
+					},{
+						name:'大兴区'
+					},{
+						name:'西城区'
+					},{
+						name:'昌平区'
+					}]
+				},{
+					name:'山西省',
+					children:[{
+						name:'太原市'
+					},{
+						name:'吕梁市'
+					},{
+						name:'大同市'
+					},{
+						name:'阳泉市'
+					}]
+				}]
+			},{
+				titName:'单位负责人',
+				type:'text',
+				idName:'manager',
+				placeTxt:'15字以内'
+			},{
+				titName:'企业联系电话',
+				type:'text',
+				idName:'telephone',
+				placeTxt:'固定电话，示例：010-12345678'
+			}]
+			$(function() {
+				appendPlan(planList,planNum)
+				appendFill()
+				//组织类型点选框事件
+				$("input[name='organizationtype']").change(function(){
+					if($(this).val() == 0){
+						$('.firm-hide').hide()
+						$('.tissue-hide').show()
+					}else if($(this).val() == 1){
+						$('.firm-hide').show()
+						$('.tissue-hide').hide()
+					}
+				})
+				//注册地选择省份点击事件
+				$("#area").change(function(){
+					fillList.forEach(function(item,index){
+						if(item.idName == 'area'){
+							item.selectList.forEach(function(items,ind){
+								if(items.name == $("#area").val()){
+									$('#city').empty()
+									for(var i = 0;i < items.children.length;i++){
+										$('#city').append('<option value="'+items.children[i].name+'">'+items.children[i].name+'</option>')
+									}
+								}
+							})
+						}
+					})
+				})
+				//获取验证码
+				$('#mobileCodeBut').click(function(){
+					if(!isVerify($('#mobile').val())) {
+						$("#mobile").focus();
+						return false;
+					}
+					var phoneReg = /^1[3-578]\d{9}$/;
+					if(phoneReg.test($('#mobile').val())){
+						var uJson = "{'one':'" + $('#mobile').val() + "'}";
+						console.log("uJson==>"+uJson);
+						uJson = window.btoa(uJson);
+						$.post('/public/registerMobile',{uJson:uJson},function(result){
+							if(result.resultcode=='100'){
+								alert("验证码已发送");
+								//倒计时
+								$('#mobileCodeBut').attr("disabled","disabled");
+								setTimeout(function(){
+									$('#mobileCodeBut').css({"opacity":"0.8","font-size":'12px'});//opacity:设置元素的不透明级别，没什么意义
+								})
+								var time = 120;
+								var set=setInterval(function(){
+									$('#mobileCodeBut').text((--time)+"秒后重新获取");
+								}, 1000);//setInterval：每1秒执行一次function里面的 :
+								setTimeout(function(){
+									$('#mobileCodeBut').attr("disabled",false).text("重新获取验证码");
+									clearInterval(set);
+								}, 120000);
+							}else if(result.resultcode=='200'){
+								alert(result.value);
+							}else{
+								alert("未知的错误");
+							}
+						},'json');
+					}else{
+						alert("请输入正确的手机号码");
+						return false;
+					}
+				})
+			});
+			function appendPlan(planList,iNum){
+				$('#planBox').empty()
+				planList.forEach(function(item,index){
+					if(index  > iNum-1){
+						if(index != planList.length-1){
+							$('#planBox').append('<div class="striping-box"><img src="../../img/login-img/Oval-'+item.ind+'-n .png"/>'+item.name+'</div><div class="striping"></div>')
+						}else{
+							$('#planBox').append('<div class="striping-box"><img src="../../img/login-img/Oval-'+item.ind+'-n .png"/>'+item.name+'</div>')
+						}
+					}else{
+						if(index != planList.length-1){
+							$('#planBox').append('<div class="striping-box striping-active"><img src="../../img/login-img/Oval-'+item.ind+' .png"/>'+item.name+'</div><div class="striping"></div>')
+						}else{
+							$('#planBox').append('<div class="striping-box striping-active"><img src="../../img/login-img/Oval-'+item.ind+' .png"/>'+item.name+'</div>')
+						}
+					}
+				})
+			}
+			function appendFill(){
+				$('#fillBox').empty()
+				fillList.forEach(function(item,index){
+					var fillHtml = ''
+					if(item.type == 'text'){
+						fillHtml = '<input id="'+item.idName+'" class="input-text" type="text" placeholder="'+item.placeTxt+'"/>'
+					}else if(item.type == 'password'){
+						fillHtml = '<input id="'+item.idName+'" class="input-text" type="password" placeholder="'+item.placeTxt+'"/>'
+					}else if(item.type == 'textBut'){
+						fillHtml = '<input id="'+item.idName+'" class="input-text-but" type="text" placeholder="'+item.placeTxt+'"/><button id="'+item.butId+'"  class="input-but">'+item.butTxt+'</button>'
+					}else if(item.type == 'radio'){
+						item.radioList.forEach(function(items,ind){
+							if(ind == 0){
+								fillHtml += '<input type="radio" name="'+item.idName+'" value="'+items.value+'" checked>'+items.name
+							}else{
+								fillHtml += '<input type="radio" name="'+item.idName+'" value="'+items.value+'">'+items.name
+							}
+						})
+					}else if(item.type == 'select'){
+						fillHtml += '<select id="'+item.idName+'">'
+						item.selectList.forEach(function(items,ind){
+							fillHtml += '<option value="'+items.name+'">'+items.name+'</option>'
+						})
+						fillHtml += '</select>'
+						fillHtml += '<select id="'+item.idNames+'">'
+						item.selectList[0].children.forEach(function(items,ind){
+							fillHtml += '<option value="'+items.name+'">'+items.name+'</option>'
+						})
+						fillHtml += '</select>'
+					}
+					if(item.patternType == 'tissue'){
+						$('#fillBox').append('<div class="fill-boxs tissue-hide"><label class="tit-label">'+item.titName+'：</label>'+fillHtml+'</div>')
+					}else if(item.patternType == 'firm'){
+						$('#fillBox').append('<div class="fill-boxs firm-hide"><label class="tit-label">'+item.titName+'：</label>'+fillHtml+'</div>')
+					}else{
+						$('#fillBox').append('<div class="fill-boxs"><label class="tit-label">'+item.titName+'：</label>'+fillHtml+'</div>')
+						if(item.idName == 'area'){
+							fillHtml = '<input class="input-text" id="'+item.inputId+'" type="text" placeholder="'+item.placeTxt+'"/>'
+							$('#fillBox').append('<div class="fill-boxs"><label class="tit-label"></label>'+fillHtml+'</div>')
+						}
+					}
+				})
+			}
+			//下一步
+			function goNext(){
+				saveMuser()
+				if(planNum < planList.length){
+					planNum ++
+					appendPlan(planList,planNum)
+					if(planNum == 2){
+						saveMuser()
+						$('#fillBox').hide()
+					}else if(planNum == 3){
+					}
+				}
+			}
+			//提交注册填写的数据
+			function saveMuser(){
+				if(!isVerify($("#idcard").val())) {
+					alert('请输入登录名!');
+					return;
+				}
+				if(!isVerify($("#password").val()) || !isVerify($("#password2").val())) {
+					alert('请输入密码!');
+					return;
+				}
+				if($("#password").val() != $("#password2").val()){
+					alert('密码输入不一致!');
+					return;
+				}
+				if(!isVerify($("#fullname").val())) {
+					alert('请输入经办人名字!');
+					return;
+				}
+				if(!isVerify($("#mobile").val())) {
+					alert('请输入手机号!');
+					return;
+				}
+				if(!isVerify($("#mobileCode").val())) {
+					alert('请输入验证码!');
+					return;
+				}
+				if(!isVerify($("#email").val())) {
+					alert('请输入邮箱!');
+					return;
+				}
+				if(!isVerify($("#organizationname").val())) {
+					alert('请输入社会组织名称!');
+					return;
+				}
+				if(!isVerify($("#affiliated").val())) {
+					alert('请输入所属上级单位!');
+					return;
+				}
+				if(!isVerify($("#organizationcode").val())) {
+					alert('请输入统一社会信用代码!');
+					return;
+				}
+				if(!isVerify($("#address").val())) {
+					alert('请输入详细注册地!');
+					return;
+				}
+				if(!isVerify($("#manager").val())) {
+					alert('请输入单位负责人!');
+					return;
+				}
+				if(!isVerify($("#telephone").val())) {
+					alert('请输入企业联系电话!');
+					return;
+				}
+				var postData = {};
+				postData.idcard = $('#idcard').val();//姓名
+				postData.password = $('#password').val();//密码
+				postData.fullname = $('#fullname').val();//经办人
+				postData.mobile = $('#mobile').val();//手机号
+				postData.mobileCode = $('#mobileCode').val();//验证码
+				postData.email = $('#email').val();//邮箱
+				postData.organizationtype = $("input[name='organizationtype']:checked").val();//组织类型
+				postData.organizationname = $('#organizationname').val();//社会组织名称
+				postData.affiliated = $('#affiliated').val()//所属上级单位
+				postData.organizationcode = $('#organizationcode').val();//统一社会信用代码
+				postData.area = $('#area').val();//省
+				postData.address = $('#address').val();//详细地址
+				postData.manager = $('#manager').val();//单位负责人
+				postData.telephone = $('#telephone').val();//企业联系电话
+				$.ajax({
+					url : '/public/saveMuser',
+					type : "post",
+					data : JSON.stringify(postData),
+					contentType : "application/json; charset=utf-8",
+					dataType : "json",
+					success : function(data) {
+						if (data.resultcode == "100") {
+							alert("data.value=="
+									+ data.value);
+							if (data.idcard != '') {
+								window.location.href = "/public/registerUploadFile?idcard="+ data.idcard;
+							} else {
+								window.location.href = "/public/login";
+							}
+						} else if (data.resultcode == "200") {
+							alert("注册失败" + data.value);
+						}
+					},
+					error : function(a, b, c) {
+						alert("error:");
+					}
+				});
+			}
+			function isVerify(data){
+				if(data == null || data == undefined || data == ''){
+					return false
+				}else{
+					return true
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -11,7 +11,6 @@ import com.cidca.entity.TRolePermission;
 
 public interface RolePermissionDao extends JpaRepository<TRolePermission, Integer>,JpaSpecificationExecutor<TRolePermission>{
 	
-	
 	@Query(nativeQuery = true, value = "select roleid,permission_code from t_role_permission  where roleid=:roleid")
 	public List<Object> findPermissionByRoleid(@Param("roleid") Integer roleid);
 }

@@ -26,4 +26,9 @@ public interface BaseDataDao extends JpaRepository<TBaseData, Integer> ,JpaSpeci
 	@Transactional
 	@Query(value = "select u from TBaseData u where types = ?1")
 	public List<TBaseData> findByTypes(@Param("types")String types);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "select u from TBaseData u where code = ?1")
+	public TBaseData findByCode(@Param("code")Integer code);
 }

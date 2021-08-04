@@ -61,6 +61,10 @@ public class TUser implements Serializable {
 	//时间锁
 	@Column(name = "timelock")
 	private Date timeLock;
+
+	//姓名
+	@Column(name = "realname")
+	private String realname;
 	
 	@Column(name = "uuid")
 	private String uuid;
@@ -219,7 +223,12 @@ public class TUser implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	
+
+	public String getRealname() {
+		return realname;
+	}
+
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
 }

@@ -10,7 +10,7 @@ import com.cidca.entity.AidMsgSubclass;
 
 public interface AidMsgSubclassService {
 
-	public AidMsgSubclass insert(AidMsgSubclass vo) throws Exception;
+	public AidMsgSubclass save(AidMsgSubclass vo) throws Exception;
 
 	public int update(String project_name);
 
@@ -28,4 +28,15 @@ public interface AidMsgSubclassService {
 	
 	public List<AidMsgSubclass> findAllByAidmsgidAndYear(String aidmsgid,String yearr);
 
+	public List<AidMsgSubclass> findByYearAndProject_name(String yearr,String project_name) throws Exception;
+	
+	/**
+	 * 
+	 * @param createUser 人员表里的idcard
+	 * @param project_name
+	 * @return
+	 * @throws Exception
+	 */
+	public List<AidMsgSubclass> findByCreateUserAndProject_name(String createUser,String project_name) throws Exception;
+	
 }

@@ -19,16 +19,6 @@ public class Constants {
 	public static final String HEADPHOTO_PATH="/upload/headphoto/";
 	public static final String NOTICE_PATH="/upload/notice/";
 	public static final String PDF_PATH="/upload/pdf/";
-	public static final String TOOLBOX_PATH="/upload/toolbox/";
-	public static final String SXAP_PATH="/upload/sxap/";
-	public static final String MNPS_PATH="/upload/mnps/";
-	public static final String JZBG_PATH="/upload/jzbg/";
-	public static final String AJSC_PATH="/upload/ajsc/";
-	public static final String ZGCZ_PATH="/upload/zgcz/";
-	public static final String CULTIVATE_PATH="/upload/pxtz/";
-	public static final String TJBG_PATH="/upload/tjbg/";
-	public static final String JJZJ_PATH="/upload/jjzj/";
-	public static final String LEAVE_PATH="/upload/leave/";
 
 	public static final String ZERO="0";
 	public static final String ONE="1";
@@ -49,11 +39,11 @@ public class Constants {
 	public static final int INTERNAL=0;//内部人员
 
 	//	综合业务部门：
-	public final static int ZHYWB_RKJD=8;//	认可监督部	
-	public final static int ZHYWB_RKPD=9;//	认可评定部
-	public final static int ZHYWB_PSYB=10;//	评审员管理部
-	public final static int ZHYWB_JSYJ=11;//	技术研究部
-	public final static int ZHYWB_ZLGL=12;//	质量管理部
+	public final static int ZHYWB_RKJD=8;//	部门1
+	public final static int ZHYWB_RKPD=9;//	部门2
+	public final static int ZHYWB_PSYB=10;// 部门3
+	public final static int ZHYWB_JSYJ=11;// 部门4
+	public final static int ZHYWB_ZLGL=12;// 部门5
 	
 	/**学历-本科**/
 	public final static int EDU_181=181;

@@ -62,7 +62,7 @@ public class TMuser implements Serializable {
 
 	//统一社会信用代码
 	@Column(name = "organizationcode")
-	private String organizationcode;	
+	private String organizationcode;
 
 	//注册地址-省份
 	@Column(name = "area")
@@ -292,7 +292,6 @@ public class TMuser implements Serializable {
 	public String getAddress() {
 		return address;
 	}
-
 
 	public void setAddress(String address) {
 		this.address = address;

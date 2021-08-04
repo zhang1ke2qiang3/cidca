@@ -39,7 +39,7 @@ public class AidMsg  implements Serializable {
 	private String recipient_content;//受援内容
 
 	@Column(name = "annual_expenditure")
-	private BigDecimal annual_expenditure;//年度支出金额
+	private BigDecimal annual_expenditure;//年度支出金额--子表的总数
 	
 	@Column(name = "expenditure_form")
 	private String expenditure_form;//资金来源
@@ -78,8 +78,8 @@ public class AidMsg  implements Serializable {
 	 * "3";//审核不通过
 	 * "-1";//退回
 	 */
-	@Column(name = "statee")
-	private String statee;//状态
+//	@Column(name = "statee")
+//	private String statee;//状态
 	
 	@Column(name = "audit_user")
 	private String audit_user;//审核人
@@ -125,7 +125,7 @@ public class AidMsg  implements Serializable {
 	public AidMsg(String uuid, String yearr, String project_name, String recipient, String recipient_content,
 			BigDecimal annual_expenditure, String expenditure_form, String expenditure_remark, Date project_begin,
 			Date project_end, String project_remark, String create_user, Date create_time, Date update_time,
-			String node, String statee, String audit_user, Date audit_date) {
+			String node,String audit_user, Date audit_date) {
 		super();
 		this.uuid = uuid;
 		this.yearr = yearr;
@@ -142,7 +142,6 @@ public class AidMsg  implements Serializable {
 		this.create_time = create_time;
 		this.update_time = update_time;
 		this.node = node;
-		this.statee = statee;
 		this.audit_user = audit_user;
 		this.audit_date = audit_date;
 	}
@@ -325,39 +324,9 @@ public class AidMsg  implements Serializable {
 		this.node = node;
 	}
 
-
-	/**
-	 * 状态
-	 * "0";草稿
-	 * "1";//待审核
-	 * "2";//审核通过
-	 * "3";//审核不通过
-	 * "-1";//退回
-	 */
-	public String getStatee() {
-		return statee;
-	}
-
-
-	/**
-	 * 状态
-	 * "0";草稿
-	 * "1";//待审核
-	 * "2";//审核通过
-	 * "3";//审核不通过
-	 * "-1";//退回
-	 */
-	public void setStatee(String statee) {
-		this.statee = statee;
-	}
-
-
-
 	public String getAudit_user() {
 		return audit_user;
 	}
-
-
 
 	public void setAudit_user(String audit_user) {
 		this.audit_user = audit_user;

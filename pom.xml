@@ -166,13 +166,18 @@
 			<version>2.1.0</version>
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency> -->
-
-
-	</dependencies>
+		<!-- Base64加密解密jar 20210801-->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
+        <dependency>
+            <groupId>com.cidca</groupId>
+            <artifactId>cidca</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
