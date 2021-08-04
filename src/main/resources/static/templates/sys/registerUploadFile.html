@@ -1,0 +1,123 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>对外援助统计数据直报平台-注册</title>
+        <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <script src="../../js/jquery.min_1.10.2.js"></script>
+        <script src="../../js/bootstrap/bootstrap.min.js"></script>
+        <link href="../../css/inputRegister/inputRegister.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="box">
+            <div class="boxs">
+                <div class="top-box">
+                    <img src="../../img/login-img/icon_zhuce logo.png"/>
+                    <div class="top-txt">对外援助统计数据直报平台</div>
+                    <img src="../../img/login-img/icon_help.png"/>
+                </div>
+                <div class="box-con">
+                    <div class="box-plan" id="planBox">
+
+                    </div>
+					<div class="file-box" id="fileBox">
+						<div class="top-txt">您仅差一步就可以完成注册，请点击下载授权书模板，在模板中附上证明文件和承诺书并盖章后上传即可</div>
+						<div class="fill-boxs">
+							<label class="tit-label"><img src="../../img/icon_help2.png"> 请点击下载模板：</label>
+							<button id="downloadTemplate" class="input-but">下载模板</button>
+						</div>
+						<div class="fill-boxs">
+							<label class="tit-label"><img src="../../img/icon_help2.png"> 选择文件：</label>
+							<input type="file" id="uploadFile" style="display: none;"/>
+							<button id="uploadTemplate" class="input-but">上传文件</button>
+							<div id="fileName"></div>
+						</div>
+					</div>
+                    <div class="next-box">
+                        <button class="but-box" onclick="goNext()">下一步</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var planNum = 2
+            var planList  = [{
+                ind:1,
+                name:'信息填报'
+            },{
+                ind:2,
+                name:'上传附件'
+            },{
+                ind:3,
+                name:'注册成功'
+            }]
+            $(function() {
+                appendPlan(planList,planNum)
+				$('#downloadTemplate').click(function(){
+					window.location.href = "/public/getCertificateTemplate";
+				})
+				$('#uploadTemplate').click(function(){
+					$('#uploadFile').click()					
+				})
+				$('#uploadFile').change(function(){
+					var fileList = $('#uploadFile')[0].files[0]
+					$('#fileName').text(fileList.name)
+				})
+            })
+            function appendPlan(planList,iNum){
+                $('#planBox').empty()
+                planList.forEach(function(item,index){
+                    if(index  > iNum-1){
+                        if(index != planList.length-1){
+                            $('#planBox').append('<div class="striping-box"><img src="../../img/login-img/Oval-'+item.ind+'-n .png"/>'+item.name+'</div><div class="striping"></div>')
+                        }else{
+                            $('#planBox').append('<div class="striping-box"><img src="../../img/login-img/Oval-'+item.ind+'-n .png"/>'+item.name+'</div>')
+                        }
+                    }else{
+                        if(index != planList.length-1){
+                            $('#planBox').append('<div class="striping-box striping-active"><img src="../../img/login-img/Oval-'+item.ind+' .png"/>'+item.name+'</div><div class="striping"></div>')
+                        }else{
+                            $('#planBox').append('<div class="striping-box striping-active"><img src="../../img/login-img/Oval-'+item.ind+' .png"/>'+item.name+'</div>')
+                        }
+                    }
+                })
+            }
+			function goNext(){
+				var formData = new FormData();
+				if($('#uploadFile')[0].files[0] == undefined){
+					alert('请上传文件！')
+					return
+				}
+				formData.idcard = getUrlParms('idcard')
+				formData.certificate = $('#uploadFile')[0].files[0]
+				$.ajax({
+					url : '/public/multifileUpload',
+					type : "post",
+					data: formData,
+					dataType: 'json',
+					processData: false,
+					contentType: false,
+					success : function(data) {
+						if (data.resultcode == "100") {
+							alert("success" + data.value);
+							window.location.href = "/public/login";
+						} else if (data.resultcode == "200") {
+							alert(data.value);
+						}
+					},
+					error : function(a, b, c) {
+						alert("error:");
+					}
+				});
+			}
+			function getUrlParms(name) {
+				var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+				var r = window.location.search.substr(1).match(reg)
+				if (r != null) return unescape(r[2])
+				return null
+			}
+        </script>
+    </body>
+</html>
+
+

@@ -1,0 +1,250 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>企业信息管理</title>
+<link href="../../css/style.css" rel="stylesheet" type="text/css">
+
+ <!-- 这个CSS影响了全局布局 -->
+<!-- <link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css"> -->
+
+<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<style type="text/css">
+.strongFont {
+	color: blue;
+}
+
+.form-input-href {
+	width: 55%;
+	height: 28px;
+	border: 1px solid #cccccc;
+	border-radius: 2px;
+	color: #cccccc;
+	padding-left: 15px;
+	font-size: 14px;
+}
+
+</style>
+</head>
+
+<body>
+<div id="container" >
+	<div class="header">
+		 <div class="div1"> 
+		<img src="../../img/icon_jiemian logo.png"><p th:text="${title}"></p>
+		</div> 
+		 <div class="div2"> 
+		<img src="../../img/icon_help3.png"> <img src="../../img/touxiang.png"><p th:text="${user}"></p>
+		</div> 
+	</div>
+	
+<div id="main" >
+	<div id="menu"  >
+		<div  style="height: 130px;width: 200px; text-align: center;">
+			<img src="../../img/logo.png" style="height: 72px; padding-top: 30px;"	>
+		</div>  
+		<div >
+			<ul>
+				<li class="li1"><a href="/noticeShow/noticeList">通知公告</a></li>
+				<li class="li2"><a href="/aidmsg/inputAidmsg">数据填报</a></li>
+				<li class="li3" ><a href="/aidmsg/aidMsgWaitList">草稿箱</a></li>
+				<li class="li4"><a href="/aidmsg/aidMsgAlreadyList">进度查询</a></li>
+				<li class="li5"><a href="/sys/accountMan">账户管理</a></li>
+				<li class="li6"><a href="/sys/enterpriseMan">企业信息管理</a></li>
+			</ul>	
+		</div>
+	</div>
+
+
+<div id="content" >
+	<div  class="div-title"><h3>填报人账户管理</h3>
+	</div>
+	<div class="div-tab" >
+		<div  class="div-tab1"><span>首页</span><img src="../../img/icon_close.png" class="img" ></div>
+		<div style="width: 1px; float: left;">&shy;</div>
+		<div  class="div-tab2"><span>填报人信息</span><img src="../../img/icon_close.png" class="img"></div>	
+	</div>
+	<div class="main-bg">
+	<div >
+		<table width="95%" border="0" cellspacing="1" cellpadding="1" align="center" >
+			<tbody>
+				<tr>
+					<td height="10" class="form-td-right" colspan="4">
+					<input type="hidden" name="idcard" id="idcard" th:value="${obj.idcard}">
+						<button class="form-button" onclick="submitThis(0)">暂 存</button> &shy;
+						<button class="form-button1" onclick="submitThis(1)">提 交</button> &shy;
+					</td>
+				</tr>
+				<tr>
+					<td class="liebiao-td-bg2"> 经办⼈姓名：</td>
+					<td class="form-td-left"> <span th:text="${obj.fullname}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left">
+						<input type="text" class="form-input-href" id="fullname" th:value="${obj.fullname}"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="liebiao-td-bg2"> 经办⼈手机号码：</td>
+					<td class="form-td-left"> <span th:text="${obj.mobile}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left">
+						<input type="text" class="form-input-href" id="mobile" th:value="${obj.mobile}"/>
+						输入验证码:
+						<input type="text" class="form-input-href" id="mobileCode"/>
+					</td><!-- TODO 验证码 -->
+				</tr>
+				
+				<tr>
+					<td class="liebiao-td-bg2">个⼈邮箱地址：</td>
+					<td class="form-td-left"> <span th:text="${obj.email}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="email" th:value="${obj.email}"/></td>
+				</tr>
+
+				<tr>
+					<td class="liebiao-td-bg2">企业/组织类型：</td>
+					<td class="form-td-left"> <span th:text="${obj.organizationtype}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="organizationtype"/></td>
+				</tr>
+				
+				<tr>
+					<td class="liebiao-td-bg2">企业/组织全称：</td>
+					<td class="form-td-left"> <span th:text="${obj.organizationname}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="organizationname"/></td>
+				</tr>
+				<tr>
+					<td class="liebiao-td-bg2">所属上级单位：</td>
+					<td class="form-td-left"> <span th:text="${obj.affiliated}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="affiliated"/></td>
+				</tr>
+				<tr>
+					<td class="liebiao-td-bg2">是否是两家商会会员单位 </td>
+					<td class="form-td-left"> <span th:text="${obj.isCommerce}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td><!-- 0否 1是： -->
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="isCommerce"/></td>
+				</tr>
+
+				<tr>
+					<td class="liebiao-td-bg2">统一社会信用代码：</td>
+					<td class="form-td-left"> <span th:text="${obj.organizationcode}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="organizationcode"/></td>
+				</tr>
+				
+				<tr>
+					<td class="liebiao-td-bg2">注册地址：</td>
+					<td class="form-td-left"> <span th:text="${obj.address}" ></span></td><!-- th:text="${obj.area}+','+${obj.address}"  -->
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> 
+						<!-- <select class="form-input-href" name="area" id="area">
+								<option></option>
+								<option th:each="basedata:${areaList}" th:value="${basedata.code}" th:text="${basedata.name}"></option> th:selected="${obj.area==basedata.code}"
+						</select> -->
+						<input type="text" class="form-input-href" id="address"/>
+					</td><!-- TODO 回构 -->
+				</tr>
+				
+				<tr>
+					<td class="liebiao-td-bg2">单位负责人：</td>
+					<td class="form-td-left"> <span th:text="${obj.manager}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="manager"/></td>
+				</tr>
+				
+				<tr>
+					<td class="liebiao-td-bg2">单位联系电话座机：</td>
+					<td class="form-td-left"> <span th:text="${obj.telephone}"></span></td>
+					<td class="liebiao-td-bg2"><font class="strongFont"><strong>变更为：</strong></font></td>
+					<td class="form-td-left"> <input type="text" class="form-input-href" id="telephone"/></td>
+				</tr>
+				
+				<tr>
+					<td class="liebiao-td-bg2" >证明文件：</td>
+					<td class="form-td-left"><button type="button" onclick="downloadTemplate()">获得模板</button></td>
+					<td class="liebiao-td-bg2">请上传：</td>
+					<td class="form-td-left"> <input type="file" id="certificate" name="certificate"/></td><!-- TODO 提供模板下载，校验PDF -->
+				</tr>
+			</tbody>
+		</table>
+		
+		<!-- <form method="post" action="" enctype="multipart/form-data" id="uploadForm">
+		    <input type="file" name="certificate" id="certificate"><br>
+		    <input type="button" value="提交" onclick="uploadThis()">
+		</form> -->
+
+	</div>	
+	</div>	
+</div>
+</div>	
+
+<script >
+	$(function() {
+		
+	});
+
+	/* function uploadThis(){
+		var file=$('#certificate').val();
+	    $.ajax({
+            method: 'POST',
+            url: '/sys/uploadCertificateFile',
+            cache: false,
+            data: new FormData($('#uploadForm')[0]),
+            processData: false,
+            contentType: false,
+            success: function (uri) {
+            	alert("success!~");
+            },
+            error: function () {
+            }
+        })
+	} */
+	
+	function submitThis(statee) {
+		console.log("statee=="+statee);
+		var formData = new FormData();
+        formData.append("mobile", $('#mobile').val());
+        formData.append("mobileCode", $('#mobile').val());
+        formData.append("email", $('#email').val());
+        formData.append("organizationtype", $("#organizationtype").val());
+        formData.append("organizationname", $("#organizationname").val());
+        formData.append("affiliated", $("#affiliated").val());
+        formData.append("isCommerce", $("#isCommerce").val());
+        formData.append("organizationcode", $("#organizationcode").val());
+        formData.append("area", $("#area").val());
+        formData.append("address", $("#address").val());
+        formData.append("manager", $("#manager").val());
+        formData.append("telephone", $("#telephone").val());
+		formData.append("certificate", $("#certificate")[0].files[0]);
+		formData.append("state", statee);
+		formData.append("idcard", $("#idcard").val());
+		$.ajax({
+			url : '/sys/saveMuserChangeHistory',
+			type : "post",
+			data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+			success : function(data) {
+				if (data.resultcode == "100") {
+					alert("data.value=="+ data.value);
+					window.location.href = "/sys/accountMan";
+				} else if (data.resultcode == "200") {
+					alert(data.value);
+				}
+			},
+			error : function(a, b, c) {
+				alert("error:");
+			}
+		});
+	};
+	
+	function downloadTemplate(){
+		window.location.href = "/public/getCertificateTemplate";
+	}
+</script>
+</body>
+</html>

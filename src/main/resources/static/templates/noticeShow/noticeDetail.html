@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>通知公告-查看详情</title>
+<link href="../../css/style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+</style>
+</head>
+
+<body>
+<div id="container" >
+	<div class="header">
+		 <div class="div1"> 
+		<img src="../../img/icon_jiemian logo.png"	><p th:text="${title}"></p>
+		</div> 
+		 <div class="div2"> <img src="../../img/touxiang.png"	><p> &shy; Hi 王晓华  </p>
+		</div> 
+	</div>
+	
+<div id="main" >
+	<div id="menu"  >
+		<div  style="height: 130px;width: 200px; text-align: center;"><img src="../../img/logo.png" style="height: 72px; padding-top: 30px;"	></div>  
+
+		<div >
+		<ul>
+			<li class="li1"><a href="/noticeShow/noticeList">通知公告</a></li>
+			<li class="li2"><a href="/aidmsg/inputAidmsg">数据填报</a></li>
+			<li class="li3" ><a href="/aidmsg/aidMsgWaitList">草稿箱</a></li>
+			<li class="li4"><a href="/aidmsg/aidMsgAlreadyList">进度查询</a></li>
+			<li class="li5"><a href="/sys/accountMan">账户管理</a></li>
+			<li class="li6"><a href="/sys/enterpriseMan">企业信息管理</a></li>
+		</ul>	
+		</div>
+	</div>
+
+
+<div id="content" >
+	<div  class="div-title"><h3>通知公告</h3>
+	</div>
+	<div class="div-tab" >
+		<div  class="div-tab1"><span>首页</span><img src="../../img/icon_close.png" class="img" ></div>
+		<div style="width: 1px; float: left;">&shy;</div>
+		<div  class="div-tab2"><span>查看详情</span><img src="../../img/icon_close.png" class="img"> </div>	
+	</div>
+	<div class="main-bg" >
+		<div class="xiangqing">
+		<h2>廉政相关规定的通知</h2>
+		<p class="leixing">公告类型：普通</p>
+		<p  class="main1">十八届中央政治局关于改进工作作风、密切联系群众的八项规定。</p>
+		<p  class="main1">中共中央政治局１２月４日召开会议，审议中央政治局关于改进工作作风、密切联系群众的八项规定，分析研究２０１３年经济工作。中共中央总书记习近平主持会议。会议一致同意关于改进工作作风、密切联系群众的八项规定。规定要求：</p>
+		<p class="img1"><img src="../../img/xiangqing-pic.png"	></p>		
+		
+		</div>
+
+	</div>	
+	
+</div>
+</div>	
+
+
+<script>
+
+$(function() {
+	/* sessionStorage.getItem("noticeUuid");
+	var url = "/noticeShow/noticeDetail";
+	$.ajax({
+		url : url,
+		method : "post",
+		data : JSON.stringify(postData),
+		dataType : "json",
+		contentType : "application/json; charset=utf-8",
+		success : function(data) {
+			if (data.resultcode = "100") {
+				$("#msgList").bootstrapTable("refresh");
+				$("#addUserModal").modal("hide");
+				resetForm();
+			}
+			alert(data.value);
+		},
+		error : function(data) {
+			alert("服务器异常！");
+		}
+	}); */
+});
+
+</script>
+</body>
+</html>

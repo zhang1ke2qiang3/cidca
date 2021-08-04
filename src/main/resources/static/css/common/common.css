@@ -1,0 +1,69 @@
+p,ul,ol,li,body{
+    margin: 0;
+    padding:0;
+}
+li{
+    list-style: none;
+}
+.box{
+    width: 100%;
+    overflow: hidden;
+}
+.top{
+    width: 100%;
+    overflow: hidden;
+}
+.tit{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 20px;
+    margin: 10px 0 20px 0;
+}
+#tabBox{
+    display: flex;
+    overflow: hidden;
+}
+#tabBox li{
+    line-height: 38px;
+    min-width: 120px;
+    text-align: center ;
+    background: #f6f8fc;
+    font-size: 14px;
+    cursor: pointer;
+}
+.tab-li-active{
+    box-shadow: 4px 12px 20px #cccccc;
+    background: #fff !important;
+}
+.main{
+    background: #fff;
+    overflow: hidden;
+}
+.input-box{
+    width: 95%;
+    height: 32px;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    color: #000;
+    padding-left: 3%;
+    font-size: 14px;
+    outline: none;
+}
+.input-but{
+    background-color: #04408d;
+    border: none;
+    outline: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    line-height: 32px;
+    outline: none;
+    padding: 0 20px;
+    border: 1px solid #04408d;
+}
+.fixed-table-pagination{
+    padding: 0 20px !important;
+}

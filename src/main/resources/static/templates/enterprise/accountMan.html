@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common/common.css" rel="stylesheet">
+	<link href="../../css/welcome/accountMan/accountMan.css" rel="stylesheet">
+	<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+	<link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" >
+	<script src="../../js/bootstrap/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div class="modal fade" id="showNoticeModal" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document" style="width: 40%;">
+			<div class="modal-content">
+				<div class="modal-header ">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetForm()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">变更经办人</h4>
+				</div>
+				<div class="modal-body">
+					<table class="tables" border="0" cellspacing="1" id="jingban"  cellpadding="1" align="center">
+						<tbody>
+							<tr>
+								<td colspan="2">原经办人信息验证</td>
+							</tr>
+							<tr>
+								<td>经办人姓名：</td>
+								<td th:text="${obj.fullname}"></td>
+							</tr>
+							<tr>
+								<td>手机号码：</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="验证码" id="idcardValidateCode" onclick="this.src='/public/defaultKaptcha?d=' + new Date()*1" 
+									src="/public/defaultKaptcha" />
+								</td>
+								<td><input class="input-box" type="text"/></td>
+							</tr>
+							<tr>
+								<td><button class="input-but" id="" style="float: right;">获取短信验证码</button></td>
+								<td><input class="input-box" type="text"/></td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="tables" border="0" cellspacing="1" cellpadding="1" id="newjingban" align="center" style="display: none;">
+						<tbody>
+							<tr>
+								<td colspan="2">新经办人信息</td>
+							</tr>
+							<tr>
+								<td>经办人姓名：</td>
+								<td>
+									<input class="input-box" type="text"/>
+								</td>
+							</tr>
+							<tr>
+								<td>手机号码：</td>
+								<td>
+									<input class="input-box" type="text"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="验证码" id="idcardValidateCode" onclick="this.src='/public/defaultKaptcha?d=' + new Date()*1" 
+									src="/public/defaultKaptcha" />
+								</td>
+								<td><input class="input-box" type="text"/></td>
+							</tr>
+							<tr>
+								<td>
+									<button class="input-but" id="" style="float: right;">获取短信验证码</button>
+								</td>
+								<td><input class="input-box" type="text"/></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" id="xiayibu" style="background: #114c9e;color: #fff;">下一步</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="success" style="display: none;background: #114c9e;color: #fff;">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetForm()">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="box">
+		<div class="top">
+			<ul id="tabBox">
+			</ul>
+		</div>
+		<div class="main">
+			<div class="table">
+				<div class="top-but">
+					<button class="input-but" id="clickToChangeMsg">信息变更</button>
+					<button class="input-but" id="clickToMsgHis">变更历史</button>
+				</div>
+				<table id="tables" border="0" cellspacing="1" cellpadding="1" align="center">
+					<tbody>
+						<tr>
+							<td>经办⼈姓名：</td>
+							<td th:text="${obj.fullname}"></td>
+						</tr>
+						<tr>
+							<td>手机号码：</td>
+							<td><div style="float: left;margin-right: 20px;" th:text="${obj.mobile}"></div><button class="input-but" id="changeUser">变更经办人</button></td>
+						</tr>
+						<tr>
+							<td>个⼈邮箱地址：</td>
+							<td th:text="${obj.email}"></td>
+						</tr>
+						<tr>
+							<td>修改登录密码：</td>
+							<td>
+								设置包含数字及字母的密码，并定期更换：
+								<button class="input-but" id="clickToMsgHiss">设置</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script>
+		var tabData = {}
+		$(function () {
+			appendTab()
+			//信息变更
+			$("#clickToChangeMsg").click(function() {
+				window.location.href="/sys/ChangeMuserMsg";
+			});
+			//变更历史
+			$("#clickToMsgHis").click(function() {
+				window.location.href="/sys/msgHis";
+			});
+			//设置
+			$("#clickToMsgHiss").click(function() {
+				window.location.href="/sys/msgHis";
+			});
+			//变更经办人
+			$('#changeUser').click(function(){
+				$("#showNoticeModal").modal("show");
+			})
+			$('#xiayibu').click(function(){
+				$('#success').show()
+				$('#xiayibu').hide()
+				$('#jingban').hide()
+				$('#newjingban').show()
+			})
+		});
+		function appendTab(){
+			tabData.tabList = [{
+				name:'首页'
+			},{
+				active:true,
+				name:'填报人信息'
+			}]
+			$('#tabBox').empty()
+			tabData.tabList.forEach(function(item,index){
+				if(item.active){
+					$('#tabBox').append('<li class="tab-li-active">'+item.name+'</li>')
+				}else{
+					$('#tabBox').append('<li>'+item.name+'</li>')
+				}
+			})
+		}
+	</script>
+</body>
+</html>

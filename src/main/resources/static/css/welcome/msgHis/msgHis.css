@@ -1,0 +1,45 @@
+.table{
+    width: 96%;
+    overflow: hidden;
+    margin: 20px 2%;
+}
+.tables{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.tables tr{
+    line-height: 40px;
+    background: #f1f2f5;
+}
+.tables tr:nth-child(1) td{
+    background: #fff;
+    border: 1px solid #f1f2f5;
+}
+.tables tr td{
+    padding-left: 20px;
+}
+.tables tr td:nth-child(2n-1){
+    width:10%;
+    font-weight: 600;
+}
+.tables tr td:nth-child(2n){
+    width: 23%;
+    background: #fff;
+    border: 1px solid #f1f2f5;
+}
+.top-td{
+    width: 100%;
+}
+.top-td div:nth-child(1){
+    float: left;
+}
+.top-td div:nth-child(2){
+    float: right;
+    margin-right: 20px;
+    font-weight: normal;
+}
+.close-box{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,92 @@
+﻿<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>对外援助统计数据直报平台	</title>
+	<link href="../../css/welcome/welcome.css" rel="stylesheet">
+	<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+</head>
+<body>
+<div class="box">
+	<div class="top">
+		<div class="top-left">
+			<img src="../../img/login-img/icon_jiemian logo.png"/>对外援助统计数据直报平台
+		</div>
+		<div class="top-right">
+			<!-- <img src="../../img/login-img/icon_help3.png">
+            <img src="../../img/login-img/touxiang.png"> -->
+			<div id="userName"></div>
+		</div>
+	</div>
+	<div class="main">
+		<div class="main-left">
+			<img class="logo-img" src="../../img/login-img/logo.png"/>
+			<ul class="main-box" id="mainBox">
+			</ul>
+		</div>
+		<div class="main-right">
+			<iframe name="iframe" id="iframe" src="" width="100%" height="100%" scrolling="auto"></iframe>
+		</div>
+	</div>
+</div>
+<script>
+    var mainNum = 0
+    if(sessionStorage.getItem('mainNum')){
+        mainNum = sessionStorage.getItem('mainNum')
+    }
+    $(function () {
+        getMainList()
+        getUserInfo()
+        $('.main').css({height:(window.innerHeight-72)+'px'})
+        $('#mainBox li').click(function(){
+            sessionStorage.setItem('mainNum',$(this).index())
+            $(this).addClass('li-active').siblings('li').removeClass('li-active')
+            $(this).children('img').attr('src',$(this).children('img').attr('src').replace('nor','pre'))
+            $(this).siblings('li').each(function(ind,item){
+                $(item).children('img').attr('src',$(item).children('img').attr('src').replace('pre','nor'))
+            })
+            $('#iframe').attr('src',$(this).attr('path'))
+        })
+    });
+    function getMainList(){
+        var mainList = [{
+            name:'通知公告',
+            icon:'icon_tongzhi_',
+            path:'/noticeShow/noticeList'
+        },{
+            name:'数据填报',
+            icon:'icon_shuju_',
+            path:'/aidmsg/inputAidmsg'
+        },{
+            name:'草稿箱',
+            icon:'icon_daibao_',
+            path:'/aidmsg/aidMsgWaitList'
+        },{
+            name:'进度查询',
+            icon:'icon_yibao_',
+            path:'/aidmsg/aidMsgAlreadyList'
+        },{
+            name:'账户管理',
+            icon:'icon_zhanghu_',
+            path:'/sys/accountMan'
+        },{
+            name:'企业信息管理',
+            icon:'icon_qiyeguanli_',
+            path:'/sys/enterpriseMan'
+        }]
+        $('#mainBox').empty()
+        mainList.forEach(function(item,index){
+            if(index == mainNum){
+                $('#iframe').attr('src',item.path)
+                $('#mainBox').append('<li class="li-active" path="'+item.path+'"><img src="../../img/login-img/'+item.icon+'pre.png"/>'+item.name+'</li>')
+            }else{
+                $('#mainBox').append('<li path="'+item.path+'"><img src="../../img/login-img/'+item.icon+'nor.png"/>'+item.name+'</li>')
+            }
+        })
+    }
+    function getUserInfo(){
+        $('#userName').html('王晓华<a class="toBack" href="/public/logout">退出</a>')
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+.table{
+    width: 96%;
+    overflow: hidden;
+    margin: 20px 2%;
+}
+#tables{
+    width: 100%;
+}
+#tables tr{
+    line-height: 40px;
+    background: #f1f2f5;
+}
+#tables tr td:nth-child(1){
+    text-align: right;
+    
+}
+.input-but{
+    margin: 4px 0;
+}
+.top-but{
+    width: 100%;
+    overflow: hidden;
+    margin: 0 0 0 1px;
+}
+.tables{
+    width: 100%;
+    background: #fff;
+}
+.tables tr:nth-child(1) td{
+    text-align: center !important;
+    background:#f1f2f5 !important ;
+}
+.tables tr{
+    line-height: 42px;
+}
+.tables tr td{
+    width: 25%;
+}
+.tables tr td:nth-child(2n-1){
+    text-align: right;
+}
+.tables tr td:nth-child(2n){
+    background: #fff;
+}

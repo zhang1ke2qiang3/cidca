@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common/common.css" rel="stylesheet">
+	<link href="../../css/welcome/ChangeMuserMsg/ChangeMuserMsg.css" rel="stylesheet">
+	<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+	<meta name="viewport" content="width=, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div class="box">
+		<div class="top">
+			<div class="tit" id="tit"></div>
+			<ul id="tabBox">
+			</ul>
+		</div>
+		<div class="main">
+			<div class="table">
+				<div class="top-but">
+					<button class="input-but" id="deposit" onclick="submitThis(0)">暂存</button>
+					<button class="input-but" id="save" onclick="submitThis(1)">提交</button>
+				</div>
+				<table id="tables" border="0" cellspacing="1" cellpadding="1" align="center">
+					<tbody>
+						<tr>
+							<td>经办⼈姓名：</td>
+							<td th:text="${obj.fullname}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<!-- <tr>
+							<td>经办⼈手机号码：</td>
+							<td th:text="${obj.mobile}"></td>
+							<td>变更为：</td>
+							<td>
+								<button class="input-but" style="margin-left: 5px; id="">变更手机号</button>
+								<input class="input-box" type="text" style="float: left;width: 30%;"/>
+								<input class="input-box" type="text" style="float: left;width: 15%;"/>
+								<button class="input-but" id="" style="float: left;">获取验证码</button>
+							</td>
+						</tr> -->
+						<tr>
+							<td>个⼈邮箱地址：</td>
+							<td th:text="${obj.email}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>企业/组织类型：</td>
+							<td>
+								<input type="radio" name="organizationtype" value="1"/>企业
+								<input type="radio" name="organizationtype" value="0"/>社会组织
+							</td>
+							<td>变更为：</td>
+							<td>
+								<input type="radio" name="neworganizationtype" value="1"/>企业
+								<input type="radio" name="neworganizationtype" value="0"/>社会组织
+							</td>
+						</tr>
+						<tr>
+							<td>企业/组织全称：</td>
+							<td th:text="${obj.organizationname}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>所属上级单位：</td>
+							<td th:text="${obj.affiliated}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>是否是两家商会会员单位：</td>
+							<td>
+								<input type="radio" name="neworganizationtype" value="0"/>是
+								<input type="radio" name="neworganizationtype" value="1"/>否
+							</td>
+							<td>变更为：</td>
+							<td>
+								<input type="radio" name="neworganizationtype" value="0"/>是
+								<input type="radio" name="neworganizationtype" value="1"/>否
+							</td>
+						</tr>
+						<tr>
+							<td>统一社会信用代码：</td>
+							<td th:text="${obj.organizationcode}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>注册地址：</td>
+							<td th:text="${obj.address}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>单位负责人：</td>
+							<td th:text="${obj.manager}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>单位联系电话座机：</td>
+							<td th:text="${obj.telephone}"></td>
+							<td>变更为：</td>
+							<td>
+								<input class="input-box" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td>证明文件：</td>
+							<td><button class="input-but" onclick="downloadTemplate()">获得模板</button></td>
+							<td>请上传：</td>
+							<td>
+								<input type="file" id="uploadFile" style="display: none;"/>
+								<button id="uploadTemplate" class="input-but" style="margin-left: 5px;float: left;">上传文件</button>
+								<div id="fileName"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="close-box">
+				<button class="input-but" id="close">关闭</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		var tabData = {}
+		$(function () {
+			appendTab()
+			$('#uploadTemplate').click(function(){
+				$('#uploadFile').click()					
+			})
+			$('#uploadFile').change(function(){
+				var fileList = $('#uploadFile')[0].files[0]
+				$('#fileName').text(fileList.name)
+			})
+			$('#close').click(function(){
+				window.location.href = '/sys/accountMan'
+			})
+		});
+		function appendTab(){
+			tabData.tit = '信息变更'
+			tabData.tabList = [{
+				name:'首页'
+			},{
+				active:true,
+				name:'信息变更'
+			}]
+			$('#tit').text(tabData.tit)
+			$('#tabBox').empty()
+			tabData.tabList.forEach(function(item,index){
+				if(item.active){
+					$('#tabBox').append('<li class="tab-li-active">'+item.name+'</li>')
+				}else{
+					$('#tabBox').append('<li>'+item.name+'</li>')
+				}
+			})
+		}
+		function submitThis(statee) {
+			var formData = new FormData();
+			formData.append("mobile", $('#mobile').val());
+			formData.append("mobileCode", $('#mobile').val());
+			formData.append("email", $('#email').val());
+			formData.append("organizationtype", $("#organizationtype").val());
+			formData.append("organizationname", $("#organizationname").val());
+			formData.append("affiliated", $("#affiliated").val());
+			formData.append("isCommerce", $("#isCommerce").val());
+			formData.append("organizationcode", $("#organizationcode").val());
+			formData.append("area", $("#area").val());
+			formData.append("address", $("#address").val());
+			formData.append("manager", $("#manager").val());
+			formData.append("telephone", $("#telephone").val());
+			formData.append("certificate", $("#certificate")[0].files[0]);
+			formData.append("state", statee);
+			formData.append("idcard", $("#idcard").val());
+			$.ajax({
+				url : '/sys/saveMuserChangeHistory',
+				type : "post",
+				data: formData,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				success : function(data) {
+					if (data.resultcode == "100") {
+						alert("data.value=="+ data.value);
+						window.location.href = "/sys/accountMan";
+					} else if (data.resultcode == "200") {
+						alert(data.value);
+					}
+				},
+				error : function(a, b, c) {
+					alert("error:");
+				}
+			});
+		};
+		
+		function downloadTemplate(){
+			window.location.href = "/public/getCertificateTemplate";
+		}
+	</script>
+</body>
+</html>

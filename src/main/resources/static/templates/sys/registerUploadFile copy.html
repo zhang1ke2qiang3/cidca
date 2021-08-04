@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>对外援助统计数据直报平台-注册文件上传</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script src="../../js/jquery.min_1.10.2.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script
+	src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<!--Bootstrap4  用于设置弹窗、提示、下拉菜单 -->
+</head>
+<body>
+
+	<div id="container">
+		<div class="header">
+			<div class="div1">
+				<img src="../../img/icon_jiemian logo.png">
+				<p th:text="${title}"></p>
+			</div>
+			<div class="div2">
+				<img src="../../img/icon_help3.png"> <img
+					src="../../img/touxiang.png">
+			</div>
+		</div>
+	</div>
+	<div id="main">
+		<div id="content">
+			<div class="div-title">
+				<h3>文件上传</h3>
+
+			</div>
+			<div class="main-bg" style="text-align: left;">
+				<input type="hidden" th:value="${idcard}" name="idcard" id="idcard">
+				<table width="95%" border="0" cellspacing="0" cellpadding="0"
+					align="center">
+					<tr>
+						<td height="20px"></td>
+					</tr>
+					<tr>
+						<td class="form-td-left"><img
+							src="../../img/register_step2.jpg" class="form-img"></td>
+					</tr>
+					<tr>
+						<td class="form-td-left" colspan="3"><font color="red"><strong>您仅差一步就可以完成注册，请点击下载授权书模板，在模板中附上证明文件和承诺书并盖章后上传即可</strong></font>
+						</td>
+					</tr>
+					<tr>
+						<td class="form-td-right"><img src="../../img/icon_help2.png"
+							class="form-img"> &shy; &shy;请点击下载模板：</td>
+						<td>
+							<button class="form-button1" id="downloadTemplate">下载模板</button>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="form-td-right"><img src="../../img/icon_help2.png"
+							class="form-img"> &shy; &shy;选择文件：</td>
+						<td><input type="file" class="file" name="certificate" />
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+					<tr>
+						<td class=""></td>
+						<td class="form-td-left">
+							<button class="btn btn-primary" id="butt">上传</button>
+						</td>
+
+						<td class=""></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script>
+	
+	$("#butt").click(function() {
+		console.log("statee=="+statee);
+		var formData = new FormData();
+		formData.append("certificate", $("#certificate")[0].files[0]);
+		formData.append("idcard", $("#idcard").val());
+		$.ajax({
+			url : '/public/multifileUpload',
+			type : "post",
+			data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success : function(data) {
+				if (data.resultcode == "100") {
+					alert("success" + data.value);
+					window.location.href = "/public/login";
+				} else if (data.resultcode == "200") {
+					alert(data.value);
+				}
+			},
+			error : function(a, b, c) {
+				alert("error:");
+			}
+		});
+	};
+	
+		
+		function downloadTemplate(){
+			window.location.href = "/public/getCertificateTemplate";
+		}
+	</script>
+</body>
+</html>

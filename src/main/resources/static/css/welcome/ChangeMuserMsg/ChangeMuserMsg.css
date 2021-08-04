@@ -1,0 +1,55 @@
+.table{
+    width: 96%;
+    overflow: hidden;
+    margin: 20px 2%;
+}
+#tables{
+    width: 100%;
+}
+#tables tr{
+    line-height: 40px;
+    background: #f1f2f5;
+}
+#tables tr td:nth-child(1),#tables tr td:nth-child(3){
+    text-align: right;
+    width: 20%;
+}
+#tables tr td:nth-child(2n){
+    background: #fff;
+    border: 1px solid #f1f2f5;
+}
+#tables tr td:nth-child(2){
+    width: 20%;
+}
+.input-but{
+    margin: 3px 0;
+}
+.input-box[type='text']{
+    width: 72%;
+    margin: 3px 1%;
+}
+.top-but{
+    width: 100%;
+    overflow: hidden;
+    margin: 0 0 0 1px;
+    text-align: right;
+}
+#save{
+    color: #000;
+    background: #fff;
+    border: 1px solid #000;
+    margin-right: 1px;
+}
+#fileName{
+    width:200px;
+    float: left;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow:ellipsis;
+    margin-left: 2%;
+}
+.close-box{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}

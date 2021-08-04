@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>对外援助统计数据直报平台-注册</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script src="../../js/jquery.min_1.10.2.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script><!--Bootstrap4  用于设置弹窗、提示、下拉菜单 -->
+<style type="text/css">
+</style>
+</head>
+
+<body>
+<div style="height: 100px;"></div>
+	
+<div class="banner">
+	<div class="div-banner"> 
+		<img src="../../img/icon_zhuce logo.png"><p th:text="${title}"></p>
+	</div> 
+	<div class="div-banner1"> 
+		<img src="../../img/icon_help.png"	>
+	</div>
+</div>
+	
+<div style="height: 30px;"></div>
+	
+<div class="zhuce-content">
+	<div class="div-title">
+		<h3>找回密码</h3>
+	</div>
+	<div>
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
+			<tbody>
+				<tr>
+					<td class="form-td-right">
+						<input type="hidden" id="idcard" name="idcard">
+					</td>
+				</tr>
+				<tr>
+					<td class="form-td-right">原密码：</td>
+					<td class="form-td-left">
+						<input type="password" class="form-input" placeholder="请输入当前密码" name="orgiPw" id="orgiPw" required="required">
+					</td>
+					<td align="left"></td>
+				</tr>
+				<tr>
+					<td class="form-td-right">新密码：</td>
+					<td class="form-td-left">
+						<input type="password" class="form-input" placeholder="8~15位，字母数字和特殊符号的组合" name="newPw1" id="newPw1" required="required"/>
+					</td>
+					<td align="left" ></td>
+				</tr>
+				<tr>
+					<td class="form-td-right">再次输入新密码：</td>
+					<td class="form-td-left">
+						<input type="password" class="form-input" placeholder="8~15位，字母数字和特殊符号的组合" name="newPw2" id="newPw2" required="required"/>
+					</td>
+					<td align="left" ></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div style="height: 30px;"></div>
+	<div> 
+		<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
+			<tbody>
+				<tr>
+				<td>
+					<button class="btn btn-primary" name="butt" id="butt">提交</button>
+				</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div style="height: 30px;"></div>
+</div>	
+	
+	<script>
+		$(function() {
+			$("#orgiPw").focus();
+		});
+
+		$("#code").click(function() {
+			var idcard=$('#idcard').val();
+			if(typeof(idcard)=='undefined' || idcard==''){
+				alert("获取人员信息失败");
+				return false;
+			}
+			var orgiPw=$('#orgiPw').val();
+			var newPw1=$('#newPw1').val();
+			var newPw2=$('#newPw2').val();
+			var uJson = "{'par1':'" + orgiPw + "','par2':'" + newPw1 + "','par3':'" + newPw2 + "','par4':'" + idcard + "'}";
+			console.log("uJson==>"+uJson);
+			uJson = window.btoa(uJson);
+			$.post('/public/saveModifyPw',{uJson:uJson},function(result){
+				if(result.resultcode=='100'){
+					alert("验证码已发送");
+					var code = $("#code");
+				    code.attr("disabled","disabled");
+				    setTimeout(function(){
+				    	code.css("opacity","0.8");//opacity:设置元素的不透明级别，没什么意义
+				    },1000)
+				    var time = 120;
+				    var set=setInterval(function(){
+				    	code.val((--time)+"秒后重新获取");
+				    }, 1000);//setInterval：每1秒执行一次function里面的 :
+				    
+				    setTimeout(function(){
+					   code.attr("disabled",false).val("重新获取验证码");
+					   clearInterval(set);
+				    }, 120000);
+				}else if(result.resultcode=='200'){
+					//$("#phoneTip").text(result.msg);
+					alert(result.value);
+				}else{
+					alert("未知的错误");
+				}
+			},'json');
+		});
+		
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="../../css/common/common.css" rel="stylesheet">
+	<link href="../../css/welcome/msgHis/msgHis.css" rel="stylesheet">
+	<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+	<meta name="viewport" content="width=, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div class="box">
+		<div class="top">
+			<div class="tit" id="tit"></div>
+			<ul id="tabBox">
+			</ul>
+		</div>
+		<div class="main">
+			<div class="table"> 
+				
+			</div>
+			<div class="close-box">
+				<button class="input-but" id="close">关闭</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		var tabData = {}
+		var tableList = []
+		$(function () {
+			appendTab()
+			appendTable()
+			$('#close').click(function(){
+				window.location.href = '/sys/accountMan'
+			})
+		});
+		function appendTab(){
+			tabData.tit = '企业信息管理'
+			tabData.tabList = [{
+				name:'首页'
+			},{
+				active:true,
+				name:'变更历史'
+			}]
+			$('#tit').text(tabData.tit)
+			$('#tabBox').empty()
+			tabData.tabList.forEach(function(item,index){
+				if(item.active){
+					$('#tabBox').append('<li class="tab-li-active">'+item.name+'</li>')
+				}else{
+					$('#tabBox').append('<li>'+item.name+'</li>')
+				}
+			})
+		}
+		function appendTable(){
+			tableList = [{
+				date:'2021.05.20',
+				tissueName:'北京思利康医学研究院有限公司',
+				newtissueName:'北京思贝康医学研究院',
+				unitName:'张广义',
+				newunitName:'赵智新',
+				phone:'010-12345678',
+				newphone:'010-88888888',
+				status:'审核中'
+			},{
+				date:'2021.05.20',
+				tissueName:'首融出行(北京)汽车服务有限公司',
+				newtissueName:'	首汽出行(北京)汽车服务有限公司',
+				unitName:'赵梓涵',
+				newunitName:'刘毅',
+				phone:'010-12345678',
+				newphone:'010-88888888',
+				status:'审核通过'
+			}]
+			tableList.forEach(function(item,index){
+				var statusColor = ''
+				if(item.status == '审核中'){
+					statusColor = '#06428e'
+				}else if(item.status == '审核通过'){
+					statusColor = '#8bd643'
+				}
+				$('.table').append(`
+					<table class="tables" border="0" cellspacing="1" cellpadding="1" align="center">
+						<tbody>
+							<tr>
+								<td colspan="6" class="top-td">
+									<div>申请时间：</div>
+									<div style="color:`+statusColor+`;">`+item.status+`</div>	
+								</td>
+							</tr>
+							<tr>
+								<td>社会组织名称</td>
+								<td>`+item.tissueName+`</td>
+								<td>单位负责人</td>
+								<td>`+item.unitName+`</td>
+								<td>联系电话</td>
+								<td>`+item.phone+`</td>
+							</tr>
+							<tr>
+								<td>变更后</td>
+								<td>`+item.newtissueName+`</td>
+								<td>变更后</td>
+								<td>`+item.newunitName+`</td>
+								<td>变更后</td>
+								<td>`+item.newphone+`</td>
+							</tr>
+						</tbody>
+					</table>
+				`)
+			})
+		}
+	</script>
+</body>
+</html>

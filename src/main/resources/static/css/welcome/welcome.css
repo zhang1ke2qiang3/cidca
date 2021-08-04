@@ -1,0 +1,98 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+li{
+    list-style: none;
+}
+.box{
+    width: 100%;
+    overflow: hidden;
+}
+.top{
+    width: 100%;
+    display: flex;
+    background: #114c9e;
+    justify-content: space-between;
+}
+.top-left{
+    color: #fff;
+    line-height: 72px;
+    font-family: 微软雅黑;
+    font-weight: 500;
+    font-size: 22px;
+}
+.top-left img{
+    display: block;
+    margin: 18px 20px;
+    float: left;
+}
+.top-right img:nth-child(1){
+    width: 32px;
+    height: 32px;
+}
+.top-right img{
+    margin: 20px 10px;
+    display: block;
+    float: left;
+}
+#userName{
+    float: left;
+    color: #fff;
+    margin: 0px 50px 0px 0px;
+    font-family: '微软雅黑';
+    font-weight: 500;
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 72px;
+}
+.main{
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    background: #f0f3fa;
+}
+.main-left{
+    width: 200px;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 2px #cccccc;
+}
+.logo-img{
+    display: block;
+    margin: 30px auto;
+}
+.main-box{
+    width: 200px;
+    height: 100%;
+    margin-top: 0px;
+}
+.main-box li{
+    line-height: 40px;
+    clear: both;
+    color: #C5C5C5;
+    cursor: pointer;
+}
+.main-box li img{
+    width: 20px;
+    display: block;
+    float: left;
+    margin: 10px 20px 10px 40px;
+}
+.li-active{
+    color: #fff !important;
+    background: #084293;
+}
+.main-right{
+    flex: 1;
+    margin: 10px;
+}
+#iframe{
+    border: none;
+}
+.toBack{
+    text-decoration: none;
+    color: #fff;
+    margin-left: 20px;
+}

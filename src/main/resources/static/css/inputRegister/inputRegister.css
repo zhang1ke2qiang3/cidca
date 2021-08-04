@@ -1,0 +1,174 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.box{
+    width: 100%;
+    overflow: hidden;
+    background: #f0f3fa;
+}
+.boxs{
+    margin: 0px auto;
+    width: 80%;
+    overflow: hidden;
+}
+.top-box{
+    width: 100%;
+    overflow: hidden;
+    line-height: 64px;
+    margin: 16px 0;
+}
+.top-box img:nth-child(1){
+    display: block;
+    float: left;
+}
+.top-txt{
+    width: auto;
+    float: left;
+    padding-left: 26px;
+    font-family: 微软雅黑;
+    font-weight: 500;
+    font-size: 28px;
+    color: rgb(6, 66, 142);
+}
+.top-box img:nth-child(3){
+    display: block;
+    float: right;
+    margin: 19px 0;
+}
+.box-con{
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+}
+.box-plan{
+    display: flex;
+    line-height: 50px;
+    margin: 30px 5%;
+    width: 90%;
+}
+.striping-box{
+    overflow: hidden;
+    float: left;
+    width: 16%;
+    display: flex;
+    color: #ccc;
+    text-align: center;
+    justify-content: space-around;
+}
+.striping-active{
+    color: #04408d;
+}
+.striping-box img{
+    display: block;
+    float: left;
+    width: 28px;
+    height: 28px;
+    margin: 11px 0;
+}
+.striping{
+    width: 26%;
+    height: 2px;
+    float: left;
+    background:#ccc;
+    margin: 24px 0;
+    background-size: 100% 100%;
+}
+.fill-boxs{
+    line-height: 50px;
+}
+.tit-label{
+    width: 35%;
+    text-align: right;
+}
+.fill-boxs input[type='text']{
+    height: 32px;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    color: #000;
+    padding-left: 15px;
+    font-size: 14px;
+}
+.fill-boxs input[type='password']{
+    height: 32px;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    color: #cccccc;
+    padding-left: 15px;
+    font-size: 14px;
+}
+.input-text{
+    width: 35%;
+}
+.input-text-but{
+    width: 20%;
+}
+.input-but{
+    width: 13%;
+    margin: 0 0 0 2%;
+    background-color: #04408d;
+    border: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    line-height: 32px;
+}
+.fill-boxs input[type='radio']{
+    margin: 0 10px;
+}
+.fill-boxs select{
+   height: 32px;
+   width: 15%;
+   margin-right: 5%;
+}
+.next-box{
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    margin: 30px 0;
+}
+.but-box{
+    border: none;
+    background: #04408d;
+    outline: none;
+    color: #fff;
+    height: 32px;
+    padding: 0 20px;
+}
+.tissue-hide{
+    display: none;
+}
+.file-box{
+    overflow: hidden;
+    width: 90%;
+    margin: 0 5%;
+}
+.file-box .fill-boxs{
+    display: flex;
+    clear: both;
+}
+.file-box .fill-boxs .input-but{
+    height: 32px;
+    margin: 9px 0;
+}
+.file-box .top-txt{
+    color: red;
+    font-size: 12px;
+    padding-left: 12px;
+    line-height: 32px;
+    width: 100%;
+}
+.file-box .tit-label{
+    width: 40%;
+}
+#fileName{
+    width:40%;
+    display: inline-block;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow:ellipsis;
+    margin-left: 2%;
+}

@@ -1,0 +1,231 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>通知公告</title>
+<link href="../../css/style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+</style>
+</head>
+
+<body>
+<div id="container" >
+	<div class="header">
+		 <div class="div1"> 
+		<img src="../../img/icon_jiemian logo.png"	><p th:text="${title}"></p>
+		</div> 
+		 <div class="div2"> 
+		<img src="../../img/touxiang.png"	><p> Hi 王晓华  </p>
+		</div> 
+	</div>
+	
+<div id="main" >
+	<div id="menu"  >
+		<div  style="height: 130px;width: 200px; text-align: center;"><img src="../../img/logo.png" style="height: 72px; padding-top: 30px;"	></div>  
+
+		<div >
+		<ul>
+			<li class="li1-choice">通知公告</li>
+			<li class="li2"><a href="/aidmsg/inputAidmsg">数据填报</a></li>
+			<li class="li3" ><a href="/aidmsg/aidMsgWaitList">草稿箱</a></li>
+			<li class="li4"><a href="/aidmsg/aidMsgAlreadyList">进度查询</a></li>
+			<li class="li5"><a href="/sys/accountMan">账户管理</a></li>
+			<li class="li6"><a href="/sys/enterpriseMan">企业信息管理</a></li>
+		</ul>	
+		</div>
+	</div>
+
+
+<div id="content" >
+	<div  class="div-title"><h3>通知公告</h3>
+	</div>
+	<div class="div-tab" >
+		<div  class="div-tab1"><span>首页</span><img src="../../img/icon_close.png" class="img" ></div>
+		<div style="width: 1px; float: left;">&shy;</div>
+		<div  class="div-tab2"><span>通知公告</span><img src="../../img/icon_close.png" class="img"> </div>	
+	</div>
+	<div class="main-bg">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tbody>
+			<tr>
+			  <td height="25"></td>
+			</tr>
+
+			<tr>
+			  <td valign="top">
+				<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+				  <tbody>
+					<tr>
+					  <td class="chaxun-title">标题：</td>
+					  <td class="td-data"><input type="text" class="chaxun-input" value="可模糊查询"  ></td>
+					  <td class="chaxun-title">发布人：</td>
+					  <td class="td-data"><input type="text" class="chaxun-input" value="请输入姓名"  ></td>					 <td class="chaxun-title">状态：</td>
+					  <td class="td-data">
+						  <div class="chaxun-select ">
+						  <select  style="border: 0px;width: 140px;">
+							<option value="已发布">已发布</option>
+							<option value="未发布">未发布</option>
+						   </select>
+						  </div>
+					  </td>					  
+					  <td class="chaxun-title">发布时间：</td>
+					  <td class="td-data"><input type="text" class="chaxun-input rili-img " data-inline="true" value="请选择"  ></td>					  
+					  <td><button class="chaxun-button">搜 索</button></td>
+					</tr>
+				  </tbody>
+				</table>
+			  </td>
+			</tr>
+			<tr>
+			  <td height="20"></td>
+			</tr>
+			  <tr>
+			  <td valign="top">
+				  <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+					  <tbody>
+						<tr class="liebiao-title">
+						  <td style="width: 10%;">序号</td>
+						  <td style="width: 45%;">标题</td>
+						  <td  style="width: 15%;">发布人</td>
+						  <td style="width: 15%;">发布时间</td>
+						  <td style="width: 15%;">状态</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">1</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">胡志国</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">2</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">3</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">胡志国</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">4</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">5</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">6</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">7</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">8</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">9</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+						<tr class="liebiao-data">
+						  <td class="liebiao-data-line">10</td>
+						  <td class="liebiao-data-line">【重要通知】2021年度项目填报项目填报项目填报</td>
+						  <td class="liebiao-data-line">张明</td>
+						  <td class="liebiao-data-line">2021-01-05</td>
+						  <td class="liebiao-data-line">已发布</td>
+						</tr>
+					  </tbody>
+					</table>
+			  </td>
+			</tr>
+			  
+			<tr>
+			  <td height="10"></td>
+			</tr>
+
+			  
+			<tr>
+			  <td height="30" align="right">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				  <tbody>
+					<tr>
+					  <td width="60%" align="right" >
+					    <div  class="fenye"><span>共800条，每页</span> &shy;
+						   <select  >
+							<option value="10">10</option>
+							<option value="20">20</option>
+						   </select> &shy; 
+						   <span>条</span>
+						 </div>
+					  </td>
+					  <td width="25%" align="right" >
+						<ul class="pagination">
+						  <li><a href="#"><img src="../../img/left-icon.png" height="10" ></a></li>
+						  <li><a href="#">1</a></li>
+						  <li><a class="active" href="#">2</a></li>
+						  <li><a href="#">3</a></li>
+						  <li><a href="#">4</a></li>
+						  <li><a href="#">5</a></li>
+						  <li><a href="#">6</a></li>
+						  <li><a href="#">7</a></li>
+						  <li><a href="#"><img src="../../img/right-icon.png" height="10" ></a></li>
+						</ul>
+					  </td>
+					  <td width="15%">
+						 <div  class="fenye"><span>前往</span> &shy;
+						   <input type="text"  value="1" class="fenye-input" > &shy; 
+						   <span>页</span>
+						 </div>
+					  </td>
+					</tr>
+				  </tbody>
+				</table>
+			  </td>
+			</tr>
+		  </tbody>
+		</table>
+
+	</div>	
+	
+</div>
+</div>	
+
+
+
+<script>
+
+$(function() {
+	
+});
+
+
+</script>
+
+</body>
+</html>

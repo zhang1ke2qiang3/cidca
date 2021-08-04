@@ -1,0 +1,285 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>对外援助统计数据直报平台-注册</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script src="../../js/jquery.min_1.10.2.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script><!--Bootstrap4  用于设置弹窗、提示、下拉菜单 -->
+<style type="text/css">
+</style>
+</head>
+
+<body>
+	<div id="container">
+		<div class="header">
+			<div class="div1">
+				<img src="../../img/icon_jiemian logo.png"> 对外援助统计数据直报平台
+			</div>
+			<div class="div2">
+				<img src="../../img/icon_help3.png"> <img
+					src="../../img/touxiang.png">
+			</div>
+		</div>
+	</div>
+	<div id="main">
+		<div id="content">
+			<div class="div-title">
+				<!-- <h3>对外援助统计数据直报平台-注册</h3> -->
+				<h3>注册</h3>
+			</div>
+			<div class="main-bg" style="text-align: center">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					style="width: 80%; margin: auto">
+					<tbody>
+						<tr>
+							<td height="10"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right">&shy; &shy;</td>
+							<td class="form-td-left"><img
+								src="../../img/register_step1.jpg" class="form-img"></td>
+							<td align="left"></td>
+						</tr>
+
+						<tr>
+							<td class="form-td-right"><img
+								src="../../img/icon_help2.png" class="form-img"> &shy;
+								&shy; 登录名：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="6~10位，字母数字组合" name="idcard"
+								id="idcard" /></td>
+							<td align="left"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right"><img
+								src="../../img/icon_help2.png" class="form-img"> &shy;
+								&shy;密码：</td>
+							<td class="form-td-left"><input type="password"
+								class="form-input" placeholder="8~15位，字母数字和特殊符号的组合" name="password" id="password" /></td>
+						</tr>
+						<tr>
+							<td class="form-td-right">请再次输入密码：</td>
+							<td class="form-td-left"><input type="password"
+								class="form-input" placeholder="8~15位，字母数字和特殊符号的组合" name="password2" id="password2" /></td>
+						</tr>
+						<tr>
+							<td class="form-td-right">&shy; &shy;经办⼈姓名：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="20字以内" name="fullname"
+								id="fullname" /></td>
+							<td align="left"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right">&shy; &shy;个⼈邮箱地址：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="50字以内" name="email" id="email" />
+							</td>
+							<td align="left"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right"><img
+								src="../../img/icon_help2.png" class="form-img"> &shy;
+								&shy; 组织类型：</td>
+							<td class="form-td-left">
+							<label class="radio-inline">
+								<input type="radio" name="organizationtype" id="organizationtype" value="1" />企业
+							</label> 
+							<label class="radio-inline"> 
+							<input type="radio" name="organizationtype" id="organizationtype" value="0" />社会组织
+							</label></td>
+						</tr>
+
+						<tr>
+							<td class="form-td-right">&shy; &shy;组织全称：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="50字以内" name="organizationname"
+								id="organizationname" /></td>
+							<td align="left"></td>
+						</tr>
+
+						<tr>
+							<td class="form-td-right">&shy; &shy;所属上级单位：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="50字以内" name="affiliated"
+								id="affiliated" /></td>
+							<td align="left"></td>
+						</tr>
+
+						<tr>
+							<td class="form-td-right">&shy; &shy;统一社会信用代码：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="50字以内" name="organizationcode" id="organizationcode" /></td>
+							<td align="left"></td>
+						</tr>
+
+						<tr>
+							<td class="form-td-right">&shy; &shy;注册地址：</td>
+							<td class="form-td-left">
+							<select class="form-input" name="area" id="area" required="required">
+								<option></option>
+								<option th:each="basedata:${areaList}" th:value="${basedata.code}" th:text="${basedata.name}" th:selected="${obj.area==basedata.code}"></option>
+							</select>
+							<input type="text" class="form-input" placeholder="30字以内"
+								name="address" id="address" /></td>
+							<td align="left"></td>
+						</tr>
+
+						<tr>
+							<td class="form-td-right">&shy; &shy;单位负责人：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="请输入" name="manager" id="manager" />
+							</td>
+							<td align="left"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right">&shy; &shy;单位联系电话：</td>
+							<td class="form-td-left"><input type="text"
+								class="form-input" placeholder="请填写固定电话" name="telephone"
+								id="telephone" /></td>
+							<td align="left"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right">&shy; &shy;手机号码：</td>
+							<td class="form-td-left">
+								<input type="number" class="form-input-short" placeholder="50字以内" name="mobile" id="mobile" />
+								<button class="btn btn-warning" name="getCode" id="getCode">获取验证码</button>
+								<input type="text" class="form-input-short" name="mobileCode" id="mobileCode" placeholder="请输入短信验证码"  />
+								<img alt="验证码" id="mobileValidateCode" onclick="this.src='/public/defaultKaptcha?d=' + new Date()*1" 
+									src="/public/defaultKaptcha" /> 
+								<input type="text" name="imgCode_mobile" id="imgCode_mobile" class="inputstyle3" required="required" placeholder="请输入图形验证码" />
+							</td>
+							<td align="left">
+							</td>
+						</tr>
+					</tbody>
+					<tr>
+						<td height="30"></td>
+					</tr>
+					<tr>
+						<td height="30"></td>
+						<td height="30">
+							<button class="btn btn-primary" name="butt" id="butt">下一步</button>
+						</td>
+						<td height="30"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function() {
+			$("#idcard").focus();
+		});
+
+		//下一步：完成注册后跳到上传附件界面
+		$("#butt").click(function() {
+			
+			var mobileCode = $("#mobileCode").val();
+			if (mobileCode == null || mobileCode == "") {
+				alert('请输入短信验证码!');
+				return;
+			}
+			var imgCode_mobile = $("#imgCode_mobile").val();
+			if (imgCode_mobile == null || imgCode_mobile == "") {
+				alert('请输入图形验证码!');
+				return;
+			}
+			
+			
+			var postData = {};
+			
+			postData.idcard = $('#idcard').val();
+			postData.password = $('#password').val();
+			postData.fullname = $('#fullname').val();
+			postData.shortname = $('#shortname').val();
+			postData.mobile = $('#mobile').val();
+			postData.email = $('#email').val();
+			postData.organizationtype = $('#organizationtype').val();
+			postData.organizationname = $('#organizationname').val();
+			postData.organizationcode = $('#organizationcode').val();
+			postData.area = $('#area').val();
+			postData.address = $('#address').val();
+			postData.manager = $('#manager').val();
+			postData.telephone = $('#telephone').val();
+			postData.mobileCode = $('#mobileCode').val();
+			console.log(postData);
+			console.log(JSON.stringify(postData));
+			$.ajax({
+				url : '/public/saveMuser',
+				type : "post",
+				data : JSON.stringify(postData),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success : function(data) {
+					if (data.resultcode == "100") {
+						alert("data.value=="
+								+ data.value);
+						if (data.idcard != '') {
+							window.location.href = "/public/registerUploadFile?idcard="
+									+ data.idcard;
+						} else {
+							window.location.href = "/public/login";
+						}
+					} else if (data.resultcode == "200") {
+						alert("注册失败" + data.value);
+					}
+				},
+				error : function(a, b, c) {
+					alert("error:");
+				}
+			});
+		});
+		
+		$("#getCode").click(function() {
+			var phoneNum=$('#mobile').val();
+			if (phoneNum == '') {
+				$("#mobile").focus();
+				return false;
+			}
+			var phoneReg = /^1[3-578]\d{9}$/;
+			if(phoneReg.test(phoneNum)){
+				var uJson = "{'one':'" + phoneNum + "'}";
+				console.log("uJson==>"+uJson);
+				uJson = window.btoa(uJson);
+				$.post('/public/registerMobile',{uJson:uJson},function(result){
+					if(result.resultcode=='100'){
+						alert("验证码已发送");
+						//倒计时
+						var code = $("#code");
+					    code.attr("disabled","disabled");
+					    setTimeout(function(){
+					    	code.css("opacity","0.8");//opacity:设置元素的不透明级别，没什么意义
+					    },1000)
+					    var time = 120;
+					    var set=setInterval(function(){
+					    	code.val((--time)+"秒后重新获取");
+					    }, 1000);//setInterval：每1秒执行一次function里面的 :
+					    
+					    setTimeout(function(){
+						   code.attr("disabled",false).val("重新获取验证码");
+						   clearInterval(set);
+					    }, 120000);
+					    
+					}else if(result.resultcode=='200'){
+						//$("#phoneTip").text(result.msg);
+						alert(result.value);
+					}else{
+						alert("未知的错误");
+					}
+				},'json');
+			}else{
+				//$("#phoneTip").text("请输入正确的手机号码");
+				alert("请输入正确的手机号码");
+				return false;
+			}
+		});
+	</script>
+
+
+</body>
+</html>

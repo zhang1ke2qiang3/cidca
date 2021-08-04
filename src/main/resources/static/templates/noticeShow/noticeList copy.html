@@ -1,0 +1,345 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>通知公告</title>
+<link href="../../css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" >
+<link rel="stylesheet" href="../../css/bootstrap-table/bootstrap-table.css">
+
+<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+
+<style type="text/css">
+
+</style>
+</head>
+
+<body>
+<div id="container" >
+	<div class="header">
+		 <div class="div1"> 
+		<img src="../../img/icon_jiemian logo.png"	><p th:text="${title}"></p>
+		</div> 
+		 <div class="div2"> 
+		<img src="../../img/touxiang.png"	><p> Hi 王晓华  </p>
+		</div> 
+	</div>
+	
+<div id="main" >
+	<div id="menu"  >
+		<div  style="height: 130px;width: 200px; text-align: center;"><img src="../../img/logo.png" style="height: 72px; padding-top: 30px;"	></div>  
+
+		<div >
+		<ul>
+			<li class="li1-choice">通知公告</li>
+			<li class="li2"><a href="/aidmsg/inputAidmsg">数据填报</a></li>
+			<li class="li3"><a href="/aidmsg/aidMsgWaitList">草稿箱</a></li>
+			<li class="li4"><a href="/aidmsg/aidMsgAlreadyList">进度查询</a></li>
+			<li class="li5"><a href="/sys/accountMan">账户管理</a></li>
+			<li class="li6"><a href="/sys/enterpriseMan">企业信息管理</a></li>
+		</ul>	
+		</div>
+	</div>
+
+
+<div id="content" >
+	<div  class="div-title"><h3>通知公告</h3>
+	</div>
+	<div class="div-tab" >
+		<div  class="div-tab1"><span>首页</span><img src="../../img/icon_close.png" class="img" ></div>
+		<div style="width: 1px; float: left;">&shy;</div>
+		<div  class="div-tab2"><span>通知公告</span><img src="../../img/icon_close.png" class="img"> </div>	
+	</div>
+	
+	<div class="main-bg">
+		<div id="toolbar" style="height: 50px">
+			<form class="form-inline" style="width: 100%">
+				<div class="form-group">
+					标题：<input type="text" id="title" class="form-control" placeholder="可模糊查询">
+					发布人：<input type="text" id="createUser" class="form-control" > &nbsp;&nbsp; 
+					发布时间：<input type="date" id="announceB" class="form-control" >~<input type="date" id="announceE" class="form-control" > &nbsp;&nbsp; 
+						<input type="button" class="btn btn-primary" id="queryBtn" value="查询" onclick="queryNotice()">
+					<button class="btn btn-warning"  onclick="delRecipientValue()">
+						清空查询条件
+					</button>
+				</div>
+			</form>
+		</div>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" id="noticeList" class="rowSameHeight"></table>
+	</div>
+</div>
+</div>	
+
+<div class="modal fade" id="showNoticeModal" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header ">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetForm()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">查看信息</h4>
+				</div>
+				<div class="modal-body">
+					<form id="showNoticeForm" class="form-horizontal" action="" method="post">
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">标题：</label>
+							<div class="col-sm-10" >
+								<input type="text" name="showTitle" id="showTitle" disabled="disabled" 
+									class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">内容：</label>
+							<div class="col-sm-10">
+								<textarea class="form-textarea" name="showContent" id="showContent">
+								 </textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">发布时间：</label>
+							<div class="col-sm-10">
+								<input type="text" name="showAnnounceTime" id="showAnnounceTime" disabled="disabled" 
+								 class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">发布人：</label>
+							<div class="col-sm-10">
+								<input type="text" name="showCreateUser" id="showCreateUser" class="form-control" disabled="disabled" >
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetForm()">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>
+	$(function() {
+		initTable();
+	});
+
+function initTable() {
+	$("#noticeList").bootstrapTable({
+		url : "/noticeShow/getNoticeList",
+		contentType:"application/x-www-form-urlencoded",//https://blog.csdn.net/feiyst/article/details/88431621
+		//contentType : "application/json;charset=UTF-8",//https://www.cnblogs.com/dinghanhua/p/5646435.html
+		method : 'post', //请求方式（*） 
+		toolbar : '#toolbar', //工具按钮用哪个容器 
+		striped : true, //是否显示行间隔色 
+		cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*） 
+		pagination : true, //是否显示分页（*） 
+		sortable : true, //是否启用排序 
+		sortName : "uuid",
+		sortOrder : "desc", //排序方式 
+		queryParams : queryParams,//传递参数（*） 
+		queryParamsType : 'limit',
+		sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*） 
+		pageNumber : 1, //初始化加载第一页，默认第一页 
+		pageSize : 5, //每页的记录行数（*） 
+		pageList : [ 10, 15, 20, 50 ], //可供选择的每页的行数（*） 
+		//search : true, //是否显示表格搜索 
+		strictSearch : true,
+		//showColumns : true, //是否显示所有的列 
+		showRefresh : true, //是否显示刷新按钮 
+		minimumCountColumns : 2, //最少允许的列数 
+		clickToSelect : true, //是否启用点击选中行 
+		//height: 500,            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度 
+		uniqueId : "uuid", //每一行的唯一标识，一般为主键列 
+		showToggle : true, //是否显示详细视图和列表视图的切换按钮 
+		cardView : false, //是否显示详细视图 
+		detailView : false, //是否显示父子表 
+		columns : [
+			{
+				title : '序号',
+				align : 'center',
+				halign : 'center',
+				formatter : function(value,row, index) {
+					var options = $("#noticeList").bootstrapTable('getOptions');
+					return options.pageSize * (options.pageNumber - 1)+ index + 1;
+				}
+			},
+			{
+				field : "uuid",
+				title : "uuid",
+				valign : 'middle',
+				visible : false
+			},
+			{
+				field : "title",
+				title : "标题",
+				align : 'left',
+				halign : 'center',
+				cellStyle:formatTableUnit,
+				formatter :paramsMatter,
+			},{
+				field : "content",
+				title : "正文",
+				align : 'left',
+				halign : 'center',
+				cellStyle:formatTableUnit,
+				formatter :paramsMatter,
+			},
+			{
+				field : "createUser",
+				title : "发布人",
+				align : 'left',
+				halign : 'center'
+			},
+			{
+				field : "announceTime",
+				title : "发布时间",
+				align : 'left',
+				halign : 'center',
+				formatter: function (value, row, index) {
+					return crtTimeFtt(value)
+				}
+			},
+			{
+				field : "state",
+				title : "状态",
+				align : 'left',
+				halign : 'center',
+				formatter : function(value) {
+					if (value == '0') {
+						return '草稿';
+					} else if (value == '1') {
+						return '生效中';
+					} else if (value == '2') {
+						return '失效';
+					} 
+				}
+			},
+			{
+				title : "操作",
+				align : 'center',
+				halign : 'center',
+				formatter : operationn
+			}
+			],
+		});
+	}
+
+	function queryParams(params) {
+		console.log("title=="+$("#title").val());
+		var param = {
+			title : $("#title").val(),
+			createUser : $("#createUser").val(),
+			announceB : $("#announceB").val(),
+			announceE : $("#announceE").val(),
+			limit : this.limit, // 页面大小
+			offset : this.offset, // 页码
+			pageIndex : this.pageNumber,
+			pageSize : this.pageSize,
+		};
+		return param;
+	}
+		
+	//查询用户
+	function queryNotice() {
+		$("#noticeList").bootstrapTable("refresh");
+	}
+
+	//查看详情
+	function showNotice(uuid) {
+		if (uuid == '') {
+			alert("请选择一条记录！");
+			return;
+		}
+		var url = "/noticeShow/noticeDetail";
+		$.ajax({
+			url : url,
+			method : "get",
+			data : {
+				'uuid' : uuid
+			},
+			dataType : "json",
+			success : function(data) {
+				if (data.resultcode = "100") {
+					var obj = data.obj;
+					$("#showTitle").val(obj.title); 
+					$("#showContent").val(obj.content);
+					$("#showCreateUser").val(obj.createUser);
+					$("#showAnnounceTime").val(crtTimeFtt(obj.announceTime));
+					$("#showNoticeModal").modal("show");
+				}
+			},
+			error : function(data) {
+				alert("服务器异常！");
+			}
+		});
+	}
+		
+	function operationn(val, rows, index) {
+		return '<button class="btn btn-xs btn-primary" onclick="showNotice(\''
+			+ rows.uuid
+			+ '\')">查看</button>';
+	}
+		
+	//清空表单数据
+	function resetForm() {
+		document.getElementById("addUserForm").reset();
+	}
+	
+
+	//表格超出宽度鼠标悬停显示td内容
+	function paramsMatter(value, row, index) {
+		var span = document.createElement("span");
+		span.setAttribute("title", value);
+		span.innerHTML = value;
+		return span.outerHTML;
+	}
+	
+	//td宽度以及内容超过宽度隐藏
+	function formatTableUnit(value, row, index) {
+		return {
+			css : {
+				"white-space" : "nowrap",
+				"text-overflow" : "ellipsis",
+				"overflow" : "hidden",
+				"max-width" : "150px"
+			}
+		}
+	}
+	
+	//创建时间格式化显示
+	function crtTimeFtt(value,row,index){
+	 var crtTime = new Date(value);
+	 return top.dateFtt("yyyy-MM-dd hh:mm:ss",crtTime);//直接调用公共JS里面的时间类处理的办法  
+	}
+	
+	//时间格式化处理
+	function dateFtt(fmt,date) {
+		var o = {
+			"M+" : date.getMonth()+1,     //月份 
+			"d+" : date.getDate(),     //日 
+			"h+" : date.getHours(),     //小时 
+			"m+" : date.getMinutes(),     //分 
+			"s+" : date.getSeconds(),     //秒 
+			"q+" : Math.floor((date.getMonth()+3)/3), //季度 
+			"S" : date.getMilliseconds()    //毫秒 
+		}; 
+		if(/(y+)/.test(fmt))
+		fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+		for(var k in o)
+		if(new RegExp("("+ k +")").test(fmt)) 
+		fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+		return fmt; 
+	}
+	
+	function delRecipientValue(){
+		$('#title').val('');
+		$('#createUser').val('');
+		$('#announceB').val('');
+		$('#announceE').val('');
+	}
+</script>
+
+</body>
+</html>
