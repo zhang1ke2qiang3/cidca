@@ -133,7 +133,7 @@ public class NoticeController {
 	/**
 	 * 通知公告-查看详情
 	 * @param uuid
-	 * @param model
+	 * @param
 	 * @param request
 	 * @param response
 	 * @return
