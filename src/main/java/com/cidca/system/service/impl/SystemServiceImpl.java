@@ -138,7 +138,17 @@ public class SystemServiceImpl implements SystemService {
 	public void saveUser(TMuser user) {
 		String uuid = UUID.randomUUID().toString().replace("-","");
 		user.setUuid(uuid);
+		user.setPersontype("1");
 		muserDao.save(user);
+	}
+
+	public void deleteUser(TMuser user){
+		muserDao.delete(user);
+	}
+
+	@Override
+	public TMuser findUserByIdcard(String idcard) {
+		return muserDao.findByIdcard(idcard);
 	}
 
 }

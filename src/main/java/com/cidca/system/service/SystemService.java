@@ -29,4 +29,8 @@ public interface SystemService {
 	public boolean saveUserRole(String userid,String roleids);
 
 	public void saveUser(TMuser user);
+
+	public void deleteUser(TMuser user);
+
+	public TMuser findUserByIdcard(String idcard);
 }

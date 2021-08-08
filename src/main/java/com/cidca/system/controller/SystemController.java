@@ -97,8 +97,11 @@ public class SystemController{
 	@RequestMapping("/welcome")
 	public String welcome(HashMap<String, Object> map,Model model,HttpServletRequest request) throws Exception {
 		//		TMuser user = (TMuser)request.getSession().getAttribute(Constants.SESSION_KEY);
-		//		String principal = (String)SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
+//				String principal = (String)SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
 		//model.addAttribute("user","欢迎："+user.getFullname());//两种方法都可以，和spring model and view一样
+//		List menuList = systemService.getMenuList(principal);
+//		request.getSession().setAttribute("menuList",menuList);
+//		model.addAttribute("menuList",menuList);
 		model.addAttribute("user","Hi 王晓华");//两种方法都可以，和spring model and view一样
 		map.put("title", "对外援助统计数据直报平台 ");
 		return "/sys/welcome";// 自动把String解析为视图
@@ -775,7 +778,8 @@ public class SystemController{
 		Map<String, Object> map = new HashMap<String, Object>();
 		TMuser user = (TMuser) request.getSession().getAttribute(Constants.SESSION_KEY);
 //		String roleid = "1";
-		List menuList = systemService.getMenuList("www");
+		String principal = (String)SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
+		List menuList = systemService.getMenuList(principal);
 		map.put("menuList",menuList);
 		map.put("resultcode", "200");
 		return map;
@@ -847,6 +851,10 @@ public class SystemController{
 					ca = cb.like(root.get("fullname").as(String.class), "%" +user.getFullname().trim()+ "%");
 					pList.add(ca);
 				}
+				if (StringUtils.isNotEmpty(user.getIdcard())) {
+					ca = cb.like(root.get("idcard").as(String.class), "%" +user.getIdcard().trim()+ "%");
+					pList.add(ca);
+				}
 				Predicate[] pre = new Predicate[pList.size()];
 				query.where(pList.toArray(pre));
 				return query.getRestriction();
@@ -910,7 +918,7 @@ public class SystemController{
 				TRole rmenu = (TRole) roleList.get(i);
 				for(int j = 0; j < userRoleList.size(); j++){
 					Map rMap = (Map)userRoleList.get(j);
-					if(rmenu.getRoleid() == (Integer) map.get("roleid")){
+					if(rmenu.getRoleid() == (Integer) rMap.get("roleid")){
 						rmenu.setChecked("1");
 					}
 				}
@@ -959,11 +967,17 @@ public class SystemController{
 	public @ResponseBody
 	Map<String, Object> saveUser(@RequestBody TMuser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try{
-			systemService.saveUser(user);
-			return StringUtil.returnMapToView("200", "角色添加成功！");
+			TMuser qUser = systemService.findUserByIdcard(user.getIdcard());
+			if(null != qUser && !"".equals(qUser.getIdcard())){
+				return StringUtil.returnMapToView("300", "用户名已存在！");
+			}else{
+				user.setPassword(new MD5().getMD5ofStr(user.getPassword()));
+				systemService.saveUser(user);
+				return StringUtil.returnMapToView("200", "用户添加成功！");
+			}
 		}catch(Exception e){
 			e.printStackTrace();
-			return StringUtil.returnMapToView("500", "角色添加失败");
+			return StringUtil.returnMapToView("500", "用户添加失败");
 		}
 	}
 
@@ -978,14 +992,14 @@ public class SystemController{
 	 */
 	@RequestMapping(value = "/delUser")
 	public @ResponseBody
-	Map<String, Object> delUser(@RequestBody TRole role, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	Map<String, Object> delUser(@RequestBody TMuser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try{
 //            TRole menu = menuService.findById(uuid);
-			systemService.delete(role);
-			return StringUtil.returnMapToView("200", "菜单删除成功！");
+			systemService.deleteUser(user);
+			return StringUtil.returnMapToView("200", "用户删除成功！");
 		}catch(Exception e){
 			e.printStackTrace();
-			return StringUtil.returnMapToView("500", "菜单删除失败！");
+			return StringUtil.returnMapToView("500", "用户删除失败！");
 		}
 
 	}

@@ -66,7 +66,7 @@
 				<div id="toolbar" style="height: 50px">
 					<form class="form-inline" style="width: 100%">
 						<div class="form-group">
-							姓名：<input type="text" id="rolename" class="form-control" placeholder="可模糊查询">
+							姓名：<input type="text" id="fullname" class="form-control" placeholder="可模糊查询">
 							登陆名：<input type="text" id="idcard" class="form-control" placeholder="可模糊查询">
 							<input type="hidden" id="userid" />
 						</div>
@@ -93,6 +93,13 @@
 				</div>
 				<div class="modal-body">
 					<form id="showMenuForm" class="form-horizontal" action="" method="post">
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">姓名：</label>
+							<div class="col-sm-10">
+								<!--<div id="showMenuName"></div>-->
+								<input type="text" name="showFullname" id="showFullname" class="form-control" >
+							</div>
+						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">用户名：</label>
 							<div class="col-sm-10">
@@ -174,13 +181,13 @@
                 cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
                 pagination : true, //是否显示分页（*）
                 sortable : true, //是否启用排序
-                sortName : "roleid",
+                sortName : "uuid",
                 sortOrder : "desc", //排序方式
                 queryParams : queryParams,//传递参数（*）
                 queryParamsType : 'limit',
                 sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
                 pageNumber : 1, //初始化加载第一页，默认第一页
-                pageSize : 10, //每页的记录行数（*）
+                pageSize : 5, //每页的记录行数（*）
                 pageList : [ 10, 15, 20, 50 ], //可供选择的每页的行数（*）
                 //search : true, //是否显示表格搜索
                 strictSearch : true,
@@ -246,7 +253,7 @@
 
         function queryParams(params) {
             var param = {
-                rolename : $("#rolename").val(),
+            	fullname : $("#fullname").val(),
 				idcard : $("#idcard").val(),
                 limit : this.limit, // 页面大小
                 offset : this.offset, // 页码
@@ -307,6 +314,7 @@
 
         //弹出添加页面
         function add() {
+            $("#showFullname").val('');
             $("#showMenuName").val('');
             $("#showMenuUuid").val('');
             $("#showMenuUrl").val('');
@@ -360,6 +368,7 @@
         //添加用户
         function updateMenu(){
             var param = {
+                fullname : $("#showFullname").val(),
                 idcard : $("#showMenuName").val(),
                 password : $("#showMenuUrl").val(),
             };
@@ -373,9 +382,11 @@
                 cache: false,
                 success : function(data) {
                     if (data.resultcode = "200") {
-                        alert("保存或修改成功！");
+                        alert("新增用户成功！");
                         resetForm();
                         queryRole();
+                    }else if (data.resultcode = "300") {
+                        alert("用户名已存在！");
                     }
                 },
                 error : function(data) {
@@ -433,7 +444,7 @@
         }
 
         function delRecipientValue(){
-            $('#rolename').val('');
+            $('#fullname').val('');
             $('#idcard').val('');
         }
 
