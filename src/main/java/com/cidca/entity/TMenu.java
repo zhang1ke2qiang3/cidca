@@ -1,9 +1,6 @@
 package com.cidca.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "t_menu")
@@ -17,6 +14,13 @@ public class TMenu {
     private String menuUrl;
     @Column(name = "menu_icon")
     private String menuIcon;
+    @Column(name = "parent_id")
+    private String parentId;
+
+    @Transient
+    private String checked;
+
+
 
 
     public String getUuid() {
@@ -49,5 +53,21 @@ public class TMenu {
 
     public void setMenuIcon(String menuIcon) {
         this.menuIcon = menuIcon;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getChecked() {
+        return checked;
+    }
+
+    public void setChecked(String checked) {
+        this.checked = checked;
     }
 }

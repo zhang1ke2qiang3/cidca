@@ -37,6 +37,9 @@ public class TRole implements Serializable {
 	@Transient
 	private String flag;
 
+	@Transient
+	private String checked;
+
 	public int getRoleid() {
 		return roleid;
 	}
@@ -85,5 +88,15 @@ public class TRole implements Serializable {
 		this.flag = flag;
 	}
 
+	public void setRoleid(Integer roleid) {
+		this.roleid = roleid;
+	}
 
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
+	}
 }

@@ -295,7 +295,7 @@
             return pageNumber + ' rows per page';
         },
         formatShowingRows: function (pageFrom, pageTo, totalRows) {
-            return 'Showing ' + pageFrom + ' to ' + pageTo + ' of ' + totalRows + ' rows';
+            return '显示 ' + pageFrom + ' 到 ' + pageTo + ' 共 ' + totalRows + ' 条';
         },
         formatSearch: function () {
             return 'Search';

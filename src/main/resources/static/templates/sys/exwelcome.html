@@ -50,29 +50,17 @@
     });
     function getMainList(){
         var mainList = [{
-            name:'通知公告',
+            name:'人员管理',
             icon:'icon_tongzhi_',
-            path:'/noticeShow/noticeList'
+            path:'/sys/userlist'
         },{
-            name:'数据填报',
+            name:'菜单管理',
             icon:'icon_shuju_',
-            path:'/aidmsg/inputAidmsg'
+            path:'/menu/list'
         },{
-            name:'草稿箱',
+            name:'角色管理',
             icon:'icon_daibao_',
-            path:'/aidmsg/aidMsgWaitList'
-        },{
-            name:'进度查询',
-            icon:'icon_yibao_',
-            path:'/aidmsg/aidMsgAlreadyList'
-        },{
-            name:'账户管理',
-            icon:'icon_zhanghu_',
-            path:'/sys/accountMan'
-        },{
-            name:'企业信息管理',
-            icon:'icon_qiyeguanli_',
-            path:'/sys/enterpriseMan'
+            path:'/role/list'
         }]
         $('#mainBox').empty()
         mainList.forEach(function(item,index){

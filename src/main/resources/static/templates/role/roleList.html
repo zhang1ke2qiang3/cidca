@@ -1,0 +1,577 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>角色管理</title>
+<link href="../../css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" >
+<link rel="stylesheet" href="../../css/bootstrap-table/bootstrap-table.css">
+
+<link href="../../css/common/common.css" rel="stylesheet">
+<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+<!--<script type="text/javascript" src="../../js/alert.js"></script>-->
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+
+<style type="text/css">
+	.form-textarea{
+		width: 100%;
+	}
+	.control-label{
+		width: 18%;
+		padding: 0;
+	}
+	.col-sm-10{
+		width: 82%;
+		padding-left: 0;
+	}
+	.form-group{
+		line-height: 40px;
+		margin-bottom: 0;
+	}
+	.control-label{
+		padding-top: 0 !important;
+	} 
+	#showCreateUser,#showAnnounceTime{
+		text-align: left !important;
+	}
+	#showContent{
+		text-align: left;
+		line-height: 24px !important;
+	}
+</style>
+</head>
+
+<body>
+<div id="container" >
+	
+<div id="main" >
+
+
+<div id="content" >
+	<div class="top">
+		<ul id="tabBox">
+		</ul>
+	</div>
+	<!-- <div  class="div-title"><h3>通知公告</h3>
+	</div>
+	<div class="div-tab" >
+		<div  class="div-tab1"><span>首页</span><img src="../../img/icon_close.png" class="img" ></div>
+		<div style="width: 1px; float: left;">&shy;</div>
+		<div  class="div-tab2"><span>通知公告</span><img src="../../img/icon_close.png" class="img"> </div>	
+	</div> -->
+	
+	<div class="main-bg">
+		<div id="toolbar" style="height: 50px">
+			<form class="form-inline" style="width: 100%">
+				<div class="form-group">
+					角色名称：<input type="text" id="rolename" class="form-control" placeholder="可模糊查询">
+					<input type="hidden" id="roleid" />
+				</div>
+				<div class="form-group">
+					<input type="button" class="form-control" id="queryButton" onclick = "queryRole();" value="查询"/>
+					<input type="button" class="form-control" onclick = "delRecipientValue();" value="清空"/>
+					<input type="button" class="btn btn-primary" onclick = "add();" value="新增"/>
+				</div>
+			</form>
+		</div>
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" id="menuList" class="rowSameHeight"></table>
+	</div>
+</div>
+</div>	
+
+<div class="modal fade" id="showMenuModal" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header ">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetForm()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="showTitle"></h4>
+				</div>
+				<div class="modal-body">
+					<form id="showMenuForm" class="form-horizontal" action="" method="post">
+						<!-- <div class="form-group">
+							<label for="" class="col-sm-2 control-label">标题：</label>
+							<div class="col-sm-10" >
+								<div type="text" name="showTitle" disabled="disabled" 
+									class="form-control"></div>
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">角色名称：</label>
+							<div class="col-sm-10">
+								<!--<div id="showMenuName"></div>-->
+								 <input type="text" name="showMenuName" id="showMenuName" class="form-control" >
+								 <input type="hidden" name="showMenuUuid" id="showMenuUuid" class="form-control" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">角色说明：</label>
+							<div class="col-sm-10">
+								<!--<div id="showMenuUrl"></div>-->
+								<!-- <input type="text" name="showAnnounceTime" id="showAnnounceTime" disabled="disabled"
+								 class="form-control"> -->
+								<input type="text" name="showMenuUrl" id="showMenuUrl" class="form-control" >
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateMenu()">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetForm()">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="showRoleMenuList" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header ">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetForm()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">菜单配置</h4>
+				</div>
+				<div class="modal-body">
+					<form id="addUserForm" class="form-horizontal" action="" method="post">
+						<!--<div id="menuboor" style="height: 50px">-->
+							<!--<form class="form-inline" style="width: 100%">-->
+								<!--<div class="form-group">-->
+									<!--菜单名称：<input type="text" id="menuName"  placeholder="可模糊查询">-->
+								<!--</div>-->
+								<!--<div class="form-group">-->
+									<!--<input type="button" class="btn btn-primary" id="queryMenuButton" onclick = "queryMenu();" value="查询"/>-->
+								<!--</div>-->
+							<!--</form>-->
+						<!--</div>-->
+						<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" id="msgList"></table>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="commit()">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetForm()">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>
+	var tabData = {}
+	$(function() {
+		initTable();
+		appendTab()
+	});
+	function appendTab(){
+		tabData.tabList = [{
+			name:'首页'
+		},{
+			active:true,
+			name:'角色列表'
+		}]
+		$('#tabBox').empty()
+		tabData.tabList.forEach(function(item,index){
+			if(item.active){
+				$('#tabBox').append('<li class="tab-li-active">'+item.name+'</li>')
+			}else{
+				$('#tabBox').append('<li>'+item.name+'</li>')
+			}
+		})
+	}
+function initTable() {
+	$("#menuList").bootstrapTable({
+		url : "/role/getRoleList",
+		contentType:"application/x-www-form-urlencoded",//https://blog.csdn.net/feiyst/article/details/88431621
+		//contentType : "application/json;charset=UTF-8",//https://www.cnblogs.com/dinghanhua/p/5646435.html
+		method : 'post', //请求方式（*） 
+		toolbar : '#toolbar', //工具按钮用哪个容器 
+		striped : true, //是否显示行间隔色 
+		cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*） 
+		pagination : true, //是否显示分页（*） 
+		sortable : true, //是否启用排序 
+		sortName : "roleid",
+		sortOrder : "desc", //排序方式 
+		queryParams : queryParams,//传递参数（*） 
+		queryParamsType : 'limit',
+		sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*） 
+		pageNumber : 1, //初始化加载第一页，默认第一页 
+		pageSize : 10, //每页的记录行数（*）
+		pageList : [ 10, 15, 20, 50 ], //可供选择的每页的行数（*） 
+		//search : true, //是否显示表格搜索 
+		strictSearch : true,
+		//showColumns : true, //是否显示所有的列 
+		showRefresh : true, //是否显示刷新按钮 
+		minimumCountColumns : 2, //最少允许的列数 
+		clickToSelect : true, //是否启用点击选中行 
+		//height: 500,            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度 
+		uniqueId : "roleid", //每一行的唯一标识，一般为主键列 
+		showToggle : true, //是否显示详细视图和列表视图的切换按钮 
+		cardView : false, //是否显示详细视图 
+		detailView : false, //是否显示父子表
+		columns : [
+			{
+				title : '序号',
+				align : 'center',
+				halign : 'center',
+				formatter : function(value,row, index) {
+					var options = $("#menuList").bootstrapTable('getOptions');
+					return options.pageSize * (options.pageNumber - 1)+ index + 1;
+				}
+			},
+			{
+				field : "roleid",
+				title : "roleid",
+				valign : 'middle',
+				visible : false
+			},
+			{
+				field : "rolename",
+				title : "角色名称",
+				align : 'left',
+				halign : 'center',
+				cellStyle:formatTableUnit,
+				formatter :paramsMatter,
+			},{
+                field : "remark",
+                title : "角色说明",
+                align : 'left',
+                halign : 'center',
+                cellStyle:formatTableUnit,
+                formatter :paramsMatter,
+            },{
+				title : "操作",
+				align : 'center',
+				halign : 'center',
+				formatter : operationn
+			}
+			],
+		});
+	}
+
+	function queryParams(params) {
+		var param = {
+			rolename : $("#rolename").val(),
+			limit : this.limit, // 页面大小
+			offset : this.offset, // 页码
+			pageIndex : this.pageNumber,
+			pageSize : this.pageSize,
+		};
+		return param;
+	}
+
+    function queryMenuParams(params) {
+        var param = {
+            menuName : $("#menuName").val(),
+            limit : this.limit, // 页面大小
+            offset : this.offset, // 页码
+            pageIndex : this.pageNumber,
+            pageSize : this.pageSize,
+        };
+        return param;
+    }
+		
+	//查询权限
+	function queryRole() {
+		$("#menuList").bootstrapTable("refresh");
+	}
+
+	function queryMenu(){
+        $("#msgList").bootstrapTable("refresh");
+	}
+
+	//查看详情
+	function showMenu(roleid) {
+		if (roleid == '') {
+            alert("请选择一条记录！");
+			return;
+		}
+		var url = "/role/roleDetail";
+		$.ajax({
+			url : url,
+			method : "get",
+			data : {
+				'uuid' : roleid
+			},
+			dataType : "json",
+			success : function(data) {
+				if (data.resultcode = "200") {
+					var obj = data.obj;
+					$("#showMenuName").val(obj.rolename);
+					$("#showMenuUuid").val(obj.roleid);
+					$("#showMenuUrl").val(obj.remark);
+                    $("#showMenuModal").modal("show");
+				}
+			},
+			error : function(data) {
+				alert("服务器异常！");
+			}
+		});
+	}
+
+    //查看详情
+    function add() {
+        $("#showMenuName").val('');
+        $("#showMenuUuid").val('');
+        $("#showMenuUrl").val('');
+		$("#showMenuModal").modal("show");
+    }
+
+    //删除
+    function del(roleid) {
+        if (roleid == '') {
+            alert("请选择一条记录！");
+            return;
+        }
+        var url = "/role/del";
+        var param = {
+            roleid : roleid,
+        };
+        $.ajax({
+            url : url,
+            method : "post",
+            contentType: "application/json;charset=UTF-8",
+            data : JSON.stringify(param),
+            dataType : "json",
+            cache: false,
+            success : function(data) {
+                if (data.resultcode = "200") {
+                    alert("删除成功！");
+                    queryRole();
+                }
+            },
+            error : function(data) {
+                alert("服务器异常！");
+                queryRole();
+            }
+        });
+    }
+		
+	function operationn(val, rows, index) {
+		return '<button class="btn btn-xs btn-primary" onclick="showMenu(\''
+			+ rows.roleid
+			+ '\')">修改</button> <button class="btn btn-xs btn-primary" onclick="del(\''
+            + rows.roleid
+            +'\')">删除</button> <button class="btn btn-xs btn-primary" onclick="confMenu(\''
+            + rows.roleid
+            + '\')">配置</button>';
+	}
+		
+	//清空表单数据
+	function resetForm() {
+		document.getElementById("showMenuForm").reset();
+	}
+	//修改菜单
+	function updateMenu(){
+        var param = {
+            rolename : $("#showMenuName").val(),
+            remark : $("#showMenuUrl").val(),
+            roleid : $("#showMenuUuid").val(),
+        };
+        var url = "/role/saveOrUpdate";
+        $.ajax({
+            url : url,
+            method : "post",
+            contentType: "application/json;charset=UTF-8",
+            data : JSON.stringify(param),
+            dataType : "json",
+            cache: false,
+            success : function(data) {
+                if (data.resultcode = "200") {
+                    alert("保存或修改成功！");
+                    resetForm();
+                    queryRole();
+                }
+            },
+            error : function(data) {
+                alert("服务器异常！");
+                resetForm();
+                queryRole();
+            }
+        });
+
+	}
+
+	//表格超出宽度鼠标悬停显示td内容
+	function paramsMatter(value, row, index) {
+		var span = document.createElement("span");
+		span.setAttribute("title", value);
+		span.innerHTML = value;
+		return span.outerHTML;
+	}
+	
+	//td宽度以及内容超过宽度隐藏
+	function formatTableUnit(value, row, index) {
+		return {
+			css : {
+				"white-space" : "nowrap",
+				"text-overflow" : "ellipsis",
+				"overflow" : "hidden",
+				"max-width" : "150px"
+			}
+		}
+	}
+	
+	//创建时间格式化显示
+	function crtTimeFtt(value,row,index){
+	 var crtTime = new Date(value);
+	 return dateFtt("yyyy-MM-dd hh:mm:ss",crtTime);//直接调用公共JS里面的时间类处理的办法  
+	}
+	
+	//时间格式化处理
+	function dateFtt(fmt,date) {
+		var o = {
+			"M+" : date.getMonth()+1,     //月份 
+			"d+" : date.getDate(),     //日 
+			"h+" : date.getHours(),     //小时 
+			"m+" : date.getMinutes(),     //分 
+			"s+" : date.getSeconds(),     //秒 
+			"q+" : Math.floor((date.getMonth()+3)/3), //季度 
+			"S" : date.getMilliseconds()    //毫秒 
+		}; 
+		if(/(y+)/.test(fmt))
+		fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+		for(var k in o)
+		if(new RegExp("("+ k +")").test(fmt)) 
+		fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+		return fmt; 
+	}
+	
+	function delRecipientValue(){
+		$('#rolename').val('');
+	}
+
+	function confMenu(uuid){
+		$("#showRoleMenuList").modal("show")
+		getMenuData(uuid);
+	}
+
+    function getMenuData(roleid){
+	    $("#roleid").val(roleid);
+        $("#msgList").bootstrapTable('destroy');
+        $("#msgList").bootstrapTable({
+            url : "/menu/getRoleMenuList?roleid="+roleid,
+            contentType:"application/x-www-form-urlencoded",//https://blog.csdn.net/feiyst/article/details/88431621
+            //contentType : "application/json;charset=UTF-8",//https://www.cnblogs.com/dinghanhua/p/5646435.html
+            method : 'post', //请求方式（*）
+            // checkbox : false,
+			data:{uuid : roleid},
+            singleSelect : false,
+            toolbar : '', //工具按钮用哪个容器
+            striped : true, //是否显示行间隔色
+            cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination : true, //是否显示分页（*）
+            sortable : true, //是否启用排序
+            sortName : "uuid",
+            sortOrder : "desc", //排序方式
+            queryParams : queryMenuParams,//传递参数（*）
+            queryParamsType : 'limit',
+            sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber : 1, //初始化加载第一页，默认第一页
+            pageSize : 10, //每页的记录行数（*）
+            pageList : [ 10, 15, 20, 50 ], //可供选择的每页的行数（*）
+            //search : true, //是否显示表格搜索
+            strictSearch : true,
+            //showColumns : true, //是否显示所有的列
+            showRefresh : true, //是否显示刷新按钮
+            minimumCountColumns : 2, //最少允许的列数
+            clickToSelect : true, //是否启用点击选中行
+            //height: 500,            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId : "uuid", //每一行的唯一标识，一般为主键列
+            showToggle : true, //是否显示详细视图和列表视图的切换按钮
+            cardView : false, //是否显示详细视图
+            detailView : false, //是否显示父子表
+            columns : [
+                { field: 'check',
+                    checkbox: true, formatter: function (value, row, index) {
+                        if (row.checked == '1' ) {
+                            // console.log(row.serverName);
+                            //设置选中
+                            return {  checked: true };
+                        }
+                    }
+                },
+                {
+                    title : '序号',
+                    align : 'center',
+                    halign : 'center',
+                    formatter : function(value,row, index) {
+                        var options = $("#menuList").bootstrapTable('getOptions');
+                        return options.pageSize * (options.pageNumber - 1)+ index + 1;
+                    }
+                },
+                {
+                    field : "uuid",
+                    title : "uuid",
+                    valign : 'middle',
+                    visible : false
+                },
+                {
+                    field : "menuName",
+                    title : "菜单名称",
+                    align : 'left',
+                    halign : 'center',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter,
+                },{
+                    field : "menuUrl",
+                    title : "菜单路径",
+                    align : 'left',
+                    halign : 'center',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter,
+                },{
+                    field : "menuIcon",
+                    title : "图标路径",
+                    align : 'left',
+                    halign : 'center',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter,
+                }
+            ],
+        });
+    }
+
+    function commit() {
+        var selRows = $("#msgList").bootstrapTable("getSelections");
+		var roleid = $("#roleid").val();
+        if(selRows.length == 0){
+            alert("请至少选择一行");
+            return;
+        }
+        var postData = "";
+        $.each(selRows,function(i) {
+            postData +=  this.uuid;
+            if (i < selRows.length - 1) {
+                postData += ",";
+            }
+        });
+        var param = {
+            roleid : roleid,
+			menuids :postData,
+        };
+        alert(param);
+        var url = "/role/saveRoleMenu";
+        $.ajax({
+            url : url,
+            method : "post",
+            contentType: "application/json;charset=UTF-8",
+            data : JSON.stringify(param),
+            dataType : "json",
+            cache: false,
+            success : function(data) {
+                if (data.resultcode = "200") {
+                    alert("配置成功！");
+                }
+            },
+            error : function(data) {
+                alert("服务器异常！");
+            }
+        });
+
+    }
+
+</script>
+
+</body>
+</html>

@@ -22,12 +22,12 @@ public class ShiroConfig {
 		 * * role: 该资源必须得到角色权限才可以访问 */
 		Map<String,String> filterMap = new LinkedHashMap<String,String>();
 		filterMap.put("/public/**", "anon");
-		filterMap.put("/user/**", "anon");
-		filterMap.put("/role/**", "anon");
-		filterMap.put("/menu/**", "anon");
-		filterMap.put("/aidmsg/**", "anon");//authc
-		filterMap.put("/sys/**", "anon");//authc
-		filterMap.put("/noticeShow/**", "anon");//authc
+		filterMap.put("/user/**", "authc");
+		filterMap.put("/role/**", "authc");
+		filterMap.put("/menu/**", "authc");
+		filterMap.put("/aidmsg/**", "authc");//authc
+		filterMap.put("/sys/**", "authc");//authc
+		filterMap.put("/noticeShow/**", "authc");//authc
 		//filterMap.put("/static/**", "anon");//麻痹的这样没用
 		filterMap.put("/css/**", "anon");
 		filterMap.put("/js/**", "anon");

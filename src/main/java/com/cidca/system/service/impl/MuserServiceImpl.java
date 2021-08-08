@@ -6,6 +6,9 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +64,11 @@ public class MuserServiceImpl implements MuserService{
 	@Override
 	public List<TMuser> findByIdcardAndPassword(String idcard, String password) {
 		return muserdao.findByIdcardAndPassword(idcard, password);
+	}
+
+	@Override
+	public Page<TMuser> findAll(Specification<TMuser> spec, PageRequest pageable) {
+		return muserdao.findAll(spec,pageable);
 	}
 
 	@Override

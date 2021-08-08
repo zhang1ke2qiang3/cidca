@@ -3,6 +3,9 @@ package com.cidca.system.service;
 import java.util.List;
 
 import com.cidca.entity.TMuser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 public interface MuserService {
 
@@ -23,7 +26,10 @@ public List<TMuser> findAll();
 	public List<TMuser> findByMobile(String mobile);
 	
 	public  List<TMuser> findByIdcardAndPassword(String idcard,String password);
-	
+
+	Page<TMuser> findAll(Specification<TMuser> spec, PageRequest pageable);
+
+
 	
 
 }

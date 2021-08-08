@@ -10,15 +10,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cidca.entity.*;
+import com.cidca.queryvo.RoleMenuVo;
+import com.cidca.system.service.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +30,9 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ClassUtils;
@@ -40,20 +46,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cidca.common.Constants;
-import com.cidca.entity.AidMsg;
-import com.cidca.entity.TAccountChange;
-import com.cidca.entity.TAuditLog;
-import com.cidca.entity.TBaseData;
-import com.cidca.entity.TBusiLog;
-import com.cidca.entity.TMuser;
-import com.cidca.entity.TEnterpriseChange;
-import com.cidca.entity.TPermission;
-import com.cidca.system.service.AccountChangeService;
-import com.cidca.system.service.BasedataService;
-import com.cidca.system.service.BusiLogService;
-import com.cidca.system.service.EnterpriseChangeService;
-import com.cidca.system.service.MuserService;
-import com.cidca.system.service.SystemService;
 import com.cidca.util.BtoAUtil;
 import com.cidca.util.DateTools;
 import com.cidca.util.FileUtils;
@@ -88,6 +80,9 @@ public class SystemController{
 	private EnterpriseChangeService ecService;
 	@Autowired
 	private AccountChangeService accService;
+	@Autowired
+	RoleService roleService;
+
 
 	/**
 	 * 登录后的主页
@@ -785,6 +780,216 @@ public class SystemController{
 		map.put("resultcode", "200");
 		return map;
 	}
+
+	/**
+	 * 后台登录后的主页
+	 * @param map
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	//	@RequiresRoles("1")
+	//	@RequiresPermissions("external")
+	@RequestMapping("/exwelcome")
+	public String exwelcome(HashMap<String, Object> map,Model model,HttpServletRequest request) throws Exception {
+		//		TMuser user = (TMuser)request.getSession().getAttribute(Constants.SESSION_KEY);
+		//		String principal = (String)SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
+		//model.addAttribute("user","欢迎："+user.getFullname());//两种方法都可以，和spring model and view一样
+		model.addAttribute("user","Hi 王晓华");//两种方法都可以，和spring model and view一样
+		map.put("title", "对外援助统计数据直报平台 ");
+		return "/sys/exwelcome";// 自动把String解析为视图
+	}
+
+	/**
+	 * 跳转用户列表
+	 * @param map
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	//	@RequiresRoles("1")
+	//	@RequiresPermissions("external")
+	@RequestMapping("/userlist")
+	public String userlist(HashMap<String, Object> map,Model model,HttpServletRequest request) throws Exception {
+		return "/user/userList";// 自动把String解析为视图
+	}
+
+
+
+	/**
+	 * 获取用户列表
+	 * @param user
+	 * @param pageIndex
+	 * @param pageSize
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("serial")
+	//	@RequiresRoles("1")
+	//	@RequiresPermissions("external")
+	@RequestMapping(value = "/getUserList")
+	public @ResponseBody Map<String, Object> getUserlist(
+			TMuser user, Integer pageIndex, Integer pageSize,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 查询条件
+		Specification<TMuser> spec = new Specification<TMuser>() {
+			Predicate ca = null;
+			@Override
+			public Predicate toPredicate(Root<TMuser> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> pList = new ArrayList<Predicate>();
+				if (StringUtils.isNotEmpty(user.getFullname())) {
+					ca = cb.like(root.get("fullname").as(String.class), "%" +user.getFullname().trim()+ "%");
+					pList.add(ca);
+				}
+				Predicate[] pre = new Predicate[pList.size()];
+				query.where(pList.toArray(pre));
+				return query.getRestriction();
+			}
+		};
+		int startIndex=pageIndex-1;
+		PageRequest pageable = PageRequest.of(startIndex, pageSize);
+		Page<TMuser> pageList = muserService.findAll(spec, pageable);
+		map.put("resultcode", "200");
+		map.put("total", pageList.getTotalElements());
+		map.put("rows", pageList.getContent());
+		return map;
+	}
+
+	/**
+	 * 人员角色
+	 * @param
+	 * @param pageIndex
+	 * @param pageSize
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("serial")
+	//	@RequiresRoles("1")
+	//	@RequiresPermissions("external")
+	@RequestMapping(value = "/getUserRoleList")
+	public @ResponseBody Map<String, Object> getRoleMenuList(
+			TRole role,Integer pageIndex,Integer pageSize,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 查询条件
+		Specification<TRole> spec = new Specification<TRole>() {
+			Predicate ca = null;
+			@Override
+			public Predicate toPredicate(Root<TRole> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> pList = new ArrayList<Predicate>();
+//				if (StringUtils.isNotEmpty(muser.getFullname())) {
+//					ca = cb.like(root.get("fullname").as(String.class), "%" +muser.getFullname().trim()+ "%");
+//					pList.add(ca);
+//				}
+				Predicate[] pre = new Predicate[pList.size()];
+				query.where(pList.toArray(pre));
+				return query.getRestriction();
+			}
+		};
+		int startIndex=pageIndex-1;
+		PageRequest pageable = PageRequest.of(startIndex, pageSize);
+		Page<TRole> pageList = roleService.findAll(spec, pageable);
+		List roleList = pageList.getContent();
+		String idcard = request.getParameter("idcard");
+//        TMuser user = (TMuser) request.getSession().getAttribute(Constants.SESSION_KEY);
+//		String principal = (String) SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
+		List userRoleList = roleService.getUserRoleList(idcard);
+
+		List<TRole> newMenuList = new ArrayList<TRole>();
+		if(null != roleList && null != userRoleList){
+			for(int i = 0; i < roleList.size();i++){
+				TRole rmenu = (TRole) roleList.get(i);
+				for(int j = 0; j < userRoleList.size(); j++){
+					Map rMap = (Map)userRoleList.get(j);
+					if(rmenu.getRoleid() == (Integer) map.get("roleid")){
+						rmenu.setChecked("1");
+					}
+				}
+				newMenuList.add(rmenu);
+			}
+		}
+
+		map.put("resultcode", "200");
+		map.put("total", pageList.getTotalElements());
+		map.put("rows", newMenuList);
+		return map;
+	}
+
+	/**
+	 * 给人员配置角色
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * 坑2 @RequestBody 自动装配的语法要求：不允许在局部进行自动装配（即:只能写在method外class里）。
+	 *
+	 */
+	@RequestMapping(value = "/saveUserRole")
+	public @ResponseBody
+	Map<String, Object> saveUserRole(@RequestBody RoleMenuVo roleMenuVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String userid =roleMenuVo.getUserid();
+		String roleids = roleMenuVo.getRoleids();
+		boolean flag = systemService.saveUserRole(userid,roleids);
+		if(flag){
+			return StringUtil.returnMapToView("200", "配置成功！");
+		}else{
+			return StringUtil.returnMapToView("500", "配置失败！");
+		}
+	}
+
+	/**
+	 * 新增或者修改角色
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * 坑2 @RequestBody 自动装配的语法要求：不允许在局部进行自动装配（即:只能写在method外class里）。
+	 *
+	 */
+	@RequestMapping(value = "/saveUser")
+	public @ResponseBody
+	Map<String, Object> saveUser(@RequestBody TMuser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try{
+			systemService.saveUser(user);
+			return StringUtil.returnMapToView("200", "角色添加成功！");
+		}catch(Exception e){
+			e.printStackTrace();
+			return StringUtil.returnMapToView("500", "角色添加失败");
+		}
+	}
+
+	/**
+	 * 删除用户
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * 坑2 @RequestBody 自动装配的语法要求：不允许在局部进行自动装配（即:只能写在method外class里）。
+	 *
+	 */
+	@RequestMapping(value = "/delUser")
+	public @ResponseBody
+	Map<String, Object> delUser(@RequestBody TRole role, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try{
+//            TRole menu = menuService.findById(uuid);
+			systemService.delete(role);
+			return StringUtil.returnMapToView("200", "菜单删除成功！");
+		}catch(Exception e){
+			e.printStackTrace();
+			return StringUtil.returnMapToView("500", "菜单删除失败！");
+		}
+
+	}
+
 
 }
 

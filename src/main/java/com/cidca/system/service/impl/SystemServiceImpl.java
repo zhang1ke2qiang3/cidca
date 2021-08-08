@@ -3,10 +3,11 @@ package com.cidca.system.service.impl;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.cidca.entity.TMenu;
-import com.cidca.system.dao.MenuDao;
+import com.cidca.entity.*;
+import com.cidca.system.dao.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -14,12 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cidca.entity.TAuditLog;
-import com.cidca.entity.TPermission;
-import com.cidca.entity.TRolePermission;
-import com.cidca.system.dao.AuditLogDao;
-import com.cidca.system.dao.PermissionDao;
-import com.cidca.system.dao.RolePermissionDao;
 import com.cidca.system.service.SystemService;
 
 @DynamicInsert
@@ -39,6 +34,11 @@ public class SystemServiceImpl implements SystemService {
 
 	@Autowired
 	MenuDao menuDao;
+
+	@Autowired
+	RoleDao roleDao;
+	@Autowired
+	MuserDao muserDao;
 
 	@Override
 	public TAuditLog save(TAuditLog vo) throws Exception {
@@ -103,6 +103,42 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public List<Map> getMenuList(String idcard) {
 		return menuDao.findByRoleId(idcard);
+	}
+
+	@Override
+	public List<Map> getMenuByRoleid(Integer roleid) {
+		return menuDao.getMenuByRoleid(roleid);
+	}
+
+	@Override
+	public boolean saveUserRole(String userid, String roleids) {
+		if(null != userid || "".equals(userid)){
+			if("".equals(roleids)){
+				return false;
+			}else{
+				try{
+					roleDao.deleteUserRoleByUserid(userid);
+					String[] strArray = roleids.split(",");
+					for(int i = 0; i < strArray.length;i++){
+						String uuid = UUID.randomUUID().toString().replace("-","");
+						roleDao.saveUserRole(userid,strArray[i]);
+					}
+				}catch (Exception e){
+					e.printStackTrace();
+					return false;
+				}
+				return true;
+			}
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public void saveUser(TMuser user) {
+		String uuid = UUID.randomUUID().toString().replace("-","");
+		user.setUuid(uuid);
+		muserDao.save(user);
 	}
 
 }

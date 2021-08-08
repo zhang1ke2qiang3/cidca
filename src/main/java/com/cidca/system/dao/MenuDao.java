@@ -15,9 +15,28 @@ public interface MenuDao extends JpaRepository<TMenu, Integer>, JpaSpecification
 
     @Modifying
     @Transactional
-    @Query(value = "select distinct m.menu_name as name," +
-            " m.menu_url as path, m.menu_icon as icon  " +
+    @Query(value = "select distinct uuid,m.menu_name as menuName ," +
+            " m.menu_url as menuUrl , m.menu_icon as menuIcon ,m.parent_id as parentId  " +
             "from t_menu m where m.uuid in (select menu_id from t_role_menu where role_id in " +
             "(select roleid from t_user_role where userid = ?1))",nativeQuery = true)
     public List<Map> findByRoleId(@Param("roleid")String roleid);
+
+    @Transactional
+    @Query(value = "from TMenu where uuid=?1 ")
+    public TMenu findById(@Param("uuid") String uuid);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from TMenu where uuid=?1 ")
+    public void delete(@Param("uuid")String uuid);
+
+    @Modifying
+    @Transactional
+    @Query(value = "select distinct uuid,m.menu_name as menuName ," +
+            " m.menu_url as menuUrl , m.menu_icon as menuIcon ,m.parent_id as parentId  " +
+            "from t_menu m where m.uuid in (select menu_id from t_role_menu where role_id = ?1 " +
+            ")",nativeQuery = true)
+    public List<Map> getMenuByRoleid(Integer roleid);
+
+
 }

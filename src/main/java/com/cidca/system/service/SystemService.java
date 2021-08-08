@@ -2,10 +2,8 @@ package com.cidca.system.service;
 
 import java.util.List;
 
-import com.cidca.entity.TAuditLog;
-import com.cidca.entity.TMenu;
-import com.cidca.entity.TPermission;
-import com.cidca.entity.TRolePermission;
+import com.cidca.entity.*;
+
 import java.util.Map;
 
 public interface SystemService {
@@ -25,4 +23,10 @@ public interface SystemService {
 	public List<TRolePermission> findPermissionByRoleid(Integer roleid);
 
 	public List<Map> getMenuList(String idcard);
+
+	public List<Map> getMenuByRoleid(Integer roleid);
+
+	public boolean saveUserRole(String userid,String roleids);
+
+	public void saveUser(TMuser user);
 }
