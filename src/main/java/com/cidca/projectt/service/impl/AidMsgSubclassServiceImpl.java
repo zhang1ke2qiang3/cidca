@@ -83,5 +83,58 @@ public class AidMsgSubclassServiceImpl implements AidMsgSubclassService{
 	public List<AidMsgSubclass> findByCreateUserAndProject_name(String createUser,String project_name) throws Exception {
 		return aidMsgSubclassDao.findByCreateUserAndProject_name(createUser,project_name);
 	}
-	
+
+	@Override
+	public List<AidMsgSubclass> findByStaee() {
+		return aidMsgSubclassDao.findByStaee();
+	}
+
+	@Override
+	public Boolean bathPass(String uuids,String idcard) {
+		if(!"".equals(uuids)){
+			String[] uuidArey = uuids.split(",");
+			for(int i = 0; i < uuidArey.length; i++){
+				AidMsgSubclass obj = this.findById(uuidArey[i]);
+				obj.setStatee("2");
+				obj.setAudit_user(idcard);
+				this.updateAidMsg(obj);
+			}
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean bathNoPass(String uuids,String idcard) {
+		if(!"".equals(uuids)){
+			String[] uuidArey = uuids.split(",");
+			for(int i = 0; i < uuidArey.length; i++){
+				AidMsgSubclass obj = this.findById(uuidArey[i]);
+				obj.setStatee("3");
+				obj.setAudit_user(idcard);
+				this.updateAidMsg(obj);
+			}
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean bathBack(String uuids,String idcard) {
+		if(!"".equals(uuids)){
+			String[] uuidArey = uuids.split(",");
+			for(int i = 0; i < uuidArey.length; i++){
+				AidMsgSubclass obj = this.findById(uuidArey[i]);
+				obj.setStatee("-1");
+				obj.setAudit_user(idcard);
+				this.updateAidMsg(obj);
+			}
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 }

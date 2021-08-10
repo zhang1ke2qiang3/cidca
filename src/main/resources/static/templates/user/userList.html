@@ -160,6 +160,8 @@
             },{
                 active:true,
                 name:'角色列表'
+            },{
+                name:'测试列表'
             }]
             $('#tabBox').empty()
             tabData.tabList.forEach(function(item,index){
@@ -169,6 +171,15 @@
                     $('#tabBox').append('<li>'+item.name+'</li>')
                 }
             })
+            // $('#tabBox li').click(function(){
+            //     $(this).addClass('li-active').siblings('li').removeClass('li-active')
+            //     // $(this).children('img').attr('src',$(this).children('img').attr('src').replace('nor','pre'))
+            //     $(this).siblings('li').each(function(ind,item){
+            //         debugger
+            //         $(item).children('img').attr('src',$(item).children('img').attr('src').replace('pre','nor'))
+            //     })
+                // $('#iframe').attr('src',$(this).attr('path'))
+            // })
         }
         function initTable() {
             $("#menuList").bootstrapTable({

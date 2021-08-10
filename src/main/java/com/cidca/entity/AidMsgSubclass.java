@@ -75,6 +75,8 @@ public class AidMsgSubclass  implements Serializable {
 	@LastModifiedDate
 	@Column(name = "update_time")
 	private Date update_time;//创建日期
+
+
 	
 	/**
 	 * 状态

@@ -24,7 +24,7 @@ public class ShiroConfig {
 		filterMap.put("/public/**", "anon");
 		filterMap.put("/user/**", "authc");
 		filterMap.put("/role/**", "authc");
-		filterMap.put("/menu/**", "authc");
+		filterMap.put("/menu/**", "anon");
 		filterMap.put("/aidmsg/**", "authc");//authc
 		filterMap.put("/sys/**", "authc");//authc
 		filterMap.put("/noticeShow/**", "authc");//authc
@@ -36,7 +36,7 @@ public class ShiroConfig {
 		filterMap.put("/upload/**", "anon");
 		
 		shiroFilterFactoryBean.setLoginUrl("/public/login");//修改调整的登录页面 如果登录的url不是“login”需要指定一下
-		shiroFilterFactoryBean.setLoginUrl("/public/login2");//修改调整的登录页面 如果登录的url不是“login”需要指定一下
+//		shiroFilterFactoryBean.setLoginUrl("/public/login2");//修改调整的登录页面 如果登录的url不是“login”需要指定一下
 		shiroFilterFactoryBean.setSuccessUrl("/sys/welcome");
 		shiroFilterFactoryBean.setUnauthorizedUrl("/public/error");
 		

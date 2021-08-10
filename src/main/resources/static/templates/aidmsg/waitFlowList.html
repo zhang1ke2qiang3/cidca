@@ -1,0 +1,554 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+<link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+<title>已报项目</title>
+<link rel="stylesheet" href="../../css/bootstrap-table/bootstrap-table.css">
+<link href="../../css/common/common.css" rel="stylesheet">
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<style type="text/css">
+</style>
+</head>
+
+<body>
+	<div id="main">
+		<div id="content">
+			<div class="top">
+				<ul id="tabBox">
+				</ul>
+			</div>
+			<div class="main-bg">
+				<div id="toolbar" style="height: 100px">
+					<form class="form-inline" style="width: 100%">
+						<div class="form-group">
+							申报年度：<input type="text" id="yearr" class="form-control">
+							项目名称：<input type="text" id="project_name" class="form-control" placeholder="可模糊查询"> &nbsp;&nbsp; 
+								<input type="button" class="btn btn-primary" id="queryBtn" value="查询" onclick="queryAidmsg()">&#8195;
+								<button class="btn btn-warning"  onclick="delRecipientValue()">清空查询条件</button>
+						</div>
+					</form>
+					<br>
+					<form class="form-inline" style="width: 100%">
+						<div class="form-group">
+							<a href="javascript:void(0)" onclick="bathPass()">批量通过</a>
+							<a href="javascript:void(0)" onclick="bathNoPass()">批量不通过</a>
+							<a href="javascript:void(0)" onclick="bathBack()">批量退回</a>
+						</div>
+					</form>
+				</div>
+				<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" id="msgList"></table>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="addUserModal" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header ">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" onclick="resetForm()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">编辑信息</h4>
+				</div>
+				<div class="modal-body">
+					<form id="addUserForm" class="form-horizontal" action="" method="post">
+						<input type="hidden" name="editUuid" id="editUuid">
+						<input type="hidden" name="editStatee" id="editStatee">
+						<div class="form-group">
+							<label for="userName" class="col-sm-2 control-label">申报年度：</label>
+							<div class="col-sm-5">
+								<input type="number" name="editYear" id="editYear" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-sm-2 control-label">项目名称：</label>
+							<div class="col-sm-5">
+								<input type="text" name="editPackjectName" id="editPackjectName" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-sm-2 control-label">受援国家、组织：</label>
+							<div class="col-sm-5">
+								<input type="text" name="editRecipient" id="editRecipient" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-sm-2 control-label">受援助内容：</label>
+							<div class="col-sm-10">
+								<input type="text" name="editRecipient_content"
+									id="editRecipient_content" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-sm-2 control-label">年支出金额：</label>
+							<div class="col-sm-5">
+								<input type="number" name="editAnnual_expenditure"
+									id="editAnnual_expenditure" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-sm-2 control-label">资金来源：</label>
+							<div class="col-sm-5">
+								<input type="text" name="editExpenditure_form" id="editExpenditure_form" class="form-control">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						onclick="resetForm()">取消</button>
+					<button type="button" class="btn btn-primary" onclick="saveAidmsg()">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="showAidmsgModal" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header ">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" onclick="resetForm()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">查看信息</h4>
+				</div>
+				<div class="modal-body">
+					<form id="showAidmsgForm" class="form-horizontal" action="" method="post">
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">申报年度：</label>
+							<div class="col-sm-10" >
+								<input type="number" name="showYear" id="showYear" disabled="disabled" 
+									class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">项目名称：</label>
+							<div class="col-sm-10">
+								<input type="text" name="showPackjectName" id="showPackjectName" disabled="disabled" 
+									class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">受援助内容：</label>
+							<div class="col-sm-10">
+								<input type="text" name="showRecipient_content" id="showRecipient_content" disabled="disabled" 
+								class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">年支出金额：</label>
+							<div class="col-sm-10">
+								<input type="number" name="showAnnual_expenditure" 
+									id="showAnnual_expenditure" class="form-control" disabled="disabled" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">资金来源：</label>
+							<div class="col-sm-10">
+								<input type="text" name="showExpenditure_form"
+									id="showExpenditure_form" class="form-control" disabled="disabled" >
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetForm()">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<script>
+	var tabData = {}
+	$(function() {
+		initTable();
+		appendTab()
+		$(window).keydown(function(event) {
+			if(event.keyCode == 13) {
+				queryAidmsg();
+			}
+		});
+	});
+	function appendTab(){
+		tabData.tabList = [{
+			name:'首页'
+		},{
+			active:true,
+			name:'已报项目'
+		}]
+		$('#tabBox').empty()
+		tabData.tabList.forEach(function(item,index){
+			if(item.active){
+				$('#tabBox').append('<li class="tab-li-active">'+item.name+'</li>')
+			}else{
+				$('#tabBox').append('<li>'+item.name+'</li>')
+			}
+		})
+	}
+	function queryParams(params) {
+		var param = {
+			yearr : $("#yearr").val(),
+			project_name : $("#project_name").val(),
+			annual_expenditure : $("#annual_expenditure").val(),
+			limit : this.limit, // 页面大小
+			offset : this.offset, // 页码
+			pageIndex : this.pageNumber,
+			pageSize : this.pageSize,
+		};
+		return param;
+	}
+	
+	//编辑保存
+	function saveAidmsg() {
+		var param = $("#addUserForm").serializeArray();
+		var uuid = $("#editUuid").val();
+		var postData = {};
+		postData.uuid = uuid;
+		postData.yearr = $('#editYear').val();
+		postData.project_name = $('#editPackjectName').val();
+		postData.recipient = $('#editRecipient').val();
+		postData.recipient_content = $('#editRecipient_content').val();
+		postData.annual_expenditure = $('#editAnnual_expenditure').val();
+		postData.expenditure_form = $('#editExpenditure_form').val();
+		postData.statee = $('#editStatee').val();
+
+		console.log(postData);
+		console.log(JSON.stringify(postData));
+		var url = "/aidmsg/saveAidMsg";
+		$.ajax({
+			url : url,
+			method : "post",
+			data : JSON.stringify(postData),
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+				if (data.resultcode = "100") {
+					$("#msgList").bootstrapTable("refresh");
+					$("#addUserModal").modal("hide");
+					resetForm();
+				}
+				alert(data.value);
+			},
+			error : function(data) {
+				alert("服务器异常！");
+			}
+		});
+	}
+
+	//修改用户
+	function editAidmsg(uuid) {
+		if (uuid == '') {
+			alert("请选择一条记录！");
+			return;
+		}
+		var url = "/aidmsg/editAidMsg";
+		$.ajax({
+			url : url,
+			method : "get",
+			data : {
+				'uuid' : uuid,
+				'type' : 'edit2',
+			},
+			dataType : "json",
+			success : function(data) {
+				if (data.resultcode = "100") {
+					var obj = data.value.obj;
+					$("#editUuid").val(obj.uuid);
+					$("#editYear").val(obj.yearr);
+					$("#editPackjectName").val(obj.project_name);
+					$("#editRecipient").val(obj.recipient);
+					$("#editRecipient_content").val(obj.recipient_content);
+					$("#editAnnual_expenditure").val(obj.annual_expenditure);
+					$("#editExpenditure_form").val(obj.expenditure_form);
+					$("#editStatee").val(obj.statee);
+					$("#addUserModal").modal("show");
+				}
+			},
+			error : function(data) {
+				alert("服务器异常！");
+			}
+		});
+	}
+
+	//提交（审核）
+	function submitAidmsg(uuid) {
+		if (uuid == '') {
+			alert("请选择一条记录！");
+			return;
+		}
+		var url = "/aidmsg/saveAidmsgSecondSubmission";
+		$.ajax({
+			url : url,
+			method : "get",
+			data : {
+				'uuid' : uuid
+			},
+			dataType : "json",
+			success : function(data) {
+				if(data.resultcode=='100'){
+					alert(data.value);
+					$("#msgList").bootstrapTable("refresh");
+				}else{
+					alert(data.value);
+					$("#msgList").bootstrapTable("refresh");
+				}
+			},
+			error : function(data) {
+				alert("服务器异常！");
+			}
+		});
+	}
+	
+	//查看详情
+	function showAidmsg(uuid) {
+		// if (uuid == '') {
+		// 	alert("请选择一条记录！");
+		// 	return;
+		// }
+		// var url = "/aidmsg/aidMsgDetail";
+		// $.ajax({
+		// 	url : url,
+		// 	method : "get",
+		// 	data : {
+		// 		'uuid' : uuid
+		// 	},
+		// 	dataType : "json",
+		// 	success : function(data) {
+		// 		if (data.resultcode = "100") {
+		// 			var obj = data.obj;
+		// 			$("#showYear").val(obj.yearr);
+		// 			$("#showPackjectName").val(obj.project_name);
+		// 			$("#showRecipient_content").val(obj.recipient_content);
+		// 			$("#showAnnual_expenditure").val(obj.annual_expenditure);
+		// 			$("#showExpenditure_form").val(obj.expenditure_form);
+		// 			$("#showAidmsgModal").modal("show");
+		// 		}
+		// 	},
+		// 	error : function(data) {
+		// 		alert("服务器异常！");
+		// 	}
+		// });
+        window.location.href = "/aidmsg/getInputAidmsg?uuid="+uuid;
+	}
+	
+	//清空表单数据
+	function resetForm() {
+		document.getElementById("addUserForm").reset();
+	}
+
+	//查询用户
+	function queryAidmsg() {
+		$("#msgList").bootstrapTable("refresh");
+	}
+
+	function operationn(val, rows, index) {
+		//console.log("uuid=="+rows.uuid);
+		return '<button class="btn btn-xs btn-primary" onclick="showAidmsg(\''
+		+ rows.uuid
+		+ '\')">审核</button>';
+	}
+		
+	function initTable() {
+		$("#msgList").bootstrapTable({
+			url : "/aidmsg/getShenPiList",
+			contentType:"application/x-www-form-urlencoded",//https://blog.csdn.net/feiyst/article/details/88431621
+			//contentType : "application/json;charset=UTF-8",//https://www.cnblogs.com/dinghanhua/p/5646435.html
+			method : 'post', //请求方式（*） 
+			toolbar : '#toolbar', //工具按钮用哪个容器 
+			striped : true, //是否显示行间隔色 
+			cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*） 
+			pagination : true, //是否显示分页（*） 
+			sortable : true, //是否启用排序 
+			sortName : "uuid",
+			sortOrder : "desc", //排序方式 
+			queryParams : queryParams,//传递参数（*） 
+			queryParamsType : 'limit',
+			sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*） 
+			pageNumber : 1, //初始化加载第一页，默认第一页 
+			pageSize : 5, //每页的记录行数（*） 
+			pageList : [ 10, 15, 20, 50 ], //可供选择的每页的行数（*） 
+			//search : true, //是否显示表格搜索 
+			strictSearch : true,
+			//showColumns : true, //是否显示所有的列 
+			showRefresh : true, //是否显示刷新按钮 
+			minimumCountColumns : 2, //最少允许的列数 
+			clickToSelect : true, //是否启用点击选中行 
+			//height: 500,            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度 
+			uniqueId : "uuid", //每一行的唯一标识，一般为主键列 
+			showToggle : true, //是否显示详细视图和列表视图的切换按钮 
+			cardView : false, //是否显示详细视图 
+			detailView : false, //是否显示父子表 
+			columns : [
+					{
+					    field: 'check',
+						checkbox: true
+                    },{
+						title : '序号',
+						align : 'center',
+						halign : 'center',
+						formatter : function(value,row, index) {
+							var options = $("#msgList").bootstrapTable('getOptions');
+							return options.pageSize * (options.pageNumber - 1)+ index + 1;
+						}
+					},
+					{
+						field : "uuid",
+						title : "uuid",
+						valign : 'middle',
+						visible : false
+					},
+					{
+						field : "yearr",
+						title : "申报年度",
+						align : 'left',
+						halign : 'center'
+					},
+					{
+						field : "project_name",
+						title : "项目名称",
+						align : 'left',
+						halign : 'center'
+					},
+					{
+						field : "recipient",
+						title : "受援国家、组织",
+						align : 'left',
+						halign : 'center'
+					},
+					{
+						field : "recipient_content",
+						title : "受援内容",
+						align : 'left',
+						halign : 'center'
+					},
+					{
+						field : "annual_expenditure",
+						title : "年度支出金额",
+						align : 'left',
+						halign : 'center',
+					},
+					{
+						field : "expenditure_form",
+						title : "资金来源",
+						align : 'left',
+						halign : 'center'
+					},
+					{
+						field : "statee",
+						title : "状态",
+						align : 'left',
+						halign : 'center',
+						formatter : function(value) {
+							if (value == '0') {
+								return '草稿';
+							} else if (value == '1') {
+								return '待审核';
+							} else if (value == '2') {
+								return '审核通过';
+							} else if (value == '-1') {
+								return '退回';
+							}
+						}
+					},
+					{
+						title : "操作",
+						align : 'center',
+						halign : 'center',
+						formatter :operationn
+						}
+					],
+				});
+			}
+	
+	function delRecipientValue(){
+		$('#yearr').val('');
+		$('#project_name').val('');
+	}
+
+    function checked() {
+        var selRows = $("#msgList").bootstrapTable("getSelections");
+        if(selRows.length == 0){
+            alert("请至少选择一行");
+            return;
+        }
+
+        var postData = "";
+        $.each(selRows,function(i) {
+            postData +=  this.uuid;
+            if (i < selRows.length - 1) {
+                postData += ",";
+            }
+        });
+        return postData;
+    }
+
+    function bathPass(){
+        var uuids = checked();
+        var url = "/aidmsg/bathPass";
+        $.ajax({
+            url : url,
+            method : "get",
+            data : {
+                'uuid' : uuids
+            },
+            dataType : "json",
+            success : function(data) {
+				alert(data.value);
+				queryAidmsg();
+            },
+            error : function(data) {
+                alert("服务器异常！");
+            }
+        });
+	}
+    function bathNoPass(){
+        var uuids = checked();
+        var url = "/aidmsg/bathNoPass";
+        $.ajax({
+            url : url,
+            method : "get",
+            data : {
+                'uuid' : uuids
+            },
+            dataType : "json",
+            success : function(data) {
+				alert(data.value);
+				queryAidmsg()
+            },
+            error : function(data) {
+                alert("服务器异常！");
+            }
+        });
+    }
+    function bathBack(){
+        var uuids = checked();
+        var url = "/aidmsg/bathBack";
+        $.ajax({
+            url : url,
+            method : "get",
+            data : {
+                'uuid' : uuids
+            },
+            dataType : "json",
+            success : function(data) {
+				alert(data.value);
+				queryAidmsg();
+            },
+            error : function(data) {
+                alert("服务器异常！");
+            }
+        });
+    }
+	</script>
+</body>
+</html>

@@ -15,7 +15,10 @@
 			<div class="top-right">
 				<!-- <img src="../../img/login-img/icon_help3.png">
 				<img src="../../img/login-img/touxiang.png"> -->
-				<div id="userName"></div>
+				<div id="userName">
+					<span id="fullname" th:text="${user.fullname}"></span>
+					<a class="toBack" href="/public/logout">退出</a>
+				</div>
 			</div>
 		</div>
 		<div class="main">
@@ -44,7 +47,8 @@
             success : function(data) {
                 if (data.resultcode = "200") {
                     var mainList = data.menuList;
-                    debugger
+                    var user = data.user;
+                    // alert(user.fullname)
                     $('#mainBox').empty()
                     mainList.forEach(function(item,index){
                         if(index == mainNum){
@@ -54,10 +58,10 @@
                             $('#mainBox').append('<li path="'+item.menuUrl+'"><img src="../../img/login-img/'+item.menuIcon+'nor.png"/>'+item.menuName+'</li>')
                         }
                     })
-                    $('#userName').html('王晓华<a class="toBack" href="/public/logout">退出</a>')
+					$("#fullname").val(user.fullname)
+                    // $('#userName').html('<span th:value="${user.fullname}"></span><a class="toBack" href="/public/logout">退出</a>')
                     $('.main').css({height:(window.innerHeight-72)+'px'})
                     $('#mainBox li').click(function(){
-                        console.log("-----------")
                         sessionStorage.setItem('mainNum',$(this).index())
                         $(this).addClass('li-active').siblings('li').removeClass('li-active')
                         $(this).children('img').attr('src',$(this).children('img').attr('src').replace('nor','pre'))

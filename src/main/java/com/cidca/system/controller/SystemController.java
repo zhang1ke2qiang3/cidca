@@ -96,14 +96,15 @@ public class SystemController{
 	//	@RequiresPermissions("external")
 	@RequestMapping("/welcome")
 	public String welcome(HashMap<String, Object> map,Model model,HttpServletRequest request) throws Exception {
-		//		TMuser user = (TMuser)request.getSession().getAttribute(Constants.SESSION_KEY);
+				TMuser user = (TMuser)request.getSession().getAttribute(Constants.SESSION_KEY);
 //				String principal = (String)SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
 		//model.addAttribute("user","欢迎："+user.getFullname());//两种方法都可以，和spring model and view一样
 //		List menuList = systemService.getMenuList(principal);
 //		request.getSession().setAttribute("menuList",menuList);
 //		model.addAttribute("menuList",menuList);
-		model.addAttribute("user","Hi 王晓华");//两种方法都可以，和spring model and view一样
+		model.addAttribute("user",user.getFullname());//两种方法都可以，和spring model and view一样
 		map.put("title", "对外援助统计数据直报平台 ");
+		map.put("user",user);
 		return "/sys/welcome";// 自动把String解析为视图
 	}
 
@@ -781,6 +782,7 @@ public class SystemController{
 		String principal = (String)SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
 		List menuList = systemService.getMenuList(principal);
 		map.put("menuList",menuList);
+		map.put("user",user);
 		map.put("resultcode", "200");
 		return map;
 	}
@@ -1003,6 +1005,8 @@ public class SystemController{
 		}
 
 	}
+
+
 
 
 }

@@ -1201,8 +1201,8 @@ public class StringUtil {
 	/**
 	 * 把返回页面的提示消息，抽取业务公共方法20210608
 	 * 有时间把所有controller的都改一下，代码冗余太多了 
-	 * @param flag 返回标识：成功或者失败
-	 * @param msg 返回的消息：10字内
+	 * @param  返回标识：成功或者失败
+	 * @param  返回的消息：10字内
 	 * @return
 	 */
 //	public static String ConvertToStringWithJSON(boolean flag,String msg) {
@@ -1232,6 +1232,12 @@ public class StringUtil {
 	
 	public static Map<String, Object> returnMapToView(String resultcode,String value) {
 		Map<String, Object> returnMap=new HashMap<String, Object>();
+		returnMap.put("resultcode",resultcode);
+		returnMap.put("value", value);
+		return returnMap;
+	}
+
+	public static Map<String, Object> returnMapToView(String resultcode,String value,Map<String,Object> returnMap) {
 		returnMap.put("resultcode",resultcode);
 		returnMap.put("value", value);
 		return returnMap;

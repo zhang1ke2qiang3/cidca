@@ -44,5 +44,8 @@ public interface AidMsgSubclassDao extends JpaRepository<AidMsgSubclass, String>
 	@Transactional
 	@Query(value = "select u from AidMsgSubclass u where create_user = ?1 and project_name=?2")
 	public List<AidMsgSubclass> findByCreateUserAndProject_name(@Param("create_user")String createUser,@Param("project_name")String project_name);
-	
+
+	@Transactional
+	@Query(value = "from AidMsgSubclass u where statee = '1'")
+	List<AidMsgSubclass>findByStaee();
 }

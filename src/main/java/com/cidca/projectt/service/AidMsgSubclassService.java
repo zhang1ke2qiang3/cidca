@@ -38,5 +38,12 @@ public interface AidMsgSubclassService {
 	 * @throws Exception
 	 */
 	public List<AidMsgSubclass> findByCreateUserAndProject_name(String createUser,String project_name) throws Exception;
-	
+
+	List<AidMsgSubclass> findByStaee();
+
+	Boolean bathPass(String uuids,String idcard);
+
+	Boolean bathNoPass(String uuids,String idcard);
+
+	Boolean bathBack(String uuids,String idcard);
 }

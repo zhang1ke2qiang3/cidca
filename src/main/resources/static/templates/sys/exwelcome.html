@@ -29,52 +29,52 @@
 		</div>
 	</div>
 </div>
+</body>
 <script>
     var mainNum = 0
-    if(sessionStorage.getItem('mainNum')){
-        mainNum = sessionStorage.getItem('mainNum')
-    }
+    //if(sessionStorage.getItem('mainNum')){
+    //mainNum = sessionStorage.getItem('mainNum')
+    //}
     $(function () {
-        getMainList()
-        getUserInfo()
-        $('.main').css({height:(window.innerHeight-72)+'px'})
-        $('#mainBox li').click(function(){
-            sessionStorage.setItem('mainNum',$(this).index())
-            $(this).addClass('li-active').siblings('li').removeClass('li-active')
-            $(this).children('img').attr('src',$(this).children('img').attr('src').replace('nor','pre'))
-            $(this).siblings('li').each(function(ind,item){
-                $(item).children('img').attr('src',$(item).children('img').attr('src').replace('pre','nor'))
-            })
-            $('#iframe').attr('src',$(this).attr('path'))
-        })
-    });
-    function getMainList(){
-        var mainList = [{
-            name:'人员管理',
-            icon:'icon_tongzhi_',
-            path:'/sys/userlist'
-        },{
-            name:'菜单管理',
-            icon:'icon_shuju_',
-            path:'/menu/list'
-        },{
-            name:'角色管理',
-            icon:'icon_daibao_',
-            path:'/role/list'
-        }]
-        $('#mainBox').empty()
-        mainList.forEach(function(item,index){
-            if(index == mainNum){
-                $('#iframe').attr('src',item.path)
-                $('#mainBox').append('<li class="li-active" path="'+item.path+'"><img src="../../img/login-img/'+item.icon+'pre.png"/>'+item.name+'</li>')
-            }else{
-                $('#mainBox').append('<li path="'+item.path+'"><img src="../../img/login-img/'+item.icon+'nor.png"/>'+item.name+'</li>')
+        $.ajax({
+            url : "/sys/getMenuList",
+            method : "post",
+            data : {},
+            dataType : "json",
+            success : function(data) {
+                if (data.resultcode = "200") {
+                    var mainList = data.menuList;
+                    $('#mainBox').empty()
+                    mainList.forEach(function(item,index){
+                        if(index == mainNum){
+                            $('#iframe').attr('src',item.menuUrl)
+                            $('#mainBox').append('<li class="li-active" path="'+item.menuUrl+'"><img src="../../img/login-img/'+item.menuIcon+'pre.png"/>'+item.menuName+'</li>')
+                        }else{
+                            $('#mainBox').append('<li path="'+item.menuUrl+'"><img src="../../img/login-img/'+item.menuIcon+'nor.png"/>'+item.menuName+'</li>')
+                        }
+                    })
+                    $('#userName').html('王晓华<a class="toBack" href="/public/logout">退出</a>')
+                    $('.main').css({height:(window.innerHeight-72)+'px'})
+                    $('#mainBox li').click(function(){
+                        sessionStorage.setItem('mainNum',$(this).index())
+                        $(this).addClass('li-active').siblings('li').removeClass('li-active')
+                        $(this).children('img').attr('src',$(this).children('img').attr('src').replace('nor','pre'))
+                        $(this).siblings('li').each(function(ind,item){
+                            $(item).children('img').attr('src',$(item).children('img').attr('src').replace('pre','nor'))
+                        })
+                        $('#iframe').attr('src',$(this).attr('path'))
+                    })
+                }
+            },
+            error : function(data) {
+                alert("服务器异常！");
             }
-        })
-    }
-    function getUserInfo(){
-        $('#userName').html('王晓华<a class="toBack" href="/public/logout">退出</a>')
-    }
+        });
+
+    });
+
+    // function getUserInfo(){
+    //     $('#userName').html('王晓华<a class="toBack" href="/public/logout">退出</a>')
+    // }
 </script>
-</body>
 </html>

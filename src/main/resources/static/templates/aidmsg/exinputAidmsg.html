@@ -1,0 +1,326 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据填报</title>
+
+<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+
+ <!-- 这个CSS影响了全局布局 -->
+<link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" >
+<link rel="stylesheet" href="../../css/bootstrap/bootstrap-select.css" >
+<link href="../../css/common/common.css" rel="stylesheet">
+<script type="text/javascript" src="../../js/jquery.min_1.10.2.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap/bootstrap-select.min.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table.js"></script>
+<script src="../../js/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<style type="text/css">
+	.form-td-right,.form-td-right-top{
+		line-height: 50px;
+	}
+	.form-td-right img,.form-td-right-top img{
+		width: 20px;
+		margin: 15px 5px;
+		padding: 0;
+		display: inline-block;
+	}
+	.form-td-left{
+		width: 30%;
+	}
+	.form-input{
+		width: 100%;
+		height: 32px;
+	}
+	.form-textarea{
+		width: 100%;
+	}
+	#yearr,#expenditure_form{
+		width: 100%;
+		line-height: 32px;
+		height: 32px;
+		outline: none;
+	}
+	.form-td-left1{
+		padding-left: 10px;
+		text-align: left;
+	}
+	.glyphicon{
+		width: 32px;
+		height: 32px;
+		top: 0;
+	}
+	.dropdown-menu{
+		width: 30%;
+	}
+	#zijinUl{
+		overflow: hidden;
+	}
+	#zijinUl li{
+		width: 100%;
+		display: flex;
+		line-height: 38px;
+		overflow: hidden;
+	}
+	#zijinUl li label{
+		width: 88px;
+		text-align: right;
+	}
+	#zijinUl li input{
+		flex: 1;
+	}
+</style>
+</head>
+
+<body>
+
+<div id="content" >
+	<div class="top">
+		<ul id="tabBox">
+		</ul>
+	</div>
+	<div class="main-bg">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tbody>
+			<tr>
+				<td valign="top" >
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+					<tbody>
+					<tr>
+						<td height="30" align="left">
+						<input type="hidden" name="idcard" id="idcard" th:value="${idcard}">
+						<input type="hidden" name="childId" id="childId" th:value="${childObj.uuid}">
+						<button class="form-button" onclick="submitAidmsg(2)">通过</button> &shy;
+						<button class="form-button" onclick="submitAidmsg(3)">不通过</button> &shy;
+						<button class="form-button1" onclick="submitAidmsg(-1)">退回</button> &shy;
+						<button class="form-button1" onclick="submitAidmsgAndOpenNewView(2)">通过并审核下一项目</button>
+						</td>
+					</tr>
+						<tr>
+							<td class="form-td-right" >
+							<img src="../../img/icon_help2.png" class="form-img" title="选择填报年度"> &shy; &shy;
+								<b>选择填报年度：</b>
+							</td>
+							<td class="form-td-left">
+								 <!--<div class="form-select ">-->
+									<!--<select name="yearr" id="yearr" required="required">-->
+										<!--<option>请选择填报年度</option>-->
+										<!--<option th:each="obj:${yearList}" th:value="${obj.name}" th:text="${obj.name}" th:selected="${obj.name=='2021'}"></option>-->
+									<!--</select>-->
+								<span th:text="${obj.yearr}">
+								 <!--</div>-->
+							</td>
+							<td align="left"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right">
+							<img src="../../img/icon_help2.png" class="form-img"> &shy; &shy; <b>项目名称：</b>
+							</td>
+							<td class="form-td-left" >
+								<!--<input type="text" class="form-input" placeholder="50字以内" name="project_name"  id="project_name" required="required"/>-->
+								<span th:text="${childObj.project_name}"></span>
+							</td>
+							<td class="form-td-left1">
+						</tr>
+						<tr>
+							<td class="form-td-right"><img src="../../img/icon_help2.png" class="form-img"> &shy; &shy; <b>受援国、受援地区、国际或区域性组织：</b></td>
+							<td class="form-td-left">
+								<!--<select id="recipient" class="selectpicker show-tick form-control" data-live-search="true" data-live-search-style="begins">-->
+								<!--</select>-->
+								<span th:text="${childObj.recipient}">
+							</td>
+							<!--<td class="form-td-left1">-->
+								<!--<button class="glyphicon glyphicon-remove" style="color: rgb(246, 41, 102); font-size: 18px; " onclick="delRecipientValue()">-->
+								<!--</button>-->
+							<!--</td>-->
+						</tr>
+						<tr>
+							<td height="10"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right-top">
+								<img src="../../img/icon_help2.png" class="form-img"> &shy;&shy;<b>援助内容：</b>
+							</td>
+							<td class="form-td-left">
+								<textarea class="form-textarea" name="recipient_content" id="recipient_content"
+								readonly="readonly" th:text="${childObj.recipient_content}"></textarea>
+								
+							</td>
+						</tr>
+						<tr>
+							<td class="form-td-right"><img src="../../img/icon_help2.png" class="form-img"> &shy; &shy; <b>资金来源：</b></td>
+							<td class="form-td-left">
+								<ul id="zijinUl">
+									<li><label>自有资金：</label><span th:text="${childObj.expenditure_form_my}"></span></li>
+									<li><label>自筹资金：</label> <span th:text="${childObj.expenditure_form_fundraising}"></span></li>
+									<li><label>其他资金：</label> <span th:text="${childObj.expenditure_form_other}"></span></li>
+									<li><label>合计：</label> <span th:text="${childObj.annual_expenditure}"></span></li>
+								</ul>
+							</td>
+							<td class="form-td-left1"></td>
+						</tr>
+						<tr>
+							<td class="form-td-right-top">
+								<img src="../../img/icon_help2.png" class="form-img"> &shy; &shy;
+								<b>资金来源备注：</b>
+							</td>
+							<td class="form-td-left">
+								<textarea class="form-textarea" name="expenditure_remark"
+										  id="expenditure_remark" readonly="readonly" th:text="${childObj.expenditure_remark}">
+								 </textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="form-td-right"><img src="../../img/icon_help2.png"
+								class="form-img"> &shy; &shy; <b>起止时间：</b></td>
+							<td class="form-td-left">
+								<span th:text="${childObj.project_begin}"></span>&nbsp;&nbsp;&nbsp;
+								<span th:if="${childObj.project_end} eq '' or ${childObj.project_end} eq null " th:text="至长期"></span>
+								<span th:if="${childObj.project_end} ne '' or ${childObj.project_end} ne null " th:text="${childObj.project_end}"></span>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="form-td-right-top">
+								<img src="../../img/icon_help2.png" class="form-img"> &shy; &shy;
+								<b>本项目备注：</b>
+							</td>
+							<td class="form-td-left">
+								<textarea class="form-textarea" name="project_remark"
+										  id="project_remark" readonly="readonly" th:text="${childObj.project_remark}">
+
+								</textarea>
+								
+								</td>
+						</tr>
+					</tbody>
+				</table>
+			  </td>
+			</tr>
+			<tr>
+				<td height="30"></td>
+			</tr>
+		  </tbody>
+		</table>
+	</div>	
+</div>
+
+<div class="modal fade" id="copyAndQuoteModal" role="dialog" tabindex="-1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header ">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetForm()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">查看信息</h4>
+				</div>
+				<div class="modal-body">
+					<form id="addUserForm" class="form-horizontal" action="" method="post">
+						<table width="95%" border="0" cellspacing="0" cellpadding="0" align="center" id="msgList"></table>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetForm()">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		var tabData = {}
+		function appendTab(){
+			tabData.tabList = [{
+				name:'首页'
+			},{
+				active:true,
+				name:'数据审核'
+			}]
+			$('#tabBox').empty()
+			tabData.tabList.forEach(function(item,index){
+				if(item.active){
+					$('#tabBox').append('<li class="tab-li-active">'+item.name+'</li>')
+				}else{
+					$('#tabBox').append('<li>'+item.name+'</li>')
+				}
+			})
+		}
+
+		function submitAidmsg(valuee) {
+			var idcard=$('#idcard').val();
+			if(typeof(idcard)=='undefined' || idcard==''){
+				alert("获取人员信息失败，请联系管理员~");
+				return false;
+			}
+			var postData = {};
+			postData.statee = valuee;
+            postData.uuid = $('#childId').val();
+			$.ajax({
+				url : '/aidmsg/shenhe',
+				type : "post",
+				data : JSON.stringify(postData),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success : function(data) {
+					if (data.resultcode == "100") {
+						alert(data.value);
+						window.location.href = "/aidmsg/shenpiList";
+					} else if (data.resultcode == "200") {
+						alert(data.value);
+					}
+				},
+				error : function(a, b, c) {
+					alert("error:");
+				}
+			});
+		}
+
+		function closeWin(){
+			myWindow.close();
+		}
+
+		function delRecipientValue(){
+			getRecipientList()
+		}
+		
+
+		function submitAidmsgAndOpenNewView(valuee){
+            var idcard=$('#idcard').val();
+            if(typeof(idcard)=='undefined' || idcard==''){
+                alert("获取人员信息失败，请联系管理员~");
+                return false;
+            }
+            var uuid = $('#childId').val();
+            var postData = {};
+            postData.statee = valuee;
+            postData.uuid = $('#childId').val();
+            $.ajax({
+                url : '/aidmsg/getNextInputAidmsg?uuid='+uuid,
+                type : "post",
+                data : JSON.stringify(postData),
+                contentType : "application/json; charset=utf-8",
+                dataType : "json",
+                success : function(data) {
+                    console.log(data);
+                    if (data.resultcode == "200") {
+                        var id = data.value;
+                        alert("审批成功！");
+                        window.location.href = "/aidmsg/getInputAidmsg?uuid="+id;
+                    } else if (data.resultcode == "300") {
+                        alert(data.value);
+                        window.location.href = "/aidmsg/shenpiList";
+                    }
+                },
+                error : function(a, b, c) {
+                    alert("error:");
+                }
+            });
+		}
+		function cleanThisView(){
+			alert("TODO");
+		}
+		
+	</script>
+
+</body>
+</html>
