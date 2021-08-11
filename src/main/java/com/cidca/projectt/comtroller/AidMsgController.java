@@ -508,7 +508,7 @@ public class AidMsgController {
 	 * @throws Exception
 	 */
 	//	@RequiresRoles("1")
-	//	@RequiresPermissions("external")
+		@RequiresPermissions("external")
 	@RequestMapping(value="/getAidMsgOne")
 	public @ResponseBody String getAidMsgOne(String uuid,HttpServletRequest request,Model model) throws Exception{
 		JSONObject result = new JSONObject();
@@ -1053,6 +1053,36 @@ public class AidMsgController {
 			return StringUtil.returnMapToView( "500", "批量退回失败！");
 		}
 
+	}
+
+	/**
+	 *  退回修改页面
+	 * @param map
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	//	@RequiresRoles("1")
+	//	@RequiresPermissions("external")
+	@RequestMapping("/getEditInputAidmsg")
+	public String getEditInputAidmsg(HashMap<String, Object> map, Model model, HttpServletRequest request) throws Exception {
+
+		String uuid = request.getParameter("uuid");
+		AidMsgSubclass childObj = ascService.findById(uuid);
+		AidMsg obj = aidmsgservice.findById(childObj.getAidmsgid());
+		String principal = (String) SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
+
+		List<TBaseData> list=null;
+		Map<String, String> paramap=new HashMap<String, String>();
+		list = basedataService.findAll();
+
+		model.addAttribute("idcard",principal);
+		model.addAttribute("yearList", basedataService.findByTypes("year"));
+		model.addAttribute("obj",obj);
+		model.addAttribute("childObj",childObj);
+		model.addAttribute("ecList",list);
+		return "aidmsg/editInputAidmsg";// 自动把String解析为视图
 	}
 
 }

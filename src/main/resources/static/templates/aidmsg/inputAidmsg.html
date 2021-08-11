@@ -463,38 +463,48 @@
 		} */
 		
 		//复制引用-引用数据
-		function getThisData(uuid){
-			if(uuid!=''){
-				$.ajax({
-					url : '/aidmsg/getAidMsgOne',
-					type : "get",
-					data : {'uuid':uuid},
-					contentType : "application/json; charset=utf-8",
-					dataType : "json",
-					success : function(data) {
-						if (data.resultcode == "100") {
-							alert("success"+data.value.obj.project_name);
-							var aidmsg=data.value.obj;
-							//TODO 赋值失败
-							$("#yearr").val(aidmsg.yearr);
-							$("#project_name").val(aidmsg.project_name);
-							$("#recipient_content").val(aidmsg.recipient_content);
-							$("#annual_expenditure").val(aidmsg.annual_expenditure);
-							
-						} else if (data.resultcode == "200") {
-							alert("error");
-						}
-					},
-					error : function(a, b, c) {
-						alert("error:");
-					}
-				});
-			}
+		function getThisData(uuid,project_name,recipient_content,annual_expenditure){
+		//方法失败，失败原因，ajax是弹出框打开如果关闭弹出框js框架先刷新父页面，导致ajax没执行完
+			//解决方法，将botton改成A标签即可，需要在这个方法里面关闭弹出的页面
+            //TODO 不要年份
+            // $("#yearr").val(aidmsg.yearr);
+            $("#project_name").val(project_name);
+            $("#recipient_content").val(recipient_content);
+            $("#annual_expenditure").val(annual_expenditure);
+            $("#copyAndQuoteModal").modal("hide");
+
+
+            // if(uuid!=''){
+			// 	$.ajax({
+			// 		url : '/aidmsg/getAidMsgOne',
+			// 		type : "get",
+			// 		data : {'uuid':uuid},
+			// 		contentType : "application/json; charset=utf-8",
+			// 		dataType : "json",
+			// 		success : function(data) {
+			// 			if (data.resultcode == "100") {
+			// 				alert("success"+data.value.obj.project_name);
+			// 				var aidmsg=data.value.obj;
+			// 				//TODO 赋值失败
+			// 				$("#yearr").val(aidmsg.yearr);
+			// 				$("#project_name").val(aidmsg.project_name);
+			// 				$("#recipient_content").val(aidmsg.recipient_content);
+			// 				$("#annual_expenditure").val(aidmsg.annual_expenditure);
+			//
+			// 			} else if (data.resultcode == "200") {
+			// 				alert("error");
+			// 			}
+			// 		},
+			// 		error : function(a, b, c) {
+			// 			alert("error:");
+			// 		}
+			// 	});
+			// }
 		}
 		
 		function operationn(val, rows, index) {
 			//console.log("uuid=="+rows.uuid);
-			return '<button class="btn btn-xs btn-primary" onclick="getThisData(\''+rows.uuid + '\')">引用</button>';
+			return '<a href="javascript:void(0)" class="btn btn-xs btn-primary" onclick="getThisData(\''+rows.uuid+ '\',\''+rows.project_name+ '\',\''+rows.recipient_content+ '\',\''+rows.annual_expenditure+ '\')">引用</a>';
 		}
 		
 		function closeWin(){
@@ -535,9 +545,9 @@
 			console.log("msg=="+msg)
 			if(msg!="" && msg.length>=3){
 				$.post('/aidmsg/getRecipientList',{msg:msg},function(result){
-					console.log("data.name=="+result.list.name);
-					console.log("data.name=="+result.name);
-					console.log("data.name=="+result.list[0].name);
+					// console.log("data.name=="+result.list.name);
+					// console.log("data.name=="+result.name);
+					// console.log("data.name=="+result.list[0].name);
 					$('#recipient').val(result.list[0].name);
 					$('#recipientCode').val(result.list[0].code);
 			    },'json');
@@ -569,10 +579,52 @@
 		}
 		
 		function submitAidmsgAndOpenNewView(){
-			alert("TODO");
+            var idcard=$('#idcard').val();
+            if(typeof(idcard)=='undefined' || idcard==''){
+                alert("获取人员信息失败，请联系管理员~");
+                return false;
+            }
+            var postData = {};
+            postData.yearr = $('#yearr').val();
+            postData.project_name = $('#project_name').val();
+            postData.recipientCode = $('#recipient').val();
+            postData.recipient = $('#recipient option:selected').text();
+            postData.recipient_content = $('#recipient_content').val();
+            postData.expenditure_form_my = $('#expenditure_form_my').val();
+            postData.expenditure_form_fundraising = $('#expenditure_form_fundraising').val();
+            postData.expenditure_form_other = $('#expenditure_form_other').val();
+            postData.annual_expenditure = $('#heji').val();
+            postData.expenditure_remark = $('#expenditure_remark').val();
+            postData.project_begin = $('#project_begin').val();
+            postData.project_end = $('#project_end').val();
+            postData.project_remark = $('#project_remark').val();
+            postData.create_user = $('#idcard').val();
+            postData.statee = 1;
+            //console.log(postData);
+            //console.log(JSON.stringify(postData));
+            $.ajax({
+                url : '/aidmsg/saveAidMsg',
+                type : "post",
+                data : JSON.stringify(postData),
+                contentType : "application/json; charset=utf-8",
+                dataType : "json",
+                success : function(data) {
+                    if (data.resultcode == "100") {
+                        alert(data.value);
+                        window.location.reload();
+                    } else if (data.resultcode == "200") {
+                        alert(data.value);
+                    }
+                },
+                error : function(a, b, c) {
+                    alert("error:");
+                }
+            });
 		}
 		function cleanThisView(){
-			alert("TODO");
+            $("#project_name").val('');
+            $("#recipient_content").val('');
+            $("#annual_expenditure").val('');
 		}
 		
 	</script>

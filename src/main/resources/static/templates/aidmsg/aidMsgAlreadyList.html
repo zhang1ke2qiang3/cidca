@@ -239,37 +239,38 @@
 
 	//修改用户
 	function editAidmsg(uuid) {
-		if (uuid == '') {
-			alert("请选择一条记录！");
-			return;
-		}
-		var url = "/aidmsg/editAidMsg";
-		$.ajax({
-			url : url,
-			method : "get",
-			data : {
-				'uuid' : uuid,
-				'type' : 'edit2',
-			},
-			dataType : "json",
-			success : function(data) {
-				if (data.resultcode = "100") {
-					var obj = data.value.obj;
-					$("#editUuid").val(obj.uuid);
-					$("#editYear").val(obj.yearr);
-					$("#editPackjectName").val(obj.project_name);
-					$("#editRecipient").val(obj.recipient);
-					$("#editRecipient_content").val(obj.recipient_content);
-					$("#editAnnual_expenditure").val(obj.annual_expenditure);
-					$("#editExpenditure_form").val(obj.expenditure_form);
-					$("#editStatee").val(obj.statee);
-					$("#addUserModal").modal("show");
-				}
-			},
-			error : function(data) {
-				alert("服务器异常！");
-			}
-		});
+		// if (uuid == '') {
+		// 	alert("请选择一条记录！");
+		// 	return;
+		// }
+		// var url = "/aidmsg/editAidMsg";
+		// $.ajax({
+		// 	url : url,
+		// 	method : "get",
+		// 	data : {
+		// 		'uuid' : uuid,
+		// 		'type' : 'edit2',
+		// 	},
+		// 	dataType : "json",
+		// 	success : function(data) {
+		// 		if (data.resultcode = "100") {
+		// 			var obj = data.value.obj;
+		// 			$("#editUuid").val(obj.uuid);
+		// 			$("#editYear").val(obj.yearr);
+		// 			$("#editPackjectName").val(obj.project_name);
+		// 			$("#editRecipient").val(obj.recipient);
+		// 			$("#editRecipient_content").val(obj.recipient_content);
+		// 			$("#editAnnual_expenditure").val(obj.annual_expenditure);
+		// 			$("#editExpenditure_form").val(obj.expenditure_form);
+		// 			$("#editStatee").val(obj.statee);
+		// 			$("#addUserModal").modal("show");
+		// 		}
+		// 	},
+		// 	error : function(data) {
+		// 		alert("服务器异常！");
+		// 	}
+		// });
+        window.location.href = "/aidmsg/getEditInputAidmsg?uuid="+uuid;
 	}
 
 	//提交（审核）
@@ -371,12 +372,17 @@
 	}
 
 	function operationn(val, rows, index) {
-		//console.log("uuid=="+rows.uuid);
-		return '<button class="btn btn-xs btn-warning" onclick="editAidmsg(\''
-		+ rows.uuid
-		+ '\')">申请修改</button> &shy; <button class="btn btn-xs btn-primary" onclick="showAidmsg(\''
-		+ rows.uuid
-		+ '\')">查看</button>';
+		if(rows.statee == '-1'){
+            return '<button class="btn btn-xs btn-warning" onclick="editAidmsg(\''
+                + rows.uuid
+                + '\')">申请修改</button> &shy; <button class="btn btn-xs btn-primary" onclick="showAidmsg(\''
+                + rows.uuid
+                + '\')">查看</button> ';
+		}else{
+            return '<button class="btn btn-xs btn-primary" onclick="showAidmsg(\''
+                + rows.uuid
+                + '\')">查看</button> ';
+		}
 	}
 		
 	function initTable() {

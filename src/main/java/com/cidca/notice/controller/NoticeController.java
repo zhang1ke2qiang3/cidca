@@ -13,13 +13,17 @@ import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cidca.entity.TMuser;
+import com.cidca.entity.TRole;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -64,11 +68,17 @@ public class NoticeController {
 	//	@RequiresPermissions("external")
 	@RequestMapping("/noticeList")
 	public String noticeList(HashMap<String, Object> map,Model model,HttpServletRequest request) throws Exception {
-		//		TMuser user = (TMuser)request.getSession().getAttribute(Constants.SESSION_KEY);
+		TMuser user = (TMuser)request.getSession().getAttribute(Constants.SESSION_KEY);
+		map.put("title", "对外援助统计数据直报平台 ");
+		if(user.getPersontype().equals(2)){
+			return "/noticeShow/noticeManagerList";// 自动把String解析为视图
+		}else{
+			return "/noticeShow/noticeList";// 自动把String解析为视图
+		}
 		//		String principal = (String)SecurityUtils.getSubject().getPrincipal();//用shiro获取当前登录用户名
 		//		model.addAttribute("user","欢迎："+user.getFullname());//两种方法都可以，和spring model and view一样
-		map.put("title", "对外援助统计数据直报平台 ");
-		return "/noticeShow/noticeList";// 自动把String解析为视图
+
+
 	}
 
 	/**
@@ -156,6 +166,50 @@ public class NoticeController {
 		}
 		return map;
 	}
-	
+
+	/**
+	 * 新增或者修改角色
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * 坑2 @RequestBody 自动装配的语法要求：不允许在局部进行自动装配（即:只能写在method外class里）。
+	 *
+	 */
+	@RequestMapping(value = "/saveOrUpdate")
+	public @ResponseBody
+	Map<String, Object> saveOrUpdateRole(@RequestBody Tnotice notice, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try{
+			noticeService.saveTnotice(notice);
+			return StringUtil.returnMapToView("200", "角色添加成功！");
+		}catch(Exception e){
+			e.printStackTrace();
+			return StringUtil.returnMapToView("500", "角色添加失败");
+		}
+	}
+
+	/**
+	 * 通知公告-删除
+	 * @param uuid
+	 * @param
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+//	@RequiresRoles("1")
+	@RequiresPermissions("external")
+	@RequestMapping(value = "/deleteNotice")
+	public @ResponseBody Map<String, Object> deleteNotice(String uuid, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (StringUtils.isNotEmpty(uuid)) {
+			noticeService.findById(uuid);
+			StringUtil.returnMapToView("100", "删除成功！");
+		}else{
+			return StringUtil.returnMapToView("200", "删除失败！");
+		}
+		return map;
+	}
 
 }
